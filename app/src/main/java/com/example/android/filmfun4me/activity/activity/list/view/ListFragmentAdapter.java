@@ -49,7 +49,6 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
           //  return mContext.getString(R.string.tv_show_tab_title);
        // }
 
-        // OVO JE MOZDA KRIVO
      //   return "";
     }
 }

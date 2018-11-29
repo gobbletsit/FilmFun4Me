@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.android.filmfun4me.BaseApplication;
@@ -28,7 +26,8 @@ public class MoviesFragment extends Fragment implements MainView {
     // Button prefs tag
     private static final String SELECTED_BUTTON_MOVIE = "selectedButton";
 
-    private static final String POSITION = "intPosition";
+    private static final String INT_POSITION = "intPosition";
+    private static final String POSITION = "position";
 
 
     @Inject
@@ -50,7 +49,7 @@ public class MoviesFragment extends Fragment implements MainView {
     public static MoviesFragment newInstance(int position) {
         MoviesFragment moviesFragment = new MoviesFragment();
         Bundle args = new Bundle();
-        args.putInt("position", position);
+        args.putInt(POSITION, position);
         moviesFragment.setArguments(args);
         return moviesFragment;
     }
@@ -63,7 +62,7 @@ public class MoviesFragment extends Fragment implements MainView {
         ((BaseApplication) getActivity().getApplication()).createMainComponent().inject(this);
 
         // To pass along
-        fragmentPosition = getArguments().getInt("position");
+        fragmentPosition = getArguments().getInt(POSITION);
     }
 
     @Override
@@ -116,11 +115,11 @@ public class MoviesFragment extends Fragment implements MainView {
         editor.putInt(SELECTED_BUTTON_MOVIE, 0);
 
         // For DetailInteractor
-        editor.putInt(POSITION, fragmentPosition);
+        editor.putInt(INT_POSITION, fragmentPosition);
         editor.apply();
 
         Intent intent = new Intent(getActivity(), ListActivity.class);
-        intent.putExtra(POSITION, fragmentPosition);
+        intent.putExtra(INT_POSITION, fragmentPosition);
         startActivity(intent);
     }
 
@@ -135,11 +134,11 @@ public class MoviesFragment extends Fragment implements MainView {
         editor.putInt(SELECTED_BUTTON_MOVIE, 1);
 
         // For DetailInteractor
-        editor.putInt(POSITION, fragmentPosition);
+        editor.putInt(INT_POSITION, fragmentPosition);
         editor.apply();
 
         Intent intent = new Intent(getActivity(), ListActivity.class);
-        intent.putExtra(POSITION, fragmentPosition);
+        intent.putExtra(INT_POSITION, fragmentPosition);
         startActivity(intent);
     }
 
@@ -154,11 +153,11 @@ public class MoviesFragment extends Fragment implements MainView {
         editor.putInt(SELECTED_BUTTON_MOVIE, 2);
 
         // For DetailInteractor
-        editor.putInt(POSITION, fragmentPosition);
+        editor.putInt(INT_POSITION, fragmentPosition);
         editor.apply();
 
         Intent intent = new Intent(getActivity(), ListActivity.class);
-        intent.putExtra(POSITION, fragmentPosition);
+        intent.putExtra(INT_POSITION, fragmentPosition);
         startActivity(intent);
     }
 

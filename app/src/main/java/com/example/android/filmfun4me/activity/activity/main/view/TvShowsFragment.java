@@ -26,7 +26,8 @@ public class TvShowsFragment extends Fragment implements MainView {
     // Prefs button tag
     private static final String SELECTED_BUTTON_TV_SHOW = "selectedButtonTv";
 
-    private static final String POSITION = "intPosition";
+    private static final String INT_POSITION = "intPosition";
+    private static final String POSITION = "position";
 
     @Inject
     MainPresenter presenter;
@@ -48,7 +49,7 @@ public class TvShowsFragment extends Fragment implements MainView {
     public static TvShowsFragment newInstance(int position) {
         TvShowsFragment tvShowsFragment = new TvShowsFragment();
         Bundle args = new Bundle();
-        args.putInt("position", position);
+        args.putInt(POSITION, position);
         tvShowsFragment.setArguments(args);
         return tvShowsFragment;
     }
@@ -60,7 +61,7 @@ public class TvShowsFragment extends Fragment implements MainView {
         ((BaseApplication) getActivity().getApplication()).createMainComponent().inject(this);
 
         // To pass along
-        fragmentPosition = getArguments().getInt("position");
+        fragmentPosition = getArguments().getInt(POSITION);
     }
 
     @Override
@@ -101,14 +102,14 @@ public class TvShowsFragment extends Fragment implements MainView {
 
         sharedPreferences = getActivity().getSharedPreferences(SELECTED_SHARED, 0);
         editor = sharedPreferences.edit();
-        editor.putInt(POSITION, fragmentPosition);
+        editor.putInt(INT_POSITION, fragmentPosition);
 
         // For ListInteractor to know which list to get
         editor.putInt(SELECTED_BUTTON_TV_SHOW, 0);
         editor.apply();
 
         Intent intent = new Intent(getActivity(), ListActivity.class);
-        intent.putExtra(POSITION, fragmentPosition);
+        intent.putExtra(INT_POSITION, fragmentPosition);
         startActivity(intent);
 
     }
@@ -118,14 +119,14 @@ public class TvShowsFragment extends Fragment implements MainView {
 
         sharedPreferences = getActivity().getSharedPreferences(SELECTED_SHARED, 0);
         editor = sharedPreferences.edit();
-        editor.putInt(POSITION, fragmentPosition);
+        editor.putInt(INT_POSITION, fragmentPosition);
 
         // For ListInteractor to know which list to get
         editor.putInt(SELECTED_BUTTON_TV_SHOW, 1);
         editor.apply();
 
         Intent intent = new Intent(getActivity(), ListActivity.class);
-        intent.putExtra(POSITION, fragmentPosition);
+        intent.putExtra(INT_POSITION, fragmentPosition);
         startActivity(intent);
 
     }

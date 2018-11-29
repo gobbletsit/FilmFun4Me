@@ -66,7 +66,7 @@ public class ListActivity extends AppCompatActivity {
 
                 uploadFragment();
 
-                Toast.makeText(this, "Jedenje kurca 1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.highest_item: // strpaj u shared prefs ko button;
@@ -80,7 +80,7 @@ public class ListActivity extends AppCompatActivity {
 
                 uploadFragment();
 
-                Toast.makeText(this, "Jedenje kurca 22", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "22", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.upcoming_item: // strpaj u shared prefs ko button;
@@ -95,7 +95,7 @@ public class ListActivity extends AppCompatActivity {
 
                 uploadFragment();
 
-                Toast.makeText(this, "Jedenje kurca 333", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "333", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:

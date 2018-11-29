@@ -20,6 +20,13 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String POSITION = "int_position";
 
+    private static final String KEY_MOVIE = "movie";
+    private static final String KEY_TV_SHOW = "tv_show";
+    private static final String KEY_THEME_COLOR_MOVIE = "theme_color_movie";
+    private static final String KEY_THEME_COLOR_TV = "theme_color_tv";
+    private static final String KEY_GENRE_NAMES_LIST_MOVIE = "genreNames";
+    private static final String KEY_GENRE_NAMES_LIST_TV_SHOW = "showGenreNames";
+
     ArrayList<String> genreNamesListMovie;
     ArrayList<String> genreNamesListTv;
 
@@ -40,9 +47,9 @@ public class DetailActivity extends AppCompatActivity {
             position = extras.getInt(POSITION);
 
             if (position == 0) {
-                Movie movie = extras.getParcelable("movie");
-                genreNamesListMovie = extras.getStringArrayList("genreNames");
-                themeColor = extras.getInt("theme_color_movie");
+                Movie movie = extras.getParcelable(KEY_MOVIE);
+                genreNamesListMovie = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
+                themeColor = extras.getInt(KEY_THEME_COLOR_MOVIE);
                 if (movie != null) {
                     FragmentManager manager = getSupportFragmentManager();
 
@@ -55,9 +62,9 @@ public class DetailActivity extends AppCompatActivity {
 
 
             } else {
-                TvShow tvShow = extras.getParcelable("tv_show");
-                genreNamesListTv = extras.getStringArrayList("showGenreNames");
-                themeColor = extras.getInt("theme_color_tv");
+                TvShow tvShow = extras.getParcelable(KEY_TV_SHOW);
+                genreNamesListTv = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
+                themeColor = extras.getInt(KEY_THEME_COLOR_TV);
                 if (tvShow != null) {
                     FragmentManager manager = getSupportFragmentManager();
 

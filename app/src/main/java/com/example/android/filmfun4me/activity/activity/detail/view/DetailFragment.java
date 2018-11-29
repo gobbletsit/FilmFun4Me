@@ -46,6 +46,17 @@ public class DetailFragment extends Fragment implements DetailView {
     @Inject
     DetailPresenter detailPresenter;
 
+    private static final String TAG = DetailFragment.class.getSimpleName();
+
+    private static final String KEY_MOVIE = "movie";
+    private static final String KEY_TV_SHOW = "tv_show";
+    private static final String KEY_THEME_COLOR_MOVIE = "theme_color_movie";
+    private static final String KEY_THEME_COLOR_TV = "theme_color_tv";
+    private static final String KEY_GENRE_NAMES_LIST_MOVIE = "genreNames";
+    private static final String KEY_GENRE_NAMES_LIST_TV_SHOW = "showGenreNames";
+    private static final String INPUT_DATE_FORMAT = "yyyy-mm-dd";
+    private static final String OUTPUT_DATE_FORMAT = "dd, MMM yyyy";
+
     private TextView tvDetailMovieTitle;
     private TextView tvDetailReleaseDate;
     private TextView tvDetailOverview;
@@ -97,9 +108,9 @@ public class DetailFragment extends Fragment implements DetailView {
     public static DetailFragment newInstance(Movie movie, ArrayList<String> genreNamesList, int themeColorMovie) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable("movie", movie);
-        args.putStringArrayList("genreNames", genreNamesList);
-        args.putInt("theme_color_movie", themeColorMovie);
+        args.putParcelable(KEY_MOVIE, movie);
+        args.putStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE, genreNamesList);
+        args.putInt(KEY_THEME_COLOR_MOVIE, themeColorMovie);
         fragment.setArguments(args);
         return fragment;
     }
@@ -107,9 +118,9 @@ public class DetailFragment extends Fragment implements DetailView {
     public static DetailFragment newInstanceTv(TvShow tvShow, ArrayList<String> genreNamesList, int themeColorTv) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable("tv_show", tvShow);
-        args.putStringArrayList("showGenreNames", genreNamesList);
-        args.putInt("theme_color_tv", themeColorTv);
+        args.putParcelable(KEY_TV_SHOW, tvShow);
+        args.putStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW, genreNamesList);
+        args.putInt(KEY_THEME_COLOR_TV, themeColorTv);
         fragment.setArguments(args);
         return fragment;
     }
@@ -173,16 +184,16 @@ public class DetailFragment extends Fragment implements DetailView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey("movie")) {
-            Movie movie = (Movie) getArguments().get("movie");
+        if (getArguments() != null && getArguments().containsKey(KEY_MOVIE)) {
+            Movie movie = (Movie) getArguments().get(KEY_MOVIE);
             if (movie != null) {
                 this.movie = movie;
                 detailPresenter.setView(this);
                 detailPresenter.showDetails(movie);
 
             }
-        } else if (getArguments() != null && getArguments().containsKey("tv_show")) {
-            TvShow tvShow = (TvShow) getArguments().get("tv_show");
+        } else if (getArguments() != null && getArguments().containsKey(KEY_TV_SHOW)) {
+            TvShow tvShow = (TvShow) getArguments().get(KEY_TV_SHOW);
             if (tvShow != null) {
                 this.tvShow = tvShow;
                 detailPresenter.setView(this);
@@ -207,14 +218,14 @@ public class DetailFragment extends Fragment implements DetailView {
 
         StringBuilder builder = new StringBuilder();
 
-        listNames = getArguments().getStringArrayList("genreNames");
+        listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
         for (int i = 0; i < listNames.size(); i++) {
             genreName = builder.append(listNames.get(i)).append(" , ").toString();
         }
 
         tvGenre.setText(genreName);
 
-        themeColor = getArguments().getInt("theme_color_movie");
+        themeColor = getArguments().getInt(KEY_THEME_COLOR_MOVIE);
         setColorOfText(themeColor);
 
         customReviewAdapter = new CustomReviewAdapter();
@@ -250,14 +261,14 @@ public class DetailFragment extends Fragment implements DetailView {
         String genreName = "";
         StringBuilder builder = new StringBuilder();
 
-        listNames = getArguments().getStringArrayList("showGenreNames");
+        listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
         for (int i = 0; i < listNames.size(); i++) {
             genreName = builder.append(listNames.get(i)).append(" , ").toString();
         }
 
         tvGenre.setText(genreName);
 
-        themeColor = getArguments().getInt("theme_color_tv");
+        themeColor = getArguments().getInt(KEY_THEME_COLOR_TV);
         setColorOfText(themeColor);
 
         tvReviewLabel.setVisibility(View.GONE);
@@ -382,12 +393,12 @@ public class DetailFragment extends Fragment implements DetailView {
             return reviewList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             private TextView tvReviewAuthor;
             private TextView tvReviewContent;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
 
                 this.tvReviewAuthor = itemView.findViewById(R.id.tv_review_author);
@@ -480,15 +491,15 @@ public class DetailFragment extends Fragment implements DetailView {
 
     private String formatDate(String date) {
 
-        SimpleDateFormat formatInput = new SimpleDateFormat("yyyy-mm-dd", java.util.Locale.getDefault());
-        SimpleDateFormat formatOutput = new SimpleDateFormat("dd, MMM yyyy", java.util.Locale.getDefault());
+        SimpleDateFormat formatInput = new SimpleDateFormat(INPUT_DATE_FORMAT, java.util.Locale.getDefault());
+        SimpleDateFormat formatOutput = new SimpleDateFormat(OUTPUT_DATE_FORMAT, java.util.Locale.getDefault());
 
         String formattedDate = "";
         try {
             Date newDate = formatInput.parse(date);
             formattedDate = formatOutput.format(newDate);
         } catch (ParseException e) {
-            Log.e("PARSE EXCEPTION", "ParseException - dateFormat");
+            Log.e(TAG, e.toString());
         }
         return formattedDate;
 

@@ -48,6 +48,9 @@ public class ListFragment extends Fragment implements ListView {
     @Inject
     ListPresenter listPresenter;
 
+    private static final String KEY_MOVIE = "movie";
+    private static final String KEY_THEME_COLOR_MOVIE = "theme_color_movie";
+    private static final String KEY_GENRE_NAMES_LIST = "genreNames";
 
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
@@ -142,9 +145,9 @@ public class ListFragment extends Fragment implements ListView {
     public void onMovieClicked(Movie movie, List<Genre> genreList, ArrayList<String> singleGenreNamesList) {
 
         Intent startDetailIntent = new Intent(getActivity(), DetailActivity.class);
-        startDetailIntent.putExtra("movie", movie);
-        startDetailIntent.putExtra("theme_color_movie", themeColor);
-        startDetailIntent.putStringArrayListExtra("genreNames", singleGenreNamesList);
+        startDetailIntent.putExtra(KEY_MOVIE, movie);
+        startDetailIntent.putExtra(KEY_THEME_COLOR_MOVIE, themeColor);
+        startDetailIntent.putStringArrayListExtra(KEY_GENRE_NAMES_LIST, singleGenreNamesList);
         startActivity(startDetailIntent);
     }
 
@@ -226,8 +229,8 @@ public class ListFragment extends Fragment implements ListView {
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            public int[] currentGenreIds;
-            public Movie movie;
+            private int[] currentGenreIds;
+            private Movie movie;
 
             private ViewGroup container;
             private TextView tv_title;

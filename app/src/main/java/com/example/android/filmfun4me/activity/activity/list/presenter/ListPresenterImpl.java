@@ -132,7 +132,7 @@ public class ListPresenterImpl implements ListPresenter {
             for (int a = 0; a < genreList.size(); a++) {
                 int preciseGenreId = genreList.get(a).getGenreId();
 
-                // Comparing the matches
+                // Comparing results
                 if (preciseGenreId == singleGenreId) {
 
                     // If the match is found, add to single genre list
