@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+def MOVIE_CONSUMER_KEY = '"' + MovieConsumerApiKey + '"' ?: '"MOVIE_CONSUMER_KEY"';
+
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.example.android.filmfun4me"
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        // API KEY
+        buildConfigField 'String', 'MOVIE_CONSUMER_KEY', MOVIE_CONSUMER_KEY
+
+        // BASE URL
+        buildConfigField "String", "TMDB_BASE_URL", "\"http://api.themoviedb.org/\""
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable "InvalidPackage"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:support-v4:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    // Rx
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+
+    // CALL ADAPTER FACTORY
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+
+    // Dagger
+    compile 'com.google.dagger:dagger:2.13'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
+    compile 'com.google.dagger:dagger-android:2.13'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.13'
+    compile 'com.google.dagger:dagger-android-support:2.13'
+
+    // network
+    implementation "com.squareup.okhttp3:okhttp:3.9.1"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.9.1"
+    implementation 'com.github.bumptech.glide:glide:4.3.1'
+
+    // gson
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    // recycler view
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+
+    // guava compatible with android
+    compile 'com.google.guava:guava:23.3-android'
+
+    // picasso
+    compile 'com.squareup.picasso:picasso:2.5.0'
+
+    // tabLayout
+    compile 'com.android.support:design:26.1.0'
+
+    // viewPagerIndicator
+    //compile 'com.viewpagerindicator:library:2.4.1@aar'
+}

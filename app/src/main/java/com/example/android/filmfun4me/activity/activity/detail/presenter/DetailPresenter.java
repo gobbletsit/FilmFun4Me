@@ -1,0 +1,54 @@
+package com.example.android.filmfun4me.activity.activity.detail.presenter;
+
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
+import com.example.android.filmfun4me.data.Movie;
+import com.example.android.filmfun4me.data.Season;
+import com.example.android.filmfun4me.data.TvShow;
+import com.example.android.filmfun4me.data.Video;
+
+import java.util.List;
+
+/**
+ * Created by gobov on 12/21/2017.
+ */
+
+public interface DetailPresenter {
+
+    void setView(DetailView detailView);
+
+    // Movie
+    void showDetails(Movie movie);
+
+    void showVideos(Movie movie);
+
+    void showReviews(Movie movie);
+
+
+    // Tv-show
+    void showSingleTvShowDetails(String id);
+
+    void showTvVideos(TvShow tvShow);
+
+    void showSeasonList(TvShow tvShow);
+
+    void showTvEpisodes(TvShow tvShow, int seasonNumber);
+
+    void setSeasons(List<Season> seasonList, LinearLayout seasonButtonLinearLayout, TvShow tvShow);
+
+
+    // Clicks
+    void whenTrailerClicked(View view);
+
+
+    // Colors
+    void setColorOfMovieRatingStar(ImageView imageView);
+
+    void setColorOfTvRatingStar(ImageView imageView);
+
+
+    void destroy();
+}

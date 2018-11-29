@@ -1,0 +1,25 @@
+package com.example.android.filmfun4me.activity.activity.list.model;
+
+import com.example.android.filmfun4me.data.Genre;
+import com.example.android.filmfun4me.data.Movie;
+import com.example.android.filmfun4me.data.TvShow;
+
+import java.util.List;
+
+import io.reactivex.Observable;
+
+
+/**
+ * Created by gobov on 12/21/2017.
+ */
+
+public interface ListInteractor {
+
+    Observable<List<Movie>> getListOfMovies();
+
+    // List of all possible genres
+    Observable<List<Genre>> getListOfAllMovieGenres();
+
+
+
+}

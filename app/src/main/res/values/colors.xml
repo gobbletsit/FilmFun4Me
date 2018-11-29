@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#927F79</color>
+    <color name="colorPrimaryDark">#36191E</color>
+    <color name="colorAccent">#818181</color>
+
+    <color name="colorSeasonsAndReviews">#303F9F</color>
+
+    <color name="colorPopular">#818181</color>
+    <color name="colorHighestRated">#927F79</color>
+    <color name="colorUpcoming">#36191E</color>
+</resources>
