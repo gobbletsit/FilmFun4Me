@@ -363,6 +363,7 @@ public class DetailFragment extends Fragment implements DetailView {
         this.customReviewAdapter.notifyDataSetChanged();
 
         if (reviewList.size() == 0) {
+            Log.d(TAG, "REVIEW LIST SIZE = " + reviewList.size());
             tvReviewLabel.setVisibility(View.INVISIBLE);
             reviewButtonTextView.setVisibility(View.INVISIBLE);
         }
