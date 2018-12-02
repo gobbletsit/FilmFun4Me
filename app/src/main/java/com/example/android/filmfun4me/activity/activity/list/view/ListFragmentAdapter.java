@@ -27,12 +27,12 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
     public Fragment getItem(int position) {
 
         Fragment frag = null;
- //       if (position == 0){
- //           frag = MoviesFragment.newInstance(position);
- //       } //else {
-          //  frag = TvShowsFragment.newInstance(position);
-        //}
-        return MoviesFragment.newInstance(position);
+        if (position == 0){
+            frag = MoviesFragment.newInstance(position);
+        } else {
+            frag = TvShowsFragment.newInstance(position);
+        }
+        return frag;
     }
 
     @Override
@@ -43,12 +43,10 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        //if (position == 0){
+        if (position == 0){
             return mContext.getString(R.string.movie_tab_title);
-       // } //else {
-          //  return mContext.getString(R.string.tv_show_tab_title);
-       // }
-
-     //   return "";
+        } else {
+            return mContext.getString(R.string.tv_show_tab_title);
+        }
     }
 }
