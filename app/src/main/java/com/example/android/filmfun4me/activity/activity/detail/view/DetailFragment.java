@@ -48,12 +48,15 @@ public class DetailFragment extends Fragment implements DetailView {
 
     private static final String TAG = DetailFragment.class.getSimpleName();
 
+    // storage keys
     private static final String KEY_MOVIE = "movie";
     private static final String KEY_TV_SHOW = "tv_show";
     private static final String KEY_THEME_COLOR_MOVIE = "theme_color_movie";
     private static final String KEY_THEME_COLOR_TV = "theme_color_tv";
     private static final String KEY_GENRE_NAMES_LIST_MOVIE = "genreNames";
     private static final String KEY_GENRE_NAMES_LIST_TV_SHOW = "showGenreNames";
+
+    // date formats
     private static final String INPUT_DATE_FORMAT = "yyyy-mm-dd";
     private static final String OUTPUT_DATE_FORMAT = "dd, MMM yyyy";
 

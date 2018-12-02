@@ -2,14 +2,12 @@ package com.example.android.filmfun4me.activity.activity.detail.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.EpisodeWrapper;
 import com.example.android.filmfun4me.data.Review;
 import com.example.android.filmfun4me.data.ReviewWrapper;
 import com.example.android.filmfun4me.data.Season;
-import com.example.android.filmfun4me.data.SeasonWrapper;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.TvShowWrapper;
 import com.example.android.filmfun4me.data.Video;
@@ -30,7 +28,7 @@ public class DetailInteractorImpl implements DetailInteractor {
     // Prefs name
     private static final String SELECTED_SHARED = "selectedShared";
 
-    private static final String POSITION = "intPosition";
+    private static final String KEY_FRAGMENT_POSITION = "position";
 
     private int fragPosition;
 
@@ -43,7 +41,7 @@ public class DetailInteractorImpl implements DetailInteractor {
         this.moviesWebService = moviesWebService;
         this.tvShowsWebService = tvShowsWebService;
 
-        // So it can be used for determining which list to get
+        // So it can be used to determine which list to get
         sharedPrefs = context.getApplicationContext().getSharedPreferences(SELECTED_SHARED, Context.MODE_PRIVATE);
     }
 
@@ -55,8 +53,8 @@ public class DetailInteractorImpl implements DetailInteractor {
     @Override
     public Observable<List<Video>> getVideoList(String id) {
 
-        if (sharedPrefs.contains(POSITION)) {
-            fragPosition = sharedPrefs.getInt(POSITION, 0);
+        if (sharedPrefs != null && sharedPrefs.contains(KEY_FRAGMENT_POSITION)) {
+            fragPosition = sharedPrefs.getInt(KEY_FRAGMENT_POSITION, 0);
 
             if (fragPosition == 0) {
                 return moviesWebService.getVideosFromService(id).map(VideoWrapper::getVideoList);
@@ -71,8 +69,8 @@ public class DetailInteractorImpl implements DetailInteractor {
     @Override
     public Observable<List<Review>> getReviewList(String id) {
 
-        if (sharedPrefs.contains(POSITION)) {
-            fragPosition = sharedPrefs.getInt(POSITION, 0);
+        if (sharedPrefs != null && sharedPrefs.contains(KEY_FRAGMENT_POSITION)) {
+            fragPosition = sharedPrefs.getInt(KEY_FRAGMENT_POSITION, 0);
 
             if (fragPosition == 0) {
                 return moviesWebService.getReviewsFromService(id).map(ReviewWrapper::getReviewList);

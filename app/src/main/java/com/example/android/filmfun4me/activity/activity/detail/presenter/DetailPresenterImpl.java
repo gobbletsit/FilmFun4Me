@@ -209,6 +209,8 @@ public class DetailPresenterImpl implements DetailPresenter {
             Season currentSeason = seasonList.get(i);
 
             // Creating programmatically because of unknown number of seasons
+            // ovo bi po nekoj fori trebalo ic u fragment jer je glup i moze ovo radit
+            // refactor ovo obavezno, mora i moze bit ljepse
             TextView textView[] = new TextView[seasonList.size()];
             textView[i] = new TextView(mContext);
             textView[i].setText(String.valueOf(currentSeason.getSeasonNumber()));

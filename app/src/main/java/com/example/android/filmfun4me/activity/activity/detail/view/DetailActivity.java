@@ -1,12 +1,10 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.data.Movie;
@@ -18,7 +16,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String DETAIL_FRAG = "DETAIL_FRAG";
 
-    public static final String POSITION = "int_position";
+    public static final String KEY_FRAGMENT_POSITION = "position";
 
     private static final String KEY_MOVIE = "movie";
     private static final String KEY_TV_SHOW = "tv_show";
@@ -41,12 +39,12 @@ public class DetailActivity extends AppCompatActivity {
         Bundle extras = listIntent.getExtras();
 
 
-        int position;
+        int fragmentPosition;
 
         if (extras != null) {
-            position = extras.getInt(POSITION);
+            fragmentPosition = extras.getInt(KEY_FRAGMENT_POSITION);
 
-            if (position == 0) {
+            if (fragmentPosition == 0) {
                 Movie movie = extras.getParcelable(KEY_MOVIE);
                 genreNamesListMovie = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
                 themeColor = extras.getInt(KEY_THEME_COLOR_MOVIE);
