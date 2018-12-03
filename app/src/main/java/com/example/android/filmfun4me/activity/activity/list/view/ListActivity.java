@@ -45,6 +45,8 @@ public class ListActivity extends AppCompatActivity {
         transaction.replace(R.id.root_activity_list, fragment, LIST_FRAG);
         transaction.commit();
 
+        sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
+
     }
 
     @Override
@@ -57,7 +59,17 @@ public class ListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.most_popular_item: // strpaj u shared prefs ko button;
-                sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
+                // ovo u onCreate da izbjegnes probleme sa main thread overloaded ako je to rjesenje
+                // probat ces svakako
+                // Another common cause of delays on UI thread is SharedPreferences access. When you call a
+                // PreferenceManager.getSharedPreferences and other similar methods for the first time,
+                // the associated .xml file is immediately loaded and parsed in the same thread.
+                //
+                // One of good ways to combat this issue is triggering first SharedPreference load
+                // from the background thread, started as early as possible (e.g. from onCreate of your
+                // Application class). This way the preference object may be already constructed by the
+                // time you'd want to use it.
+
                 editor = sharedPreferences.edit();
 
                 // For ListInteractor to know which list to get
@@ -71,7 +83,7 @@ public class ListActivity extends AppCompatActivity {
 
             case R.id.highest_item: // strpaj u shared prefs ko button;
 
-                sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
+                //sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
                 editor = sharedPreferences.edit();
 
                 // For ListInteractor to know which list to get
@@ -85,7 +97,7 @@ public class ListActivity extends AppCompatActivity {
 
             case R.id.upcoming_item: // strpaj u shared prefs ko button;
 
-                sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
+                //sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
                 editor = sharedPreferences.edit();
 
                 // For ListInteractor to know which list to get
