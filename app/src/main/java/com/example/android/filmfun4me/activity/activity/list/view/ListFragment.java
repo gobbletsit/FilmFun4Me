@@ -177,8 +177,8 @@ public class ListFragment extends Fragment implements ListView {
 
         String genreName = "";
 
-        for (int i = 0; i < currentGenreIds.length; i++) {
-            singleGenreId = currentGenreIds[i];
+        for (int currentGenreId : currentGenreIds) {
+            singleGenreId = currentGenreId;
 
             for (int a = 0; a < genreList.size(); a++) {
                 int preciseGenreId = genreList.get(a).getGenreId();
@@ -236,7 +236,7 @@ public class ListFragment extends Fragment implements ListView {
             private TextView tv_title;
             private ImageView iv_movie_poster;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 this.container = itemView.findViewById(R.id.list_item_container);
                 this.tv_title = itemView.findViewById(R.id.tv_movie_title);
