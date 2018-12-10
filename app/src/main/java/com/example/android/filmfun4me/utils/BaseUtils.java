@@ -6,7 +6,7 @@ package com.example.android.filmfun4me.utils;
 
 public class BaseUtils {
 
-    public static final String BASE_POSTER_PATH = "http://image.tmdb.org/t/p/w342";
+    private static final String BASE_POSTER_PATH = "http://image.tmdb.org/t/p/w342";
 
     public static final String YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%1$s";
 

@@ -17,7 +17,7 @@ import okhttp3.Response;
 
 public class RequestInterceptor implements Interceptor {
 
-    public static final String API_KEY_TAG = "api_key";
+    private static final String API_KEY_TAG = "api_key";
 
     @Inject
     RequestInterceptor() {
@@ -30,7 +30,7 @@ public class RequestInterceptor implements Interceptor {
 
         HttpUrl httpUrl = request.url();
 
-        // GETTING THE KEY FROM GRADLE PROPERTIES FILE
+        // getting the key from the gradle properties file
         HttpUrl url = httpUrl.newBuilder().addQueryParameter(API_KEY_TAG, BuildConfig.MOVIE_CONSUMER_KEY).build();
 
         Request finalRequest = request.newBuilder().url(url).build();
