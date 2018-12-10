@@ -25,9 +25,6 @@ public class DetailActivity extends AppCompatActivity {
     private static final String KEY_GENRE_NAMES_LIST_MOVIE = "genreNames";
     private static final String KEY_GENRE_NAMES_LIST_TV_SHOW = "showGenreNames";
 
-    ArrayList<String> genreNamesListMovie;
-    ArrayList<String> genreNamesListTv;
-
     int themeColor;
 
     @Override
@@ -46,33 +43,18 @@ public class DetailActivity extends AppCompatActivity {
 
             if (fragmentPosition == 0) {
                 Movie movie = extras.getParcelable(KEY_MOVIE);
-                genreNamesListMovie = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
+                ArrayList<String> genreNamesListMovie = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
                 themeColor = extras.getInt(KEY_THEME_COLOR_MOVIE);
                 if (movie != null) {
-                    FragmentManager manager = getSupportFragmentManager();
-
-                    DetailFragment fragment = DetailFragment.newInstance(movie, genreNamesListMovie, themeColor);
-
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.replace(R.id.root_activity_detail, fragment, DETAIL_FRAG);
-                    transaction.commit();
+                    switchToMovieDetailFragment(movie, genreNamesListMovie, themeColor);
                 }
-
-
             } else {
                 TvShow tvShow = extras.getParcelable(KEY_TV_SHOW);
-                genreNamesListTv = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
+                ArrayList<String> genreNamesListTv = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
                 themeColor = extras.getInt(KEY_THEME_COLOR_TV);
                 if (tvShow != null) {
-                    FragmentManager manager = getSupportFragmentManager();
-
-                    DetailFragment fragment = DetailFragment.newInstanceTv(tvShow, genreNamesListTv, themeColor);
-
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.replace(R.id.root_activity_detail, fragment, DETAIL_FRAG);
-                    transaction.commit();
+                    switchToTvShowDetailFragment(tvShow, genreNamesListTv, themeColor);
                 }
-
             }
         }
     }
@@ -80,5 +62,21 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    private void switchToMovieDetailFragment(Movie movie, ArrayList<String> genreNamesListMovie, int themeColor){
+        FragmentManager manager = getSupportFragmentManager();
+        DetailFragment fragment = DetailFragment.newInstance(movie, genreNamesListMovie, themeColor);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.root_activity_detail, fragment, DETAIL_FRAG);
+        transaction.commit();
+    }
+
+    private void switchToTvShowDetailFragment(TvShow tvShow, ArrayList<String> genreNamesListTv, int themeColor){
+        FragmentManager manager = getSupportFragmentManager();
+        DetailFragment fragment = DetailFragment.newInstanceTv(tvShow, genreNamesListTv, themeColor);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.root_activity_detail, fragment, DETAIL_FRAG);
+        transaction.commit();
     }
 }
