@@ -60,6 +60,7 @@ public class DetailFragment extends Fragment implements DetailView {
     private static final String INPUT_DATE_FORMAT = "yyyy-mm-dd";
     private static final String OUTPUT_DATE_FORMAT = "dd, MMM yyyy";
 
+    // butterknife odje odmah
     private TextView tvDetailMovieTitle;
     private TextView tvDetailReleaseDate;
     private TextView tvDetailOverview;
@@ -101,7 +102,6 @@ public class DetailFragment extends Fragment implements DetailView {
     private CustomEpisodeAdapter customEpisodeAdapter;
 
     int themeColor;
-
 
     public DetailFragment() {
         // Required empty public constructor

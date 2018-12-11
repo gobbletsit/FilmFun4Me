@@ -35,12 +35,12 @@ public class DetailActivity extends AppCompatActivity {
         Intent listIntent = getIntent();
         Bundle extras = listIntent.getExtras();
 
-
         int fragmentPosition;
 
         if (extras != null) {
             fragmentPosition = extras.getInt(KEY_FRAGMENT_POSITION);
 
+            // have to make this cleaner!
             if (fragmentPosition == 0) {
                 Movie movie = extras.getParcelable(KEY_MOVIE);
                 ArrayList<String> genreNamesListMovie = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
