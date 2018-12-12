@@ -69,23 +69,23 @@ public class DetailFragment extends Fragment implements DetailView {
     @BindView(R.id.tv_detail_overview) private TextView tvDetailOverview;
     @BindView(R.id.tv_detail_rating) private TextView tvDetailRating;
     @BindView(R.id.tv_detail_lang) private TextView tvDetailLang;
-    @BindView(R.id.review_label) private TextView tvReviewLabel;
+    @BindView(R.id.tv_review_label) private TextView tvReviewLabel;
     @BindView(R.id.tv_detail_genre) private TextView tvGenre;
-    @BindView(R.id.detail_language_label) private TextView tvLangLabel;
-    @BindView(R.id.detail_overview_label) private TextView tvOverviewLabel;
-    @BindView(R.id.detail_date_label) private TextView tvDateLabel;
+    @BindView(R.id.tv_detail_lang_label) private TextView tvLangLabel;
+    @BindView(R.id.tv_detail_overview_label) private TextView tvOverviewLabel;
+    @BindView(R.id.tv_detail_date_label) private TextView tvDateLabel;
     @BindView(R.id.tv_seasons_label) private TextView tvSeasonLabel;
-    @BindView(R.id.drop_rev_button) private TextView reviewButtonTextView;
+    @BindView(R.id.tv_drop_rev_button) private TextView reviewButtonTextView;
 
-    @BindView(R.id.image_view_detail) private ImageView imageVideoView;
-    @BindView(R.id.image_view_rating_star) private ImageView ratingStar;
+    @BindView(R.id.image_view_trailer) private ImageView ivTrailer;
+    @BindView(R.id.image_view_rating_star) private ImageView ivRatingStar;
     @BindView(R.id.image_view_play_icon) private ImageView ivPlayIcon;
 
-    @BindView(R.id.recycler_detail_review_list) private RecyclerView recyclerView;
+    @BindView(R.id.recycler_detail_reviews) private RecyclerView recyclerViewReviews;
 
-    @BindView(R.id.reviews_container) private LinearLayout reviewContainerLinearLayout;
-    @BindView(R.id.linear_review_button_holder) private LinearLayout reviewButtonLinearLayout;
-    @BindView(R.id.season_button_holder) private LinearLayout seasonButtonLinearLayout;
+    @BindView(R.id.linear_reviews_container) private LinearLayout reviewsContainerLinearLayout;
+    @BindView(R.id.linear_review_button_container) private LinearLayout reviewButtonLinearLayout;
+    @BindView(R.id.linear_season_button_container) private LinearLayout seasonButtonLinearLayout;
 
     private LinearLayoutManager layoutManager;
     private LayoutInflater layoutInflater;
@@ -146,40 +146,16 @@ public class DetailFragment extends Fragment implements DetailView {
 
         ButterKnife.bind(getActivity(), view);
 
-        tvDetailMovieTitle = view.findViewById(R.id.tv_detail_movie_title);
-        tvDetailReleaseDate = view.findViewById(R.id.tv_detail_release_date);
-        tvDetailOverview = view.findViewById(R.id.tv_detail_overview);
-        tvDetailRating = view.findViewById(R.id.tv_detail_rating);
-        tvDetailLang = view.findViewById(R.id.tv_detail_lang);
-        imageVideoView = view.findViewById(R.id.image_view_detail);
-        recyclerView = view.findViewById(R.id.recycler_detail_review_list);
-        reviewButtonTextView = view.findViewById(R.id.drop_rev_button);
-        reviewContainerLinearLayout = view.findViewById(R.id.reviews_container);
-        tvReviewLabel = view.findViewById(R.id.review_label);
-        tvGenre = view.findViewById(R.id.tv_detail_genre);
-        ratingStar = view.findViewById(R.id.image_view_rating_star);
-        tvLangLabel = view.findViewById(R.id.detail_language_label);
-        tvOverviewLabel = view.findViewById(R.id.detail_overview_label);
-        tvDateLabel = view.findViewById(R.id.detail_date_label);
-        tvSeasonLabel = view.findViewById(R.id.tv_seasons_label);
-        ivPlayIcon = view.findViewById(R.id.image_view_play_icon);
-
-        // REVIEW BUTTON HOLDER
-        reviewButtonLinearLayout = view.findViewById(R.id.linear_review_button_holder);
-
-        // RECYCLER VIEW
+        // recycler view
         layoutInflater = getActivity().getLayoutInflater();
         layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-
-        // SEASON BUTTON HOLDER FOR SEASON BUTTONS
-        seasonButtonLinearLayout = view.findViewById(R.id.season_button_holder);
+        recyclerViewReviews.setLayoutManager(layoutManager);
 
         reviewButtonLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (reviewList.size() != 0) {
-                    reviewContainerLinearLayout.setVisibility(View.VISIBLE);
+                    reviewsContainerLinearLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -221,10 +197,9 @@ public class DetailFragment extends Fragment implements DetailView {
         tvDetailRating.setText(String.valueOf(movie.getVoteAverage()));
         tvDetailLang.setText(movie.getLanguage());
 
+        // ovo u zasebnu metodu
         String genreName = "";
-
         StringBuilder builder = new StringBuilder();
-
         listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
         for (int i = 0; i < listNames.size(); i++) {
             genreName = builder.append(listNames.get(i)).append(" , ").toString();
@@ -236,20 +211,20 @@ public class DetailFragment extends Fragment implements DetailView {
         setColorOfText(themeColor);
 
         customReviewAdapter = new CustomReviewAdapter();
-        recyclerView.setAdapter(customReviewAdapter);
+        recyclerViewReviews.setAdapter(customReviewAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
-                recyclerView.getContext(),
+                recyclerViewReviews.getContext(),
                 layoutManager.getOrientation()
         );
 
         itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
-        recyclerView.addItemDecoration(itemDecoration);
+        recyclerViewReviews.addItemDecoration(itemDecoration);
 
         seasonButtonLinearLayout.setVisibility(View.GONE);
         tvSeasonLabel.setVisibility(View.GONE);
 
-        detailPresenter.setColorOfMovieRatingStar(ratingStar);
+        detailPresenter.setColorOfMovieRatingStar(ivRatingStar);
         detailPresenter.showVideos(movie);
         detailPresenter.showReviews(movie);
     }
@@ -282,17 +257,17 @@ public class DetailFragment extends Fragment implements DetailView {
         reviewButtonTextView.setVisibility(View.GONE);
 
         customEpisodeAdapter = new CustomEpisodeAdapter();
-        recyclerView.setAdapter(customEpisodeAdapter);
+        recyclerViewReviews.setAdapter(customEpisodeAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
-                recyclerView.getContext(),
+                recyclerViewReviews.getContext(),
                 layoutManager.getOrientation()
         );
 
         itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
-        recyclerView.addItemDecoration(itemDecoration);
+        recyclerViewReviews.addItemDecoration(itemDecoration);
 
-        detailPresenter.setColorOfTvRatingStar(ratingStar);
+        detailPresenter.setColorOfTvRatingStar(ivRatingStar);
         detailPresenter.showTvVideos(tvShow);
         detailPresenter.showSeasonList(tvShow);
     }
@@ -304,7 +279,7 @@ public class DetailFragment extends Fragment implements DetailView {
         this.customEpisodeAdapter.notifyDataSetChanged();
 
         if (episodeList.size() != 0) {
-            reviewContainerLinearLayout.setVisibility(View.VISIBLE);
+            reviewsContainerLinearLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -317,12 +292,12 @@ public class DetailFragment extends Fragment implements DetailView {
 
     @Override
     public void setMovieRatingStar(ImageView imageView) {
-        this.ratingStar = imageView;
+        this.ivRatingStar = imageView;
     }
 
     @Override
     public void setTvRatingStar(ImageView imageView) {
-        this.ratingStar = imageView;
+        this.ivRatingStar = imageView;
     }
 
     @Override
@@ -339,19 +314,19 @@ public class DetailFragment extends Fragment implements DetailView {
         Video video = videos.get(0);
 
         if (Video.getUrl(video) != null) {
-            imageVideoView.setTag(Video.getUrl(video));
+            ivTrailer.setTag(Video.getUrl(video));
         } else {
             ivPlayIcon.setVisibility(View.GONE);
         }
 
         if (Video.getThumbnailUrl(video) != null) {
-            Picasso.with(getActivity()).load(Video.getThumbnailUrl(video)).into(imageVideoView);
+            Picasso.with(getActivity()).load(Video.getThumbnailUrl(video)).into(ivTrailer);
             ivPlayIcon.setVisibility(View.VISIBLE);
         } else {
             ivPlayIcon.setVisibility(View.GONE);
         }
 
-        imageVideoView.setOnClickListener(new View.OnClickListener() {
+        ivTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 detailPresenter.whenTrailerClicked(v);

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/image_view_detail"
+                android:id="@+id/image_view_trailer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
@@ -29,11 +29,12 @@
                 android:id="@+id/image_view_play_icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/image_view_detail"
+                android:layout_alignLeft="@+id/image_view_trailer"
                 android:layout_centerVertical="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/play_icon"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:layout_alignStart="@+id/image_view_trailer" />
 
 
         </RelativeLayout>
@@ -62,8 +63,8 @@
                     android:id="@+id/image_view_rating_star"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
                     android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="8dp"
                     android:scaleType="fitCenter" />
@@ -72,8 +73,8 @@
                     android:id="@+id/tv_detail_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
                     android:gravity="center" />
 
 
@@ -96,7 +97,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/detail_language_label"
+                android:id="@+id/tv_detail_lang_label"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="8dp"
@@ -116,7 +117,7 @@
 
 
         <TextView
-            android:id="@+id/detail_overview_label"
+            android:id="@+id/tv_detail_overview_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -129,10 +130,10 @@
             android:id="@+id/tv_detail_overview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:paddingTop="6dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="8dp"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -142,7 +143,7 @@
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/detail_date_label"
+                android:id="@+id/tv_detail_date_label"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/detail_date_label"
@@ -159,7 +160,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_review_button_holder"
+            android:id="@+id/linear_review_button_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -169,7 +170,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/review_label"
+                android:id="@+id/tv_review_label"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -178,7 +179,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/drop_rev_button"
+                android:id="@+id/tv_drop_rev_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -190,7 +191,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/season_button_holder"
+            android:id="@+id/linear_season_button_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -210,7 +211,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/reviews_container"
+            android:id="@+id/linear_reviews_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -218,7 +219,7 @@
             android:visibility="gone">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_detail_review_list"
+                android:id="@+id/recycler_detail_reviews"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
