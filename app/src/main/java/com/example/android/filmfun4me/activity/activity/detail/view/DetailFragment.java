@@ -41,6 +41,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailFragment extends Fragment implements DetailView {
 
     @Inject
@@ -60,44 +63,43 @@ public class DetailFragment extends Fragment implements DetailView {
     private static final String INPUT_DATE_FORMAT = "yyyy-mm-dd";
     private static final String OUTPUT_DATE_FORMAT = "dd, MMM yyyy";
 
-    // butterknife odje odmah
-    private TextView tvDetailMovieTitle;
-    private TextView tvDetailReleaseDate;
-    private TextView tvDetailOverview;
-    private TextView tvDetailRating;
-    private TextView tvDetailLang;
-    private TextView tvReviewLabel;
-    private TextView tvGenre;
-    private TextView tvLangLabel;
-    private TextView tvOverviewLabel;
-    private TextView tvDateLabel;
-    private TextView tvSeasonLabel;
-    private TextView reviewButtonTextView;
+    // view binding
+    @BindView(R.id.tv_detail_movie_title) private TextView tvDetailMovieTitle;
+    @BindView(R.id.tv_detail_release_date) private TextView tvDetailReleaseDate;
+    @BindView(R.id.tv_detail_overview) private TextView tvDetailOverview;
+    @BindView(R.id.tv_detail_rating) private TextView tvDetailRating;
+    @BindView(R.id.tv_detail_lang) private TextView tvDetailLang;
+    @BindView(R.id.review_label) private TextView tvReviewLabel;
+    @BindView(R.id.tv_detail_genre) private TextView tvGenre;
+    @BindView(R.id.detail_language_label) private TextView tvLangLabel;
+    @BindView(R.id.detail_overview_label) private TextView tvOverviewLabel;
+    @BindView(R.id.detail_date_label) private TextView tvDateLabel;
+    @BindView(R.id.tv_seasons_label) private TextView tvSeasonLabel;
+    @BindView(R.id.drop_rev_button) private TextView reviewButtonTextView;
 
-    private ImageView imageVideoView;
-    private ImageView ratingStar;
-    private ImageView ivPlayIcon;
+    @BindView(R.id.image_view_detail) private ImageView imageVideoView;
+    @BindView(R.id.image_view_rating_star) private ImageView ratingStar;
+    @BindView(R.id.image_view_play_icon) private ImageView ivPlayIcon;
+
+    @BindView(R.id.recycler_detail_review_list) private RecyclerView recyclerView;
+
+    @BindView(R.id.reviews_container) private LinearLayout reviewContainerLinearLayout;
+    @BindView(R.id.linear_review_button_holder) private LinearLayout reviewButtonLinearLayout;
+    @BindView(R.id.season_button_holder) private LinearLayout seasonButtonLinearLayout;
+
+    private LinearLayoutManager layoutManager;
+    private LayoutInflater layoutInflater;
 
     private Movie movie;
     private TvShow tvShow;
 
-    private RecyclerView recyclerView;
-
-    private LinearLayout linearLayout;
-    private LinearLayout reviewButtonLinearLayout;
-    private LinearLayout seasonButtonLinearLayout;
-    private LinearLayoutManager layoutManager;
-    private LayoutInflater layoutInflater;
-
-    // LISTS
     private List<Review> reviewList = new ArrayList<>(20);
-    private List<Season> seasonList = new ArrayList<>(15);
+    private List<Season> seasonList = new ArrayList<>(20);
     private List<Episode> episodeList = new ArrayList<>(20);
 
-    // GENRE
+    // genre list
     ArrayList<String> listNames;
 
-    // ADAPTERS
     private CustomReviewAdapter customReviewAdapter;
     private CustomEpisodeAdapter customEpisodeAdapter;
 
@@ -142,6 +144,8 @@ public class DetailFragment extends Fragment implements DetailView {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        ButterKnife.bind(getActivity(), view);
+
         tvDetailMovieTitle = view.findViewById(R.id.tv_detail_movie_title);
         tvDetailReleaseDate = view.findViewById(R.id.tv_detail_release_date);
         tvDetailOverview = view.findViewById(R.id.tv_detail_overview);
@@ -150,7 +154,7 @@ public class DetailFragment extends Fragment implements DetailView {
         imageVideoView = view.findViewById(R.id.image_view_detail);
         recyclerView = view.findViewById(R.id.recycler_detail_review_list);
         reviewButtonTextView = view.findViewById(R.id.drop_rev_button);
-        linearLayout = view.findViewById(R.id.reviews_container);
+        reviewContainerLinearLayout = view.findViewById(R.id.reviews_container);
         tvReviewLabel = view.findViewById(R.id.review_label);
         tvGenre = view.findViewById(R.id.tv_detail_genre);
         ratingStar = view.findViewById(R.id.image_view_rating_star);
@@ -175,7 +179,7 @@ public class DetailFragment extends Fragment implements DetailView {
             @Override
             public void onClick(View v) {
                 if (reviewList.size() != 0) {
-                    linearLayout.setVisibility(View.VISIBLE);
+                    reviewContainerLinearLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -300,7 +304,7 @@ public class DetailFragment extends Fragment implements DetailView {
         this.customEpisodeAdapter.notifyDataSetChanged();
 
         if (episodeList.size() != 0) {
-            linearLayout.setVisibility(View.VISIBLE);
+            reviewContainerLinearLayout.setVisibility(View.VISIBLE);
         }
     }
 
