@@ -81,7 +81,9 @@ public class DetailFragment extends Fragment implements DetailView {
     @BindView(R.id.image_view_rating_star) ImageView ivRatingStar;
     @BindView(R.id.image_view_play_icon) ImageView ivPlayIcon;
 
-    @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
+    //@BindView(R.id.recycler_detail_reviews)
+    // nesto si sjebo odje, moras popravlajt, vrati se na master i skontaj sta je problem
+    RecyclerView recyclerViewReviews;
 
     @BindView(R.id.linear_reviews_container) LinearLayout reviewsContainerLinearLayout;
     @BindView(R.id.linear_review_button_container) LinearLayout reviewButtonLinearLayout;
@@ -147,6 +149,7 @@ public class DetailFragment extends Fragment implements DetailView {
         ButterKnife.bind(getActivity(), view);
 
         // recycler view
+        recyclerViewReviews = view.findViewById(R.id.recycler_detail_reviews);
         layoutInflater = getActivity().getLayoutInflater();
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewReviews.setLayoutManager(layoutManager);
@@ -212,6 +215,10 @@ public class DetailFragment extends Fragment implements DetailView {
         setColorOfText(themeColor);
 
         customReviewAdapter = new CustomReviewAdapter();
+        // recycler view
+        layoutInflater = getActivity().getLayoutInflater();
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewReviews.setLayoutManager(layoutManager);
         recyclerViewReviews.setAdapter(customReviewAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
@@ -373,14 +380,12 @@ public class DetailFragment extends Fragment implements DetailView {
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            private TextView tvReviewAuthor;
-            private TextView tvReviewContent;
+            @BindView(R.id.tv_review_author) TextView tvReviewAuthor;
+            @BindView(R.id.tv_review_content) TextView tvReviewContent;
 
             ViewHolder(View itemView) {
                 super(itemView);
-
-                this.tvReviewAuthor = itemView.findViewById(R.id.tv_review_author);
-                this.tvReviewContent = itemView.findViewById(R.id.tv_review_content);
+                ButterKnife.bind(this, itemView);
             }
         }
     }
@@ -414,13 +419,13 @@ public class DetailFragment extends Fragment implements DetailView {
             return episodeList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             private TextView tv__episode_title;
             private TextView tv_episode_overview;
             private ImageView iv_episode_poster;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 this.tv__episode_title = itemView.findViewById(R.id.tv_episode_title);
                 this.tv_episode_overview = itemView.findViewById(R.id.tv_episode_overview);
