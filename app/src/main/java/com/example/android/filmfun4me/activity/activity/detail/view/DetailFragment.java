@@ -81,9 +81,7 @@ public class DetailFragment extends Fragment implements DetailView {
     @BindView(R.id.image_view_rating_star) ImageView ivRatingStar;
     @BindView(R.id.image_view_play_icon) ImageView ivPlayIcon;
 
-    //@BindView(R.id.recycler_detail_reviews)
-    // nesto si sjebo odje, moras popravlajt, vrati se na master i skontaj sta je problem
-    RecyclerView recyclerViewReviews;
+    @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
 
     @BindView(R.id.linear_reviews_container) LinearLayout reviewsContainerLinearLayout;
     @BindView(R.id.linear_review_button_container) LinearLayout reviewButtonLinearLayout;
@@ -146,10 +144,8 @@ public class DetailFragment extends Fragment implements DetailView {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        ButterKnife.bind(getActivity(), view);
+        ButterKnife.bind(this, view);
 
-        // recycler view
-        recyclerViewReviews = view.findViewById(R.id.recycler_detail_reviews);
         layoutInflater = getActivity().getLayoutInflater();
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewReviews.setLayoutManager(layoutManager);
