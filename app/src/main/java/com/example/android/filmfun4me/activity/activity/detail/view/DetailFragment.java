@@ -64,28 +64,28 @@ public class DetailFragment extends Fragment implements DetailView {
     private static final String OUTPUT_DATE_FORMAT = "dd, MMM yyyy";
 
     // view binding
-    @BindView(R.id.tv_detail_movie_title) private TextView tvDetailMovieTitle;
-    @BindView(R.id.tv_detail_release_date) private TextView tvDetailReleaseDate;
-    @BindView(R.id.tv_detail_overview) private TextView tvDetailOverview;
-    @BindView(R.id.tv_detail_rating) private TextView tvDetailRating;
-    @BindView(R.id.tv_detail_lang) private TextView tvDetailLang;
-    @BindView(R.id.tv_review_label) private TextView tvReviewLabel;
-    @BindView(R.id.tv_detail_genre) private TextView tvGenre;
-    @BindView(R.id.tv_detail_lang_label) private TextView tvLangLabel;
-    @BindView(R.id.tv_detail_overview_label) private TextView tvOverviewLabel;
-    @BindView(R.id.tv_detail_date_label) private TextView tvDateLabel;
-    @BindView(R.id.tv_seasons_label) private TextView tvSeasonLabel;
-    @BindView(R.id.tv_drop_rev_button) private TextView reviewButtonTextView;
+    @BindView(R.id.tv_detail_movie_title) TextView tvDetailMovieTitle;
+    @BindView(R.id.tv_detail_release_date) TextView tvDetailReleaseDate;
+    @BindView(R.id.tv_detail_overview) TextView tvDetailOverview;
+    @BindView(R.id.tv_detail_rating) TextView tvDetailRating;
+    @BindView(R.id.tv_detail_lang) TextView tvDetailLang;
+    @BindView(R.id.tv_review_label) TextView tvReviewLabel;
+    @BindView(R.id.tv_detail_genre) TextView tvGenre;
+    @BindView(R.id.tv_detail_lang_label) TextView tvLangLabel;
+    @BindView(R.id.tv_detail_overview_label) TextView tvOverviewLabel;
+    @BindView(R.id.tv_detail_date_label) TextView tvDateLabel;
+    @BindView(R.id.tv_seasons_label) TextView tvSeasonLabel;
+    @BindView(R.id.tv_drop_rev_button) TextView reviewButtonTextView;
 
-    @BindView(R.id.image_view_trailer) private ImageView ivTrailer;
-    @BindView(R.id.image_view_rating_star) private ImageView ivRatingStar;
-    @BindView(R.id.image_view_play_icon) private ImageView ivPlayIcon;
+    @BindView(R.id.image_view_trailer) ImageView ivTrailer;
+    @BindView(R.id.image_view_rating_star) ImageView ivRatingStar;
+    @BindView(R.id.image_view_play_icon) ImageView ivPlayIcon;
 
-    @BindView(R.id.recycler_detail_reviews) private RecyclerView recyclerViewReviews;
+    @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
 
-    @BindView(R.id.linear_reviews_container) private LinearLayout reviewsContainerLinearLayout;
-    @BindView(R.id.linear_review_button_container) private LinearLayout reviewButtonLinearLayout;
-    @BindView(R.id.linear_season_button_container) private LinearLayout seasonButtonLinearLayout;
+    @BindView(R.id.linear_reviews_container) LinearLayout reviewsContainerLinearLayout;
+    @BindView(R.id.linear_review_button_container) LinearLayout reviewButtonLinearLayout;
+    @BindView(R.id.linear_season_button_container) LinearLayout seasonButtonLinearLayout;
 
     private LinearLayoutManager layoutManager;
     private LayoutInflater layoutInflater;
@@ -202,6 +202,7 @@ public class DetailFragment extends Fragment implements DetailView {
         StringBuilder builder = new StringBuilder();
         listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
         for (int i = 0; i < listNames.size(); i++) {
+            // trebas se rijesit zareza zadnjeg
             genreName = builder.append(listNames.get(i)).append(" , ").toString();
         }
 
@@ -240,15 +241,9 @@ public class DetailFragment extends Fragment implements DetailView {
         tvDetailRating.setText(String.valueOf(tvShow.getVoteAverage()));
         tvDetailLang.setText(tvShow.getLanguage());
 
-        String genreName = "";
-        StringBuilder builder = new StringBuilder();
-
+        // isto vrijedi i za ovo
         listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
-        for (int i = 0; i < listNames.size(); i++) {
-            genreName = builder.append(listNames.get(i)).append(" , ").toString();
-        }
-
-        tvGenre.setText(genreName);
+        tvGenre.setText(getAppendedGenreNames(listNames));
 
         themeColor = getArguments().getInt(KEY_THEME_COLOR_TV);
         setColorOfText(themeColor);
@@ -496,5 +491,14 @@ public class DetailFragment extends Fragment implements DetailView {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String getAppendedGenreNames (ArrayList<String> genreNamesList){
+        String genreName = "";
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < listNames.size(); i++) {
+            genreName = builder.append(listNames.get(i)).append(" , ").toString();
+        }
+        return genreName;
     }
 }
