@@ -196,16 +196,8 @@ public class DetailFragment extends Fragment implements DetailView {
         tvDetailRating.setText(String.valueOf(movie.getVoteAverage()));
         tvDetailLang.setText(movie.getLanguage());
 
-        // ovo u zasebnu metodu
-        String genreName = "";
-        StringBuilder builder = new StringBuilder();
         listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
-        for (int i = 0; i < listNames.size(); i++) {
-            // trebas se rijesit zareza zadnjeg
-            genreName = builder.append(listNames.get(i)).append(" , ").toString();
-        }
-
-        tvGenre.setText(genreName);
+        tvGenre.setText(getAppendedGenreNames(listNames));
 
         themeColor = getArguments().getInt(KEY_THEME_COLOR_MOVIE);
         setColorOfText(themeColor);
@@ -244,7 +236,6 @@ public class DetailFragment extends Fragment implements DetailView {
         tvDetailRating.setText(String.valueOf(tvShow.getVoteAverage()));
         tvDetailLang.setText(tvShow.getLanguage());
 
-        // isto vrijedi i za ovo
         listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
         tvGenre.setText(getAppendedGenreNames(listNames));
 
