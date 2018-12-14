@@ -119,16 +119,20 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
 
-
-
     // To compare to all the genres and get the match if it's found
+    // OVO JE ODVRATNO MOJ TI, REFACTOR POD HITNO!!!!!!!
     private void setUpSingleItemGenreList(int[] currentGenreIds, List<Genre> genreList, ArrayList<String> singleGenreNamesList) {
 
-        // Going through the single item genre list
+        if (singleGenreNamesList.size() != 0){
+            singleGenreNamesList.clear();
+        }
+        // Going through the single item genre list ids
         for (int i = 0; i < currentGenreIds.length; i++) {
             int singleGenreId = currentGenreIds[i];
 
             // Going through all possible genre list
+            // u novu metodu
+            // method for genre identifying
             for (int a = 0; a < genreList.size(); a++) {
                 int preciseGenreId = genreList.get(a).getGenreId();
 
