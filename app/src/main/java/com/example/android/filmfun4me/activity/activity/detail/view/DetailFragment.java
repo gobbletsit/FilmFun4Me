@@ -331,14 +331,12 @@ public class DetailFragment extends Fragment implements DetailView {
         this.customReviewAdapter.notifyDataSetChanged();
 
         if (reviewList.size() == 0) {
-            Log.d(TAG, "REVIEW LIST SIZE = " + reviewList.size());
             tvReviewLabel.setVisibility(View.INVISIBLE);
             reviewButtonTextView.setVisibility(View.INVISIBLE);
         }
 
     }
 
-    // REVIEW LIST ADAPTER
     public class CustomReviewAdapter extends RecyclerView.Adapter<CustomReviewAdapter.ViewHolder> {
 
 
@@ -361,7 +359,6 @@ public class DetailFragment extends Fragment implements DetailView {
 
         @Override
         public int getItemCount() {
-
             return reviewList.size();
         }
 
