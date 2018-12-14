@@ -3,27 +3,19 @@ package com.example.android.filmfun4me.activity.activity.list.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +25,6 @@ import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivi
 import com.example.android.filmfun4me.activity.activity.list.presenter.ListPresenter;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
-import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +36,8 @@ import javax.inject.Inject;
 
 public class ListFragment extends Fragment implements ListView {
 
+    private static final String TAG = ListFragment.class.getSimpleName();
+
     @Inject
     ListPresenter listPresenter;
 
@@ -53,7 +46,7 @@ public class ListFragment extends Fragment implements ListView {
     private static final String KEY_GENRE_NAMES_LIST = "genreNames";
 
     RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
+    RecyclerView.Adapter customAdapter;
     LayoutInflater layoutInflater;
 
     private String genreName;
@@ -62,7 +55,7 @@ public class ListFragment extends Fragment implements ListView {
 
     private List<Genre> genreList = new ArrayList<>(40);
 
-    // To store for a single movie ans pass it to detail activity
+    // To store for a single movie and pass it to detail activity
     private ArrayList<String> singleGenreNamesList = new ArrayList<>(20);
 
     private GridLayoutManager layoutManager;
@@ -100,12 +93,11 @@ public class ListFragment extends Fragment implements ListView {
         recyclerView = view.findViewById(R.id.rec_list_activity);
         layoutInflater = getActivity().getLayoutInflater();
 
-        // WITH NUMBER OF COLUMNS
         layoutManager = new GridLayoutManager(getActivity(), 2);
 
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CustomAdapter();
-        recyclerView.setAdapter(adapter);
+        customAdapter = new CustomAdapter();
+        recyclerView.setAdapter(customAdapter);
 
         return view;
     }
@@ -136,7 +128,7 @@ public class ListFragment extends Fragment implements ListView {
     public void setUpMovieView(List<Movie> movieList) {
         this.movieList.clear();
         this.movieList.addAll(movieList);
-        adapter.notifyDataSetChanged();
+        customAdapter.notifyDataSetChanged();
 
     }
 
@@ -150,7 +142,6 @@ public class ListFragment extends Fragment implements ListView {
         startDetailIntent.putStringArrayListExtra(KEY_GENRE_NAMES_LIST, singleGenreNamesList);
         startActivity(startDetailIntent);
     }
-
 
 
     @Override
@@ -215,6 +206,7 @@ public class ListFragment extends Fragment implements ListView {
             holder.currentGenreIds = holder.movie.getGenreIds();
 
             genreName = getSingleGenreName(holder.currentGenreIds, genreList);
+            Log.d(TAG, "SAD CEMO SKONTAT STA ODJE OVAJ KURAC PRIKAZUJE = " + genreName);
             holder.tv_title.setText(holder.movie.getTitle());
             holder.tv_title.setTextColor(themeColor);
 

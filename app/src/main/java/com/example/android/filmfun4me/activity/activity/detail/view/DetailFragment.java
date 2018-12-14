@@ -197,7 +197,9 @@ public class DetailFragment extends Fragment implements DetailView {
         tvDetailLang.setText(movie.getLanguage());
 
         listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
-        tvGenre.setText(getAppendedGenreNames(listNames));
+        if (listNames != null){
+            tvGenre.setText(getAppendedGenreNames(listNames));
+        }
 
         themeColor = getArguments().getInt(KEY_THEME_COLOR_MOVIE);
         setColorOfText(themeColor);
@@ -237,7 +239,9 @@ public class DetailFragment extends Fragment implements DetailView {
         tvDetailLang.setText(tvShow.getLanguage());
 
         listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
-        tvGenre.setText(getAppendedGenreNames(listNames));
+        if (listNames != null){
+            tvGenre.setText(getAppendedGenreNames(listNames));
+        }
 
         themeColor = getArguments().getInt(KEY_THEME_COLOR_TV);
         setColorOfText(themeColor);
@@ -422,9 +426,6 @@ public class DetailFragment extends Fragment implements DetailView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        reviewList.clear();
-
-        getArguments().clear();
 
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
     }
@@ -485,8 +486,8 @@ public class DetailFragment extends Fragment implements DetailView {
     private String getAppendedGenreNames (ArrayList<String> genreNamesList){
         String genreName = "";
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < listNames.size(); i++) {
-            genreName = builder.append(listNames.get(i)).append(" , ").toString();
+        for (int i = 0; i < genreNamesList.size(); i++) {
+            genreName = builder.append(genreNamesList.get(i)).append(" , ").toString();
         }
         return genreName;
     }
