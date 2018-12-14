@@ -238,7 +238,7 @@ public class ListFragment extends Fragment implements ListView {
 
             @Override
             public void onClick(View view) {
-                listPresenter.whenMovieClicked(movie, genreList, singleGenreNamesList);
+                listPresenter.whenMovieClicked(movie, genreList);
             }
         }
     }

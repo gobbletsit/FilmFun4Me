@@ -28,7 +28,7 @@ public interface ListPresenter {
     void getAllMovieGenres();
 
     // Clicks
-    void whenMovieClicked(Movie movie, List<Genre> genreList, ArrayList<String> singleGenreNamesList);
+    void whenMovieClicked(Movie movie, List<Genre> genreList);
 
     void setListColors(RecyclerView recyclerView, LinearLayoutManager layoutManager, int themeColor);
 

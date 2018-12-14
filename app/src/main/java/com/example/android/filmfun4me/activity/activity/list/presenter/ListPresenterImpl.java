@@ -107,43 +107,22 @@ public class ListPresenterImpl implements ListPresenter {
         view.loadingErrorMessage(e.getMessage());
     }
 
-
-    // Click methods
     @Override
-    public void whenMovieClicked(Movie movie, List<Genre> genreList, ArrayList<String> singleGenreNamesList) {
+    public void whenMovieClicked(Movie movie, List<Genre> genreList) {
         int[] currentGenreIds = movie.getGenreIds();
 
-        setUpSingleItemGenreList(currentGenreIds, genreList, singleGenreNamesList);
-
-        view.onMovieClicked(movie, genreList, singleGenreNamesList);
+        view.onMovieClicked(movie, genreList, getSingleItemGenreList(currentGenreIds, genreList));
     }
 
+    // To compare to all the genres and get the match when found
+    private ArrayList<String> getSingleItemGenreList(int[] currentGenreIds, List<Genre> genreList) {
 
-    // To compare to all the genres and get the match if it's found
-    // OVO JE ODVRATNO MOJ TI, REFACTOR POD HITNO!!!!!!!
-    private void setUpSingleItemGenreList(int[] currentGenreIds, List<Genre> genreList, ArrayList<String> singleGenreNamesList) {
-
-        if (singleGenreNamesList.size() != 0){
-            singleGenreNamesList.clear();
-        }
+        ArrayList<String> singleGenreNamesList = new ArrayList<>(10);
         // Going through the single item genre list ids
-        for (int i = 0; i < currentGenreIds.length; i++) {
-            int singleGenreId = currentGenreIds[i];
-
-            // Going through all possible genre list
-            // u novu metodu
-            // method for genre identifying
-            for (int a = 0; a < genreList.size(); a++) {
-                int preciseGenreId = genreList.get(a).getGenreId();
-
-                // Comparing results
-                if (preciseGenreId == singleGenreId) {
-
-                    // If the match is found, add to single genre list
-                    singleGenreNamesList.add(genreList.get(a).getGenreName());
-                }
-            }
+        for (int singleGenreId : currentGenreIds) {
+            compareGenreIdsAndLoadGenreList(genreList, singleGenreNamesList, singleGenreId);
         }
+        return singleGenreNamesList;
     }
 
     @Override
@@ -188,4 +167,18 @@ public class ListPresenterImpl implements ListPresenter {
         RxUtils.unsubscribe(disposableGenres);
     }
 
+    private void compareGenreIdsAndLoadGenreList(List<Genre> genreList, ArrayList<String> singleGenreNamesList, int singleGenreId){
+        // Going through list of all possible genres
+        for (int a = 0; a < genreList.size(); a++) {
+            int preciseGenreId = genreList.get(a).getGenreId();
+
+            // Comparing results
+            if (preciseGenreId == singleGenreId) {
+
+                // If the match is found, add to single genre list
+                singleGenreNamesList.add(genreList.get(a).getGenreName());
+                break;
+            }
+        }
+    }
 }
