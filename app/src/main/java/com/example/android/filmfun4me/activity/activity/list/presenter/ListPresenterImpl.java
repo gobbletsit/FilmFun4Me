@@ -51,7 +51,7 @@ public class ListPresenterImpl implements ListPresenter {
         this.listInteractor = listInteractor;
         this.mContext = context;
 
-        // So it can be used for determining which list to get
+        // So it can be used to determine which list to get
         sharedPreferences = context.getApplicationContext().getSharedPreferences(SELECTED_SHARED, Context.MODE_PRIVATE);
     }
 
@@ -171,10 +171,8 @@ public class ListPresenterImpl implements ListPresenter {
         // Going through list of all possible genres
         for (int a = 0; a < genreList.size(); a++) {
             int preciseGenreId = genreList.get(a).getGenreId();
-
             // Comparing results
             if (preciseGenreId == singleGenreId) {
-
                 // If the match is found, add to single genre list
                 singleGenreNamesList.add(genreList.get(a).getGenreName());
                 break;

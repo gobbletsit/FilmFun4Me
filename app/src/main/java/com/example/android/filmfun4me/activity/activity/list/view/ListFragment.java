@@ -205,8 +205,8 @@ public class ListFragment extends Fragment implements ListView {
 
             holder.currentGenreIds = holder.movie.getGenreIds();
 
-            genreName = getSingleGenreName(holder.currentGenreIds, genreList);
-            Log.d(TAG, "SAD CEMO SKONTAT STA ODJE OVAJ KURAC PRIKAZUJE = " + genreName);
+            // dont need this for now
+            // genreName = getSingleGenreName(holder.currentGenreIds, genreList);
             holder.tv_title.setText(holder.movie.getTitle());
             holder.tv_title.setTextColor(themeColor);
 
