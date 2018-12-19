@@ -72,7 +72,6 @@ public class ListActivity extends AppCompatActivity {
 
                 editor = sharedPreferences.edit();
 
-                // For ListInteractor to know which list to get
                 editor.putInt(SELECTED_BUTTON_MOVIE, 0);
                 editor.apply();
 
@@ -86,7 +85,6 @@ public class ListActivity extends AppCompatActivity {
                 //sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
                 editor = sharedPreferences.edit();
 
-                // For ListInteractor to know which list to get
                 editor.putInt(SELECTED_BUTTON_MOVIE, 1);
                 editor.apply();
 
@@ -97,7 +95,6 @@ public class ListActivity extends AppCompatActivity {
 
             case R.id.upcoming_item: // strpaj u shared prefs ko button;
 
-                //sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
                 editor = sharedPreferences.edit();
 
                 // For ListInteractor to know which list to get
