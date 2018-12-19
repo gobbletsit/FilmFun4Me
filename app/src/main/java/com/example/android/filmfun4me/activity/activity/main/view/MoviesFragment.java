@@ -33,9 +33,8 @@ public class MoviesFragment extends Fragment implements MainView {
     @Inject
     MainPresenter presenter;
 
-    private ImageButton popularButton;
-    private ImageButton highestButton;
-    private ImageButton upcomingButton;
+    private ImageButton moviesButton;
+    private ImageButton tvShowsButton;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -70,34 +69,25 @@ public class MoviesFragment extends Fragment implements MainView {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movies, container, false);
 
-        popularButton = new ImageButton(getContext());
-        highestButton = new ImageButton(getContext());
-        upcomingButton = new ImageButton(getContext());
+        moviesButton = new ImageButton(getContext());
+        tvShowsButton = new ImageButton(getContext());
 
-        popularButton = view.findViewById(R.id.button_popular);
-        highestButton = view.findViewById(R.id.button_highest_rated);
-        upcomingButton = view.findViewById(R.id.button_upcoming);
+        moviesButton = view.findViewById(R.id.button_popular);
+        tvShowsButton = view.findViewById(R.id.button_highest_rated);
 
         presenter.setView(this);
 
-        popularButton.setOnClickListener(new View.OnClickListener() {
+        moviesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.goToMostPopularMoviesList(fragmentPosition);
             }
         });
 
-        highestButton.setOnClickListener(new View.OnClickListener() {
+        tvShowsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.goToHighestRatedMoviesList(fragmentPosition);
-            }
-        });
-
-        upcomingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.goToUpcomingMoviesList(fragmentPosition);
             }
         });
 
