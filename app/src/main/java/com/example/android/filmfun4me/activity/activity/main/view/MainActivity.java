@@ -17,27 +17,22 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     private static final String MAIN_FRAG = "MAIN_FRAG";
-
-    private ListFragmentAdapter adapter;
-
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new ListFragmentAdapter(this, getSupportFragmentManager());
-
         android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
 
-        ListFragment fragment = (ListFragment) manager.findFragmentByTag(LIST_FRAG);
+        ListFragment fragment = (ListFragment) manager.findFragmentByTag(MAIN_FRAG);
 
         if (fragment == null) {
             fragment = ListFragment.newInstance();
         }
 
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.root_activity_list, fragment, LIST_FRAG);
+        transaction.replace(R.id.root_activity_list, fragment, MAIN_FRAG);
         transaction.commit();
 
     }
