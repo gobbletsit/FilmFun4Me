@@ -36,6 +36,7 @@ public class ListActivity extends AppCompatActivity {
                 ViewPager viewPager = this.findViewById(R.id.view_pager_list);
                 TabLayout tabLayout = this.findViewById(R.id.tab_layout_list);
                 viewPager.setAdapter(listFragmentAdapter);
+                tabLayout.setupWithViewPager(viewPager);
             }
         }
     }
