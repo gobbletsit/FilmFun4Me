@@ -16,7 +16,7 @@ public interface MainPresenter {
     void setView (MainView mainView);
 
     // Fragment position so it can passed along to activities for use
-    void goToMostPopularMoviesList(int fragmentPosition);
+    /*void goToMostPopularMoviesList(int fragmentPosition);
 
     void goToHighestRatedMoviesList(int fragmentPosition);
 
@@ -24,6 +24,6 @@ public interface MainPresenter {
 
     void goToMostPopularTvShowsList(int fragmentPosition);
 
-    void goToHighestRatedTvShowsList(int fragmentPosition);
+    void goToHighestRatedTvShowsList(int fragmentPosition);*/
 
 }

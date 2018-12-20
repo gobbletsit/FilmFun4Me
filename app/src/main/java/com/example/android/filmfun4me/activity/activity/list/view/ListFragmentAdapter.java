@@ -18,26 +18,19 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
 
     private Context mContext;
 
-    private SharedPreferences sharedPreferences;
+    private int selectedButton;
 
-    private static final String SELECTED_BUTTON = "selectedButton";
-
-    private static final int BUTTON_MOVIES = 0;
-    private static final int BUTTON_TVSHOWS = 1;
-
-    ListFragmentAdapter(Context context, FragmentManager fm) {
+    ListFragmentAdapter(Context context, FragmentManager fm, int selectedButton) {
         super(fm);
 
         // for strings
         mContext = context;
-        sharedPreferences = mContext.getSharedPreferences(SELECTED_BUTTON, 0);
+        this.selectedButton = selectedButton;
     }
 
 
     @Override
     public Fragment getItem(int position) {
-
-        Fragment frag = null;
         return ListFragment.newInstance(position);
     }
 
@@ -50,12 +43,17 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
     @Override
     public CharSequence getPageTitle(int position) {
         // you will set which names to retrieve based SELECTED BUTTON
-        if (position == 0){
-            return "Most Popular";
-        } else if (position == 1){
-            return "Highest rated";
+        if (selectedButton == 0){
+            if (position == 0){
+                return "Most Popular";
+            } else if (position == 1){
+                return "Highest rated";
+            } else {
+                return "Upcoming";
+            }
         } else {
-            return "Upcoming";
+            return null;
         }
+
     }
 }

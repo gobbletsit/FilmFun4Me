@@ -21,7 +21,7 @@ public class MainPresenterImpl implements MainPresenter {
         this.mainView = mainView;
     }
 
-    @Override
+    /*@Override
     public void goToMostPopularMoviesList(int fragmentPosition) {
         mainView.onPopularButtonClick(fragmentPosition);
     }
@@ -44,5 +44,5 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void goToHighestRatedTvShowsList(int fragmentPosition) {
         mainView.onHighestRatedButtonClick(fragmentPosition);
-    }
+    }*/
 }

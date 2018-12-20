@@ -78,7 +78,7 @@ public class TvShowsFragment extends Fragment implements MainView {
 
         presenter.setView(this);
 
-        popularButton.setOnClickListener(new View.OnClickListener() {
+        /*popularButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.goToMostPopularTvShowsList(fragmentPosition);
@@ -91,12 +91,12 @@ public class TvShowsFragment extends Fragment implements MainView {
             public void onClick(View v) {
                 presenter.goToHighestRatedTvShowsList(fragmentPosition);
             }
-        });
+        });*/
 
         return view;
     }
 
-    @Override
+    /*@Override
     public void onPopularButtonClick(int fragmentPosition) {
 
 
@@ -134,7 +134,7 @@ public class TvShowsFragment extends Fragment implements MainView {
     @Override
     public void onUpcomingButtonClick(int fragmentPosition) {
         // ONLY HERE BECAUSE OF THE MAIN VIEW IMPLEMENTATION
-    }
+    }*/
 
 
     @Override

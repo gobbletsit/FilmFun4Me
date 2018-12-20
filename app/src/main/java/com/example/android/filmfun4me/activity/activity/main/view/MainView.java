@@ -8,11 +8,11 @@ import android.widget.Button;
 
 public interface MainView {
 
-    void onPopularButtonClick(int fragmentPosition);
+    /*void onPopularButtonClick(int fragmentPosition);
 
     void onHighestRatedButtonClick(int fragmentPosition);
 
-    void onUpcomingButtonClick(int fragmentPosition);
+    void onUpcomingButtonClick(int fragmentPosition);*/
 
 
 }
