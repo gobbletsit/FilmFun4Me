@@ -1,7 +1,9 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
 import android.content.SharedPreferences;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +24,8 @@ public class ListActivity extends AppCompatActivity {
 
     private ListFragmentAdapter listFragmentAdapter;
 
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -31,8 +35,7 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-
-
+        listFragmentAdapter = new ListFragmentAdapter(this, getSupportFragmentManager());
 
 
         sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
