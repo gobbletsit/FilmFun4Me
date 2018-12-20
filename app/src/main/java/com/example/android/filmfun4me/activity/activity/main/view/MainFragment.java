@@ -29,7 +29,6 @@ public class MainFragment extends Fragment implements MainView {
     private static final int BUTTON_MOVIES = 0;
     private static final int BUTTON_TVSHOWS = 1;
 
-    //private static final String INT_POSITION = "intPosition";
     private static final String KEY_FRAGMENT_POSITION = "position";
 
 
@@ -60,7 +59,7 @@ public class MainFragment extends Fragment implements MainView {
         ((BaseApplication) getActivity().getApplication()).createMainComponent().inject(this);
 
         // To pass along
-        fragmentPosition = getArguments().getInt(KEY_FRAGMENT_POSITION);
+        //fragmentPosition = getArguments().getInt(KEY_FRAGMENT_POSITION);
     }
 
     @Override

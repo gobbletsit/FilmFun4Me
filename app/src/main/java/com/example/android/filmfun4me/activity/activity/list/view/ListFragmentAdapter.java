@@ -1,6 +1,7 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,9 +18,19 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
 
     private Context mContext;
 
+    private SharedPreferences sharedPreferences;
+
+    private static final String SELECTED_BUTTON = "selectedButton";
+
+    private static final int BUTTON_MOVIES = 0;
+    private static final int BUTTON_TVSHOWS = 1;
+
     ListFragmentAdapter(Context context, FragmentManager fm) {
         super(fm);
+
+        // for strings
         mContext = context;
+        sharedPreferences = mContext.getSharedPreferences(SELECTED_BUTTON, 0);
     }
 
 
@@ -27,26 +38,24 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
     public Fragment getItem(int position) {
 
         Fragment frag = null;
-        if (position == 0){
-            frag = ListFragment.newInstance(position);
-        } else {
-            frag = TvShowsFragment.newInstance(position);
-        }
-        return frag;
+        return ListFragment.newInstance(position);
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
 
     @Override
     public CharSequence getPageTitle(int position) {
+        // you will set which names to retrieve based SELECTED BUTTON
         if (position == 0){
-            return mContext.getString(R.string.movie_tab_title);
+            return "Most Popular";
+        } else if (position == 1){
+            return "Highest rated";
         } else {
-            return mContext.getString(R.string.tv_show_tab_title);
+            return "Upcoming";
         }
     }
 }

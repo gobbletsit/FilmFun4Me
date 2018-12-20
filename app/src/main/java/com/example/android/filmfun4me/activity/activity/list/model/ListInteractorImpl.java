@@ -27,7 +27,7 @@ public class ListInteractorImpl implements ListInteractor {
     private MoviesWebService moviesWebService;
 
     @Inject
-    public ListInteractorImpl(MoviesWebService moviesWebService, Context context) {
+    public ListInteractorImpl(MoviesWebService moviesWebService) {
         this.moviesWebService = moviesWebService;
     }
 

@@ -40,19 +40,28 @@ public class ListPresenterImpl implements ListPresenter {
     private Disposable disposableSubscription;
     private Disposable disposableGenres;
 
-    private SharedPreferences sharedPreferences;
-
     private Context mContext;
 
 
     public ListPresenterImpl(ListInteractor listInteractor, Context context) {
         this.listInteractor = listInteractor;
         this.mContext = context;
-
-        // So it can be used to determine which list to get
-        sharedPreferences = context.getApplicationContext().getSharedPreferences(SELECTED_SHARED, Context.MODE_PRIVATE);
     }
 
+    @Override
+    public void setMovieView(ListView listView, int pagerPosition) {
+        this.view = listView;
+
+        if (pagerPosition == 0){
+            showMostPopularMovies();
+        } else if (pagerPosition == 1){
+            showHighestRatedMovies();
+        } else {
+            showUpcomingMovies();
+        }
+
+        getAllMovieGenres();
+    }
 
     // Show methods
     @Override
@@ -81,15 +90,6 @@ public class ListPresenterImpl implements ListPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onMovieFetchSuccess, this::onMovieFetchFailed);
     }
-
-    // Set view methods
-    @Override
-    public void setMovieView(ListView listView, int pagerPosition) {
-        this.view = listView;
-        showMostPopularMovies();
-        getAllMovieGenres();
-    }
-
 
     // Genre methods
     @Override
@@ -141,19 +141,17 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     @Override
-    public void setListColors(RecyclerView recyclerView, LinearLayoutManager layoutManager, int themeColor) {
-
-        int selectedButton = sharedPreferences.getInt(SELECTED_BUTTON_MOVIE, 0);
+    public void setListColors(RecyclerView recyclerView, LinearLayoutManager layoutManager, int themeColor,int pagerPosition) {
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
                 recyclerView.getContext(),
                 layoutManager.getOrientation()
         );
 
-        if (selectedButton == 0) {
+        if (pagerPosition == 0) {
             itemDecoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.divider_popular));
             themeColor = ContextCompat.getColor(mContext, R.color.colorPopular);
-        } else if (selectedButton == 1) {
+        } else if (pagerPosition == 1) {
             itemDecoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.divider_highest_rated));
             themeColor = ContextCompat.getColor(mContext, R.color.colorHighestRated);
         } else {

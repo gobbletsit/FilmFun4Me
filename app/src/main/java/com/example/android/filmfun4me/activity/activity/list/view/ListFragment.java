@@ -86,8 +86,6 @@ public class ListFragment extends Fragment implements ListView {
 
         ((BaseApplication) getActivity().getApplication()).createListComponent().inject(this);
 
-        //fragmentPosition = getArguments().getInt("position");
-
     }
 
     @Override
@@ -117,7 +115,7 @@ public class ListFragment extends Fragment implements ListView {
 
             if (isNetworkAvailable()) {
                 listPresenter.setMovieView(this, pagerPosition);
-                listPresenter.setListColors(recyclerView, layoutManager, themeColor);
+                listPresenter.setListColors(recyclerView, layoutManager, themeColor, pagerPosition);
             }
         }
     }
