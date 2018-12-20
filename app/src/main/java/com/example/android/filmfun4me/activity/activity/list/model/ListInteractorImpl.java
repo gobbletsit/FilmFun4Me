@@ -42,7 +42,6 @@ public class ListInteractorImpl implements ListInteractor {
     public ListInteractorImpl(MoviesWebService moviesWebService, Context context) {
         this.moviesWebService = moviesWebService;
 
-
         // So it can be used for determining which list to get
         prefs = context.getApplicationContext().getSharedPreferences(SELECTED_SHARED_MOVIE, Context.MODE_PRIVATE);
     }
@@ -50,6 +49,7 @@ public class ListInteractorImpl implements ListInteractor {
     @Override
     public Observable<List<Movie>> getListOfMovies() {
 
+        // if pager position
         int selectedButton = prefs.getInt(SELECTED_BUTTON_MOVIE, 0);
         if (selectedButton == 0) {
             return moviesWebService.popularMovies().map(MoviesWrapper::getMovieList);

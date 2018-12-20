@@ -1,9 +1,8 @@
 package com.example.android.filmfun4me.di;
 
-import com.example.android.filmfun4me.activity.activity.main.view.MoviesFragment;
+import com.example.android.filmfun4me.activity.activity.main.view.MainFragment;
 import com.example.android.filmfun4me.activity.activity.main.view.TvShowsFragment;
 
-import dagger.Component;
 import dagger.Subcomponent;
 
 /**
@@ -13,7 +12,7 @@ import dagger.Subcomponent;
 @Subcomponent(modules = MainModule.class)
 public interface MainComponent {
 
-    MoviesFragment inject(MoviesFragment fragment);
+    MainFragment inject(MainFragment fragment);
 
     TvShowsFragment inject(TvShowsFragment fragment);
 

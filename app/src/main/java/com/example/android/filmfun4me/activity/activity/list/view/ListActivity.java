@@ -1,15 +1,10 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
-import android.app.FragmentManager;
 import android.content.SharedPreferences;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -23,7 +18,10 @@ public class ListActivity extends AppCompatActivity {
     private static final String SELECTED_SHARED = "selectedShared";
 
     // Button prefs tag
-    private static final String SELECTED_BUTTON_MOVIE = "selectedButton";
+    private static final String SELECTED_BUTTON = "selectedButton";
+
+    private ListFragmentAdapter listFragmentAdapter;
+
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -32,6 +30,8 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+
 
         android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
 
@@ -72,7 +72,7 @@ public class ListActivity extends AppCompatActivity {
 
                 editor = sharedPreferences.edit();
 
-                editor.putInt(SELECTED_BUTTON_MOVIE, 0);
+                editor.putInt(SELECTED_BUTTON, 0);
                 editor.apply();
 
                 uploadFragment();
@@ -85,7 +85,7 @@ public class ListActivity extends AppCompatActivity {
                 //sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
                 editor = sharedPreferences.edit();
 
-                editor.putInt(SELECTED_BUTTON_MOVIE, 1);
+                editor.putInt(SELECTED_BUTTON, 1);
                 editor.apply();
 
                 uploadFragment();
@@ -98,7 +98,7 @@ public class ListActivity extends AppCompatActivity {
                 editor = sharedPreferences.edit();
 
                 // For ListInteractor to know which list to get
-                editor.putInt(SELECTED_BUTTON_MOVIE, 2);
+                editor.putInt(SELECTED_BUTTON, 2);
 
                 editor.apply();
 

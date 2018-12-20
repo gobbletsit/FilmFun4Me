@@ -18,13 +18,16 @@ import com.example.android.filmfun4me.activity.activity.main.presenter.MainPrese
 import javax.inject.Inject;
 
 
-public class MoviesFragment extends Fragment implements MainView {
+public class MainFragment extends Fragment implements MainView {
 
     // Prefs name
     private static final String SELECTED_SHARED = "selectedShared";
 
     // Button prefs tag
-    private static final String SELECTED_BUTTON_MOVIE = "selectedButton";
+    private static final String SELECTED_BUTTON = "selectedButton";
+
+    private static final int BUTTON_MOVIES = 0;
+    private static final int BUTTON_TVSHOWS = 1;
 
     //private static final String INT_POSITION = "intPosition";
     private static final String KEY_FRAGMENT_POSITION = "position";
@@ -41,16 +44,12 @@ public class MoviesFragment extends Fragment implements MainView {
 
     private int fragmentPosition;
 
-    public MoviesFragment() {
+    public MainFragment() {
         // Required empty public constructor
     }
 
-    public static MoviesFragment newInstance(int position) {
-        MoviesFragment moviesFragment = new MoviesFragment();
-        Bundle args = new Bundle();
-        args.putInt(KEY_FRAGMENT_POSITION, position);
-        moviesFragment.setArguments(args);
-        return moviesFragment;
+    public static MainFragment newInstance() {
+        return new MainFragment();
     }
 
     @Override
@@ -94,6 +93,7 @@ public class MoviesFragment extends Fragment implements MainView {
         return view;
     }
 
+    // this will present a regular button click
     @Override
     public void onPopularButtonClick(int fragmentPosition) {
 
@@ -102,17 +102,18 @@ public class MoviesFragment extends Fragment implements MainView {
         editor = sharedPreferences.edit();
 
         // For ListInteractor to know which list to get
-        editor.putInt(SELECTED_BUTTON_MOVIE, 0);
+        editor.putInt(SELECTED_BUTTON, BUTTON_MOVIES);
 
         // For DetailInteractor
         editor.putInt(KEY_FRAGMENT_POSITION, fragmentPosition);
         editor.apply();
 
         Intent intent = new Intent(getActivity(), ListActivity.class);
-        intent.putExtra(KEY_FRAGMENT_POSITION, fragmentPosition);
+        intent.putExtra(SELECTED_BUTTON, BUTTON_MOVIES);
         startActivity(intent);
     }
 
+    // this would present a tvshows button click
     @Override
     public void onHighestRatedButtonClick(int fragmentPosition) {
 
@@ -121,14 +122,14 @@ public class MoviesFragment extends Fragment implements MainView {
         editor = sharedPreferences.edit();
 
         // For ListInteractor to know which list to get
-        editor.putInt(SELECTED_BUTTON_MOVIE, 1);
+        editor.putInt(SELECTED_BUTTON, BUTTON_TVSHOWS);
 
         // For DetailInteractor
         editor.putInt(KEY_FRAGMENT_POSITION, fragmentPosition);
         editor.apply();
 
         Intent intent = new Intent(getActivity(), ListActivity.class);
-        intent.putExtra(KEY_FRAGMENT_POSITION, fragmentPosition);
+        intent.putExtra(SELECTED_BUTTON, BUTTON_TVSHOWS);
         startActivity(intent);
     }
 
@@ -140,7 +141,7 @@ public class MoviesFragment extends Fragment implements MainView {
         editor = sharedPreferences.edit();
 
         // For ListInteractor to know which list to get
-        editor.putInt(SELECTED_BUTTON_MOVIE, 2);
+        editor.putInt(SELECTED_BUTTON, 2);
 
         // For DetailInteractor
         editor.putInt(KEY_FRAGMENT_POSITION, fragmentPosition);

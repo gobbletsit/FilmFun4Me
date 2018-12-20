@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.android.filmfun4me.R;
-import com.example.android.filmfun4me.activity.activity.main.view.MoviesFragment;
+import com.example.android.filmfun4me.activity.activity.main.view.MainFragment;
 import com.example.android.filmfun4me.activity.activity.main.view.TvShowsFragment;
 
 /**
@@ -16,6 +16,8 @@ import com.example.android.filmfun4me.activity.activity.main.view.TvShowsFragmen
 public class ListFragmentAdapter extends FragmentPagerAdapter{
 
     private Context mContext;
+
+    private static final String SELECTED_BUTTON = "selectedButton";
 
     public ListFragmentAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -28,7 +30,7 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
 
         Fragment frag = null;
         if (position == 0){
-            frag = MoviesFragment.newInstance(position);
+            frag = ListFragment.newInstance(position);
         } else {
             frag = TvShowsFragment.newInstance(position);
         }

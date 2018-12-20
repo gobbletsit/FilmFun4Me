@@ -1,18 +1,10 @@
 package com.example.android.filmfun4me.activity.activity.main.view;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageButton;
 
 import com.example.android.filmfun4me.R;
-import com.example.android.filmfun4me.activity.activity.list.view.ListFragment;
-import com.example.android.filmfun4me.activity.activity.list.view.ListFragmentAdapter;
-
-import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,10 +17,10 @@ public class MainActivity extends AppCompatActivity {
 
         android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
 
-        ListFragment fragment = (ListFragment) manager.findFragmentByTag(MAIN_FRAG);
+        MainFragment fragment = (MainFragment) manager.findFragmentByTag(MAIN_FRAG);
 
         if (fragment == null) {
-            fragment = ListFragment.newInstance();
+            fragment = MainFragment.newInstance();
         }
 
         FragmentTransaction transaction = manager.beginTransaction();

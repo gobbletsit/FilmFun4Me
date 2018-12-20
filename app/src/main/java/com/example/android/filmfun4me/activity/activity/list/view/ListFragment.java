@@ -62,14 +62,20 @@ public class ListFragment extends Fragment implements ListView {
 
     private int themeColor;
 
+    private static final String PAGER_POSITION = "pager_position";
+
 
     public ListFragment() {
         // Required empty public constructor
     }
 
 
-    public static ListFragment newInstance() {
-        return new ListFragment();
+    public static ListFragment newInstance(int position) {
+        ListFragment listFragment = new ListFragment();
+        Bundle args = new Bundle();
+        args.putInt(PAGER_POSITION, position);
+        listFragment.setArguments(args);
+        return listFragment;
     }
 
     @Override
@@ -105,6 +111,10 @@ public class ListFragment extends Fragment implements ListView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (getArguments() != null && getArguments().containsKey(PAGER_POSITION)){
+            int pagerPosition = (int) getArguments().get(PAGER_POSITION);
+        }
 
         if (isNetworkAvailable()) {
             listPresenter.setMovieView(this);
