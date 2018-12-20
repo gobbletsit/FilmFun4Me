@@ -15,7 +15,11 @@ import io.reactivex.Observable;
 
 public interface ListInteractor {
 
-    Observable<List<Movie>> getListOfMovies();
+    Observable<List<Movie>> getListOfMostPopularMovies();
+
+    Observable<List<Movie>> getListOfHighestRatedMovies();
+
+    Observable<List<Movie>> getListOfUpcomingMovies();
 
     // List of all possible genres
     Observable<List<Genre>> getListOfAllMovieGenres();

@@ -17,9 +17,7 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
 
     private Context mContext;
 
-    private static final String SELECTED_BUTTON = "selectedButton";
-
-    public ListFragmentAdapter(Context context, FragmentManager fm) {
+    ListFragmentAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }

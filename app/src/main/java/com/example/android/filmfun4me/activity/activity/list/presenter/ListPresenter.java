@@ -20,9 +20,14 @@ import java.util.List;
 public interface ListPresenter {
 
     // Movies
-    void showPopularMovies();
+    void showMostPopularMovies();
 
-    void setMovieView(ListView listView);
+    void showHighestRatedMovies();
+
+    void showUpcomingMovies();
+
+
+    void setMovieView(ListView listView, int pagerPosition);
 
     // Genres
     void getAllMovieGenres();

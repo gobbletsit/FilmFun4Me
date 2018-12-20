@@ -6,14 +6,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.list.model.ListInteractor;
 import com.example.android.filmfun4me.activity.activity.list.view.ListView;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
-import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.RxUtils;
 
 import java.util.ArrayList;
@@ -58,20 +56,37 @@ public class ListPresenterImpl implements ListPresenter {
 
     // Show methods
     @Override
-    public void showPopularMovies() {
+    public void showMostPopularMovies() {
         showLoading();
-        disposableSubscription = listInteractor.getListOfMovies()
+        disposableSubscription = listInteractor.getListOfMostPopularMovies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onMovieFetchSuccess, this::onMovieFetchFailed);
     }
 
+    @Override
+    public void showHighestRatedMovies() {
+        showLoading();
+        disposableSubscription = listInteractor.getListOfHighestRatedMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onMovieFetchSuccess, this::onMovieFetchFailed);
+    }
+
+    @Override
+    public void showUpcomingMovies() {
+        showLoading();
+        disposableSubscription = listInteractor.getListOfUpcomingMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onMovieFetchSuccess, this::onMovieFetchFailed);
+    }
 
     // Set view methods
     @Override
-    public void setMovieView(ListView listView) {
+    public void setMovieView(ListView listView, int pagerPosition) {
         this.view = listView;
-        showPopularMovies();
+        showMostPopularMovies();
         getAllMovieGenres();
     }
 

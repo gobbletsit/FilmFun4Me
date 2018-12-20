@@ -114,13 +114,12 @@ public class ListFragment extends Fragment implements ListView {
 
         if (getArguments() != null && getArguments().containsKey(PAGER_POSITION)){
             int pagerPosition = (int) getArguments().get(PAGER_POSITION);
-        }
 
-        if (isNetworkAvailable()) {
-            listPresenter.setMovieView(this);
-            listPresenter.setListColors(recyclerView, layoutManager, themeColor);
+            if (isNetworkAvailable()) {
+                listPresenter.setMovieView(this, pagerPosition);
+                listPresenter.setListColors(recyclerView, layoutManager, themeColor);
+            }
         }
-
     }
 
 
