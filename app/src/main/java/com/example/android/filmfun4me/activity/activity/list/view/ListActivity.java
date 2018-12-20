@@ -33,17 +33,7 @@ public class ListActivity extends AppCompatActivity {
 
 
 
-        android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
 
-        ListFragment fragment = (ListFragment) manager.findFragmentByTag(LIST_FRAG);
-
-        if (fragment == null) {
-            fragment = ListFragment.newInstance();
-        }
-
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.root_activity_list, fragment, LIST_FRAG);
-        transaction.commit();
 
         sharedPreferences = this.getSharedPreferences(SELECTED_SHARED, 0);
 
