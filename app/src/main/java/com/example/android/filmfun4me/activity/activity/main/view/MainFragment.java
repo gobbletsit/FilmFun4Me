@@ -2,8 +2,6 @@ package com.example.android.filmfun4me.activity.activity.main.view;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,11 +11,9 @@ import android.widget.ImageButton;
 
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
-import com.example.android.filmfun4me.activity.activity.list.view.ListActivity;
 import com.example.android.filmfun4me.activity.activity.main.presenter.MainPresenter;
 
 import javax.inject.Inject;
-import javax.security.auth.callback.Callback;
 
 
 public class MainFragment extends Fragment implements MainView {
@@ -54,13 +50,13 @@ public class MainFragment extends Fragment implements MainView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movies, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         ImageButton moviesButton = new ImageButton(getContext());
         ImageButton tvShowsButton = new ImageButton(getContext());
 
-        moviesButton = view.findViewById(R.id.button_popular);
-        tvShowsButton = view.findViewById(R.id.button_highest_rated);
+        moviesButton = view.findViewById(R.id.image_button_movie);
+        tvShowsButton = view.findViewById(R.id.image_button_tv);
 
         presenter.setView(this);
 
