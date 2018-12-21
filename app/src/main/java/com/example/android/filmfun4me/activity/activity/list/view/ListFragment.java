@@ -63,6 +63,7 @@ public class ListFragment extends Fragment implements ListView {
     private int themeColor;
 
     private static final String PAGER_POSITION = "pager_position";
+    private int pagerPosition;
 
 
     public ListFragment() {
@@ -76,6 +77,14 @@ public class ListFragment extends Fragment implements ListView {
         args.putInt(PAGER_POSITION, position);
         listFragment.setArguments(args);
         return listFragment;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null){
+            pagerPosition = (int) savedInstanceState.get(PAGER_POSITION);
+        }
     }
 
     @Override
@@ -111,7 +120,7 @@ public class ListFragment extends Fragment implements ListView {
         super.onViewCreated(view, savedInstanceState);
 
         if (getArguments() != null && getArguments().containsKey(PAGER_POSITION)){
-            int pagerPosition = (int) getArguments().get(PAGER_POSITION);
+            pagerPosition = (int) getArguments().get(PAGER_POSITION);
 
             if (isNetworkAvailable()) {
                 listPresenter.setMovieView(this, pagerPosition);
@@ -265,5 +274,9 @@ public class ListFragment extends Fragment implements ListView {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(PAGER_POSITION,pagerPosition);
+    }
 }
