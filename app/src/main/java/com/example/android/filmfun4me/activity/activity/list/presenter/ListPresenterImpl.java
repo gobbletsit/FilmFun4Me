@@ -140,29 +140,6 @@ public class ListPresenterImpl implements ListPresenter {
         return singleGenreNamesList;
     }
 
-    @Override
-    public void setListColors(RecyclerView recyclerView, LinearLayoutManager layoutManager, int themeColor,int pagerPosition) {
-
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(
-                recyclerView.getContext(),
-                layoutManager.getOrientation()
-        );
-
-        if (pagerPosition == 0) {
-            itemDecoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.divider_popular));
-            themeColor = ContextCompat.getColor(mContext, R.color.colorPopular);
-        } else if (pagerPosition == 1) {
-            itemDecoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.divider_highest_rated));
-            themeColor = ContextCompat.getColor(mContext, R.color.colorHighestRated);
-        } else {
-            itemDecoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.divider_upcoming));
-            themeColor = ContextCompat.getColor(mContext, R.color.colorUpcoming);
-        }
-
-        view.setViewColors(recyclerView, itemDecoration, themeColor);
-
-    }
-
     private boolean isViewAttached() {
         return view != null;
     }

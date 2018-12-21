@@ -35,8 +35,6 @@ public interface ListPresenter {
     // Clicks
     void whenMovieClicked(Movie movie, List<Genre> genreList);
 
-    void setListColors(RecyclerView recyclerView, LinearLayoutManager layoutManager, int themeColor, int pagerPosition);
-
     void destroy();
 
 }

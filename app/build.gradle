@@ -84,6 +84,10 @@ dependencies {
     // recycler view
     compile 'com.android.support:recyclerview-v7:26.1.0'
 
+    // recycler view animations
+    compile 'jp.wasabeef:recyclerview-animators:2.0.0'
+    implementation "com.android.support:customtabs:26.1.0"
+
     // guava compatible with android
     compile 'com.google.guava:guava:23.3-android'
 

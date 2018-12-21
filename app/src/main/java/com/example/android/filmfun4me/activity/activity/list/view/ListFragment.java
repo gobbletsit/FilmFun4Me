@@ -8,14 +8,18 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
 public class ListFragment extends Fragment implements ListView {
@@ -58,13 +64,14 @@ public class ListFragment extends Fragment implements ListView {
     // To store for a single movie and pass it to detail activity
     private ArrayList<String> singleGenreNamesList = new ArrayList<>(20);
 
-    private GridLayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
 
     private int themeColor;
 
     private static final String PAGER_POSITION = "pager_position";
     private int pagerPosition;
 
+    private ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     public ListFragment() {
         // Required empty public constructor
@@ -106,11 +113,22 @@ public class ListFragment extends Fragment implements ListView {
         recyclerView = view.findViewById(R.id.rec_list_activity);
         layoutInflater = getActivity().getLayoutInflater();
 
-        layoutManager = new GridLayoutManager(getActivity(), 2);
-
-        recyclerView.setLayoutManager(layoutManager);
         customAdapter = new CustomAdapter();
-        recyclerView.setAdapter(customAdapter);
+
+        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
+        scaleInAnimationAdapter.setDuration(400);
+        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
+        // disable the first scroll mode
+        scaleInAnimationAdapter.setFirstOnly(false);
+        recyclerView.setAdapter(scaleInAnimationAdapter);
+
+        // layoutManager = new GridLayoutManager(getActivity(), 2);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.recycler_divider_with_spacing));
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         return view;
     }
@@ -124,7 +142,6 @@ public class ListFragment extends Fragment implements ListView {
 
             if (isNetworkAvailable()) {
                 listPresenter.setMovieView(this, pagerPosition);
-                listPresenter.setListColors(recyclerView, layoutManager, themeColor, pagerPosition);
             }
         }
     }
@@ -144,7 +161,7 @@ public class ListFragment extends Fragment implements ListView {
     public void setUpMovieView(List<Movie> movieList) {
         this.movieList.clear();
         this.movieList.addAll(movieList);
-        customAdapter.notifyDataSetChanged();
+        scaleInAnimationAdapter.notifyDataSetChanged();
 
     }
 
@@ -200,8 +217,7 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void setViewColors(RecyclerView recyclerView, DividerItemDecoration dividerItemDecoration, int themeColor) {
-        this.themeColor = themeColor;
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        // nothing
     }
 
 
