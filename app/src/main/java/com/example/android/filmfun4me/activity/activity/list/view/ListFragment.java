@@ -240,7 +240,6 @@ public class ListFragment extends Fragment implements ListView {
             // dont need this for now
             // genreName = getSingleGenreName(holder.currentGenreIds, genreList);
             holder.tv_title.setText(holder.movie.getTitle());
-            holder.tv_title.setTextColor(themeColor);
 
             Picasso.with(getActivity()).load(BaseUtils.getPosterPath(holder.movie.getPosterPath())).into(holder.iv_movie_poster);
 
