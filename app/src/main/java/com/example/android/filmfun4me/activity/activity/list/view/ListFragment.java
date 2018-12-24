@@ -237,9 +237,9 @@ public class ListFragment extends Fragment implements ListView {
 
             holder.currentGenreIds = holder.movie.getGenreIds();
 
-            // dont need this for now
-            // genreName = getSingleGenreName(holder.currentGenreIds, genreList);
+            genreName = getSingleGenreName(holder.currentGenreIds, genreList);
             holder.tv_title.setText(holder.movie.getTitle());
+            holder.tv_genre.setText(genreName);
 
             Picasso.with(getActivity()).load(BaseUtils.getPosterPath(holder.movie.getPosterPath())).into(holder.iv_movie_poster);
 
@@ -258,12 +258,14 @@ public class ListFragment extends Fragment implements ListView {
             private ViewGroup container;
             private TextView tv_title;
             private ImageView iv_movie_poster;
+            private TextView tv_genre;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 this.container = itemView.findViewById(R.id.list_item_container);
                 this.tv_title = itemView.findViewById(R.id.tv_movie_title);
                 this.iv_movie_poster = itemView.findViewById(R.id.imv_poster);
+                this.tv_genre = itemView.findViewById(R.id.tv_list_genre);
                 this.container.setOnClickListener(this);
             }
 
