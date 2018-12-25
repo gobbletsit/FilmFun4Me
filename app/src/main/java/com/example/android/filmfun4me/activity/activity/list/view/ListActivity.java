@@ -1,5 +1,6 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.filmfun4me.R;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -39,5 +41,10 @@ public class ListActivity extends AppCompatActivity {
                 tabLayout.setupWithViewPager(viewPager);
             }
         }
+    }
+
+    private void startDetailActivity (){
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        startActivity(detailIntent);
     }
 }

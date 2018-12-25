@@ -216,7 +216,7 @@ public class DetailFragment extends Fragment implements DetailView {
         seasonButtonLinearLayout.setVisibility(View.GONE);
         tvSeasonLabel.setVisibility(View.GONE);
 
-        detailPresenter.setColorOfMovieRatingStar(ivRatingStar);
+        //detailPresenter.setColorOfMovieRatingStar(ivRatingStar);
         detailPresenter.showVideos(movie);
         detailPresenter.showReviews(movie);
     }

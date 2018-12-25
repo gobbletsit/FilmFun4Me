@@ -25,24 +25,13 @@ import io.reactivex.Observable;
 
 public class DetailInteractorImpl implements DetailInteractor {
 
-    // Prefs name
-    private static final String SELECTED_SHARED = "selectedShared";
-
-    private static final String KEY_FRAGMENT_POSITION = "position";
-
-    private int fragPosition;
-
     private MoviesWebService moviesWebService;
     private TvShowsWebService tvShowsWebService;
 
-    private SharedPreferences sharedPrefs;
 
-    public DetailInteractorImpl(MoviesWebService moviesWebService, Context context, TvShowsWebService tvShowsWebService) {
+    public DetailInteractorImpl(MoviesWebService moviesWebService,TvShowsWebService tvShowsWebService) {
         this.moviesWebService = moviesWebService;
         this.tvShowsWebService = tvShowsWebService;
-
-        // So it can be used to determine which list to get
-        sharedPrefs = context.getApplicationContext().getSharedPreferences(SELECTED_SHARED, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -52,34 +41,22 @@ public class DetailInteractorImpl implements DetailInteractor {
 
     @Override
     public Observable<List<Video>> getVideoList(String id) {
+        return moviesWebService.getVideosFromService(id).map(VideoWrapper::getVideoList);
+    }
 
-        if (sharedPrefs != null && sharedPrefs.contains(KEY_FRAGMENT_POSITION)) {
-            fragPosition = sharedPrefs.getInt(KEY_FRAGMENT_POSITION, 0);
-
-            if (fragPosition == 0) {
-                return moviesWebService.getVideosFromService(id).map(VideoWrapper::getVideoList);
-            } else {
-                return tvShowsWebService.getTvVideosFromService(id).map(VideoWrapper::getVideoList);
-            }
-        }
-        return null;
-
+    @Override
+    public Observable<List<Video>> getTvVideoList(String id) {
+        return tvShowsWebService.getTvVideosFromService(id).map(VideoWrapper::getVideoList);
     }
 
     @Override
     public Observable<List<Review>> getReviewList(String id) {
+        return moviesWebService.getReviewsFromService(id).map(ReviewWrapper::getReviewList);
+    }
 
-        if (sharedPrefs != null && sharedPrefs.contains(KEY_FRAGMENT_POSITION)) {
-            fragPosition = sharedPrefs.getInt(KEY_FRAGMENT_POSITION, 0);
-
-            if (fragPosition == 0) {
-                return moviesWebService.getReviewsFromService(id).map(ReviewWrapper::getReviewList);
-            } else {
-                return tvShowsWebService.getTvReviewsFromService(id).map(ReviewWrapper::getReviewList);
-            }
-        }
-        return null;
-
+    @Override
+    public Observable<List<Review>> getTvReviewList(String id) {
+        return tvShowsWebService.getTvReviewsFromService(id).map(ReviewWrapper::getReviewList);
     }
 
 

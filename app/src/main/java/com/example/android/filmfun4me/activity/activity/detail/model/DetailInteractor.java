@@ -19,7 +19,11 @@ public interface DetailInteractor {
 
     io.reactivex.Observable<List<Video>> getVideoList(String id);
 
+    io.reactivex.Observable<List<Video>> getTvVideoList(String id);
+
     io.reactivex.Observable<List<Review>> getReviewList(String id);
+
+    public io.reactivex.Observable<List<Review>> getTvReviewList(String id);
 
     io.reactivex.Observable<List<Season>> getSeasonList(String id);
 

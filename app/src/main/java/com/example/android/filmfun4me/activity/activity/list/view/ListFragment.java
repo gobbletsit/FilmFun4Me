@@ -66,8 +66,6 @@ public class ListFragment extends Fragment implements ListView {
 
     private LinearLayoutManager layoutManager;
 
-    private int themeColor;
-
     private static final String PAGER_POSITION = "pager_position";
     private int pagerPosition;
 
@@ -171,7 +169,6 @@ public class ListFragment extends Fragment implements ListView {
 
         Intent startDetailIntent = new Intent(getActivity(), DetailActivity.class);
         startDetailIntent.putExtra(KEY_MOVIE, movie);
-        startDetailIntent.putExtra(KEY_THEME_COLOR_MOVIE, themeColor);
         startDetailIntent.putStringArrayListExtra(KEY_GENRE_NAMES_LIST, singleGenreNamesList);
         startActivity(startDetailIntent);
     }

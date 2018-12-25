@@ -121,7 +121,7 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void showTvVideos(TvShow tvShow) {
-        videoSubscription = detailInteractor.getVideoList(tvShow.getId())
+        videoSubscription = detailInteractor.getTvVideoList(tvShow.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetVideosSuccess, t -> onGetVideoFailure());
