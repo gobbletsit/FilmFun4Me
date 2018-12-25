@@ -25,7 +25,7 @@ public interface ListView {
 
 
     // Click methods
-    void onMovieClicked(Movie movie, List<Genre> genreList, ArrayList<String> singleGenreNamesList);
+    void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList);
 
 
     // Genre methods

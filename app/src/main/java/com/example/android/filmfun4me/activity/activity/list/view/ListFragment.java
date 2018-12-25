@@ -30,6 +30,7 @@ import com.example.android.filmfun4me.activity.activity.list.presenter.ListPrese
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.utils.BaseUtils;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ public class ListFragment extends Fragment implements ListView {
     ListPresenter listPresenter;
 
     private static final String KEY_MOVIE = "movie";
-    private static final String KEY_THEME_COLOR_MOVIE = "theme_color_movie";
     private static final String KEY_GENRE_NAMES_LIST = "genreNames";
 
     RecyclerView recyclerView;
@@ -71,6 +71,8 @@ public class ListFragment extends Fragment implements ListView {
 
     private ScaleInAnimationAdapter scaleInAnimationAdapter;
 
+    private Callback callback;
+
     public ListFragment() {
         // Required empty public constructor
     }
@@ -90,6 +92,12 @@ public class ListFragment extends Fragment implements ListView {
         if (savedInstanceState != null){
             pagerPosition = (int) savedInstanceState.get(PAGER_POSITION);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callback = (Callback) context;
     }
 
     @Override
@@ -165,12 +173,9 @@ public class ListFragment extends Fragment implements ListView {
 
 
     @Override
-    public void onMovieClicked(Movie movie, List<Genre> genreList, ArrayList<String> singleGenreNamesList) {
+    public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList) {
 
-        Intent startDetailIntent = new Intent(getActivity(), DetailActivity.class);
-        startDetailIntent.putExtra(KEY_MOVIE, movie);
-        startDetailIntent.putStringArrayListExtra(KEY_GENRE_NAMES_LIST, singleGenreNamesList);
-        startActivity(startDetailIntent);
+        callback.onMovieClicked(movie,singleGenreNamesList);
     }
 
 
@@ -293,4 +298,9 @@ public class ListFragment extends Fragment implements ListView {
         super.onSaveInstanceState(outState);
         outState.putInt(PAGER_POSITION,pagerPosition);
     }
+
+    public interface Callback {
+        void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList);
+    }
+
 }

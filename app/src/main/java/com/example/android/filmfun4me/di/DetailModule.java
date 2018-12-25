@@ -22,8 +22,8 @@ public class DetailModule {
     // Context needed
     @DetailScope
     @Provides
-    DetailInteractor providesDetailInteractor(MoviesWebService moviesWebService, Context context, TvShowsWebService tvShowsWebService) {
-        return new DetailInteractorImpl(moviesWebService, context, tvShowsWebService);
+    DetailInteractor providesDetailInteractor(MoviesWebService moviesWebService, TvShowsWebService tvShowsWebService) {
+        return new DetailInteractorImpl(moviesWebService, tvShowsWebService);
     }
 
     @DetailScope

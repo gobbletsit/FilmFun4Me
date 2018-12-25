@@ -14,13 +14,21 @@ import android.widget.Toast;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
+import com.example.android.filmfun4me.data.Movie;
 
-public class ListActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
     public static final String LIST_FRAG = "LIST_FRAG";
 
     // Button prefs tag
     private static final String SELECTED_BUTTON = "selectedButton";
+
+    private static final String KEY_MOVIE = "movie";
+    private static final String KEY_TV_SHOW = "tv_show";
+    private static final String KEY_GENRE_NAMES_LIST_MOVIE = "genreNames";
+    private static final String KEY_GENRE_NAMES_LIST_TV_SHOW = "showGenreNames";
 
 
     @Override
@@ -45,6 +53,16 @@ public class ListActivity extends AppCompatActivity {
 
     private void startDetailActivity (){
         Intent detailIntent = new Intent(this, DetailActivity.class);
+        startActivity(detailIntent);
+    }
+
+    @Override
+    public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        Bundle extras = new Bundle();
+        extras.putParcelable(KEY_MOVIE, movie);
+        extras.putStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE, singleGenreNamesList);
+        detailIntent.putExtras(extras);
         startActivity(detailIntent);
     }
 }

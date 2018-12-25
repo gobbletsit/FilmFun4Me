@@ -43,12 +43,5 @@ public interface DetailPresenter {
     // Clicks
     void whenTrailerClicked(View view);
 
-
-    // Colors
-    void setColorOfMovieRatingStar(ImageView imageView);
-
-    void setColorOfTvRatingStar(ImageView imageView);
-
-
     void destroy();
 }

@@ -52,13 +52,10 @@ public class DetailPresenterImpl implements DetailPresenter {
     private Disposable episodeSubscription;
     private Disposable singleShowSubscription;
 
-    private SharedPreferences sharedPreferences;
-
 
     public DetailPresenterImpl(DetailInteractor detailInteractor, Context context) {
         this.detailInteractor = detailInteractor;
         this.mContext = context;
-        sharedPreferences = context.getApplicationContext().getSharedPreferences(SELECTED_SHARED, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -224,33 +221,4 @@ public class DetailPresenterImpl implements DetailPresenter {
 
         }
     }
-
-    @Override
-    public void setColorOfMovieRatingStar(ImageView imageView) {
-        int selectedButton = sharedPreferences.getInt(SELECTED_BUTTON_MOVIE, 0);
-        int resource;
-        if (selectedButton == 0) {
-            resource = R.drawable.star_icon_popular;
-        } else if (selectedButton == 1) {
-            resource = R.drawable.star_icon_highest_rated;
-        } else {
-            resource = R.drawable.star_icon_upcoming;
-        }
-        imageView.setImageResource(resource);
-        detailView.setMovieRatingStar(imageView);
-    }
-
-    @Override
-    public void setColorOfTvRatingStar(ImageView imageView) {
-        int selectedButton = sharedPreferences.getInt(SELECTED_BUTTON_TV_SHOW, 0);
-        int resource;
-        if (selectedButton == 0) {
-            resource = R.drawable.star_icon_popular;
-        } else {
-            resource = R.drawable.star_icon_highest_rated;
-        }
-        imageView.setImageResource(resource);
-        detailView.setTvRatingStar(imageView);
-    }
-
 }
