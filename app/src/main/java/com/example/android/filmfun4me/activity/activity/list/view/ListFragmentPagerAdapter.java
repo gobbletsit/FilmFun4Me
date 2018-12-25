@@ -55,12 +55,14 @@ public class ListFragmentPagerAdapter extends FragmentPagerAdapter{
             } else {
                 return "Upcoming";
             }
-        } else {
-            if (position == 1){
+        } else if (selectedButton == 1){
+            if (position == 0){
                 return "Most Popular";
             } else {
                 return "Highest rated";
             }
+        } else {
+            return null;
         }
     }
 }

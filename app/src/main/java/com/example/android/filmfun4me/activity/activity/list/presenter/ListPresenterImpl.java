@@ -66,10 +66,11 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void setTvShowView(ListView listView, int pagerPosition) {
+        this.view = listView;
         if (pagerPosition == 0){
-            // show most popular tvshows
+            showMostPopularTvShows();
         } else {
-            // show highest rated tv shows
+            showHighestRatedTvShows();
         }
     }
 
@@ -169,6 +170,7 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void showMostPopularTvShows() {
+        showLoading();
         disposableSubscription = listInteractor.getListOfMostPopularTvShows()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -177,7 +179,11 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void showHighestRatedTvShows() {
-
+        showLoading();
+        disposableSubscription = listInteractor.getListOfHighestRatedTvShows()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onTvShowFetchSuccess, this::onTvShowFetchFailed);
     }
 
     // Success and failure methods for RX

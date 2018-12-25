@@ -43,19 +43,16 @@ public class ListFragment extends Fragment implements ListView {
     @Inject
     ListPresenter listPresenter;
 
-    private static final String KEY_MOVIE = "movie";
-    private static final String KEY_GENRE_NAMES_LIST = "genreNames";
     private static final String SELECTED_BUTTON = "selectedButton";
     private static final int BUTTON_MOVIES = 0;
     private static final int BUTTON_TV_SHOWS = 1;
 
     RecyclerView recyclerView;
     RecyclerView.Adapter customAdapter;
-    LayoutInflater layoutInflater;
-
-    private String genreName;
 
     private List<Movie> movieList = new ArrayList<>(40);
+
+    private List<TvShow> tvShowList = new ArrayList<>(40);
 
     private List<Genre> genreList = new ArrayList<>(40);
 
@@ -116,12 +113,6 @@ public class ListFragment extends Fragment implements ListView {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         recyclerView = view.findViewById(R.id.rec_list_activity);
-        layoutInflater = getActivity().getLayoutInflater();
-
-        // ovo strpat u setMovie view, a za tv view promijenit adapter i tjt
-
-
-
 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -165,7 +156,7 @@ public class ListFragment extends Fragment implements ListView {
         this.movieList.clear();
         this.movieList.addAll(movieList);
         // znaci ovo je malo cudno, treba ovo ljepse bit jer se jebeno dodavas presenterom sto je debilno
-        customAdapter = new ListMovieRecyclerAdapter(getActivity(), movieList, genreList, listPresenter);
+        customAdapter = new ListMovieRecyclerAdapter(movieList, genreList, listPresenter);
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
@@ -178,7 +169,17 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void setUpTvShowView(List<TvShow> tvShowList) {
-
+        this.tvShowList.clear();
+        this.tvShowList.addAll(tvShowList);
+        // znaci ovo je malo cudno, treba ovo ljepse bit jer se jebeno dodavas presenterom sto je debilno
+        customAdapter = new ListTvShowRecyclerAdapter(tvShowList);
+        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
+        scaleInAnimationAdapter.setDuration(400);
+        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
+        // disable the first scroll mode
+        scaleInAnimationAdapter.setFirstOnly(false);
+        scaleInAnimationAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(scaleInAnimationAdapter);
     }
 
 
@@ -204,88 +205,6 @@ public class ListFragment extends Fragment implements ListView {
         this.genreList.clear();
         this.genreList.addAll(genreList);
     }
-
-    @Override
-    public String getSingleGenreName(int[] currentGenreIds, List<Genre> genreList) {
-
-        int singleGenreId;
-
-        String genreName = "";
-
-        for (int currentGenreId : currentGenreIds) {
-            singleGenreId = currentGenreId;
-
-            for (int a = 0; a < genreList.size(); a++) {
-                int preciseGenreId = genreList.get(a).getGenreId();
-
-                if (preciseGenreId == singleGenreId) {
-                    genreName = genreList.get(a).getGenreName();
-                }
-            }
-        }
-        return genreName;
-    }
-
-    @Override
-    public void setViewColors(RecyclerView recyclerView, DividerItemDecoration dividerItemDecoration, int themeColor) {
-        // nothing
-    }
-
-
-    /*private class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecyclerAdapter.ViewHolder> {
-
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = layoutInflater.inflate(R.layout.movie_list_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-
-            holder.movie = movieList.get(position);
-
-            holder.currentGenreIds = holder.movie.getGenreIds();
-
-            genreName = getSingleGenreName(holder.currentGenreIds, genreList);
-            holder.tv_title.setText(holder.movie.getTitle());
-            holder.tv_genre.setText(genreName);
-
-            Picasso.with(getActivity()).load(BaseUtils.getPosterPath(holder.movie.getPosterPath())).into(holder.iv_movie_poster);
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return movieList.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-            private int[] currentGenreIds;
-            private Movie movie;
-
-            private ViewGroup container;
-            private TextView tv_title;
-            private ImageView iv_movie_poster;
-            private TextView tv_genre;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                this.container = itemView.findViewById(R.id.list_item_container);
-                this.tv_title = itemView.findViewById(R.id.tv_movie_title);
-                this.iv_movie_poster = itemView.findViewById(R.id.imv_poster);
-                this.tv_genre = itemView.findViewById(R.id.tv_list_genre);
-                this.container.setOnClickListener(this);
-            }
-
-            @Override
-            public void onClick(View view) {
-                listPresenter.whenMovieClicked(movie, genreList);
-            }
-        }
-    }*/
 
 
     @Override

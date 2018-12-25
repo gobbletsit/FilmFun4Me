@@ -23,17 +23,12 @@ public interface ListView {
     void setUpTvShowView(List<TvShow> tvShowList);
 
 
-    void setViewColors(RecyclerView recyclerView, DividerItemDecoration itemDecoration, int themeColor);
-
-
     // Click methods
     void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList);
 
 
     // Genre methods
     void loadUpAllGenreList(List<Genre> genreList);
-
-    String getSingleGenreName(int[] currentGenreIds, List<Genre> genreList);
 
 
     void showLoading();

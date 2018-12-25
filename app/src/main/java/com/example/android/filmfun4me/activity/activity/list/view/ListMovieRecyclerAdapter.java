@@ -28,8 +28,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
     private Context context;
 
 
-    ListMovieRecyclerAdapter (Context context, List<Movie> movieList, List<Genre> genreList, ListPresenter listPresenter){
-        this.context = context;
+    ListMovieRecyclerAdapter (List<Movie> movieList, List<Genre> genreList, ListPresenter listPresenter){
         this.movieList = movieList;
         this.genreList = genreList;
         this.listPresenter = listPresenter;
@@ -38,6 +37,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
 
     @Override
     public ListMovieRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_item, parent, false);
         return new ViewHolder(view);
     }
