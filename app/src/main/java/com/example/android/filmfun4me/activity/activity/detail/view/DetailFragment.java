@@ -103,29 +103,26 @@ public class DetailFragment extends Fragment implements DetailView {
     private CustomReviewAdapter customReviewAdapter;
     private CustomEpisodeAdapter customEpisodeAdapter;
 
-    int themeColor;
 
     public DetailFragment() {
         // Required empty public constructor
     }
 
 
-    public static DetailFragment newInstance(Movie movie, ArrayList<String> genreNamesList, int themeColorMovie) {
+    public static DetailFragment newInstance(Movie movie, ArrayList<String> genreNamesList) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(KEY_MOVIE, movie);
         args.putStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE, genreNamesList);
-        args.putInt(KEY_THEME_COLOR_MOVIE, themeColorMovie);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static DetailFragment newInstanceTv(TvShow tvShow, ArrayList<String> genreNamesList, int themeColorTv) {
+    public static DetailFragment newInstanceTv(TvShow tvShow, ArrayList<String> genreNamesList) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(KEY_TV_SHOW, tvShow);
         args.putStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW, genreNamesList);
-        args.putInt(KEY_THEME_COLOR_TV, themeColorTv);
         fragment.setArguments(args);
         return fragment;
     }
@@ -201,9 +198,6 @@ public class DetailFragment extends Fragment implements DetailView {
             tvGenre.setText(getAppendedGenreNames(listNames));
         }
 
-        themeColor = getArguments().getInt(KEY_THEME_COLOR_MOVIE);
-        setColorOfText(themeColor);
-
         customReviewAdapter = new CustomReviewAdapter();
         // recycler view
         layoutInflater = getActivity().getLayoutInflater();
@@ -242,9 +236,6 @@ public class DetailFragment extends Fragment implements DetailView {
         if (listNames != null){
             tvGenre.setText(getAppendedGenreNames(listNames));
         }
-
-        themeColor = getArguments().getInt(KEY_THEME_COLOR_TV);
-        setColorOfText(themeColor);
 
         tvReviewLabel.setVisibility(View.GONE);
         reviewButtonTextView.setVisibility(View.GONE);
