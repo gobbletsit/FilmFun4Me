@@ -31,17 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DetailPresenterImpl implements DetailPresenter {
 
-    Context mContext;
-
-    // Prefs name
-    private static final String SELECTED_SHARED = "selectedShared";
-
-    // Prefs movie button tag
-    private static final String SELECTED_BUTTON_MOVIE = "selectedButton";
-
-    // Prefs tv-show button tag
-    private static final String SELECTED_BUTTON_TV_SHOW = "selectedButtonTv";
-
+    private Context mContext;
 
     private DetailView detailView;
     private DetailInteractor detailInteractor;
@@ -59,7 +49,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void showDetails(Movie movie) {
+    public void showMovieDetails(Movie movie) {
         if (isViewAttached()) {
             detailView.showDetails(movie);
         }
@@ -67,7 +57,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void showSingleTvShowDetails(String id) {
+    public void showTvShowDetails(String id) {
         singleShowSubscription = detailInteractor.getSingleTvShow(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -75,7 +65,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void showVideos(Movie movie) {
+    public void showMovieVideos(Movie movie) {
         videoSubscription = detailInteractor.getMovieVideoList(movie.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -83,7 +73,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void showReviews(Movie movie) {
+    public void showMovieReviews(Movie movie) {
         reviewSubscription = detailInteractor.getMovieReviewList(movie.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -218,7 +208,6 @@ public class DetailPresenterImpl implements DetailPresenter {
                     showTvEpisodes(tvShow, currentSeason.getSeasonNumber());
                 }
             });
-
         }
     }
 }

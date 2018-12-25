@@ -21,15 +21,15 @@ public interface DetailPresenter {
     void setView(DetailView detailView);
 
     // Movie
-    void showDetails(Movie movie);
+    void showMovieDetails(Movie movie);
 
-    void showVideos(Movie movie);
+    void showMovieVideos(Movie movie);
 
-    void showReviews(Movie movie);
+    void showMovieReviews(Movie movie);
 
 
     // Tv-show
-    void showSingleTvShowDetails(String id);
+    void showTvShowDetails(String id);
 
     void showTvVideos(TvShow tvShow);
 

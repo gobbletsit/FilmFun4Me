@@ -166,7 +166,7 @@ public class DetailFragment extends Fragment implements DetailView {
             if (movie != null) {
                 this.movie = movie;
                 detailPresenter.setView(this);
-                detailPresenter.showDetails(movie);
+                detailPresenter.showMovieDetails(movie);
 
             }
         } else if (getArguments() != null && getArguments().containsKey(KEY_TV_SHOW)) {
@@ -174,7 +174,7 @@ public class DetailFragment extends Fragment implements DetailView {
             if (tvShow != null) {
                 this.tvShow = tvShow;
                 detailPresenter.setView(this);
-                detailPresenter.showSingleTvShowDetails(tvShow.getId());
+                detailPresenter.showTvShowDetails(tvShow.getId());
             }
         }
 
@@ -215,8 +215,8 @@ public class DetailFragment extends Fragment implements DetailView {
         tvSeasonLabel.setVisibility(View.GONE);
 
         //detailPresenter.setColorOfMovieRatingStar(ivRatingStar);
-        detailPresenter.showVideos(movie);
-        detailPresenter.showReviews(movie);
+        detailPresenter.showMovieVideos(movie);
+        detailPresenter.showMovieReviews(movie);
     }
 
     @Override
@@ -249,7 +249,6 @@ public class DetailFragment extends Fragment implements DetailView {
         itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
         recyclerViewReviews.addItemDecoration(itemDecoration);
 
-        detailPresenter.setColorOfTvRatingStar(ivRatingStar);
         detailPresenter.showTvVideos(tvShow);
         detailPresenter.showSeasonList(tvShow);
     }
@@ -426,6 +425,7 @@ public class DetailFragment extends Fragment implements DetailView {
         listNames.clear();
 
         getArguments().clear();
+        detailPresenter.destroy();
     }
 
     private void setColorOfText(int themeColor) {

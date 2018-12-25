@@ -51,11 +51,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         }
     }
 
-    private void startDetailActivity (){
-        Intent detailIntent = new Intent(this, DetailActivity.class);
-        startActivity(detailIntent);
-    }
-
     @Override
     public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
