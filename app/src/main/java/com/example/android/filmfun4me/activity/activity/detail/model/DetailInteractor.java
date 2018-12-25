@@ -17,17 +17,17 @@ public interface DetailInteractor {
 
     io.reactivex.Observable<TvShow> getSingleTvShow(String id);
 
-    io.reactivex.Observable<List<Video>> getVideoList(String id);
+    io.reactivex.Observable<List<Video>> getMovieVideoList(String id);
 
-    io.reactivex.Observable<List<Video>> getTvVideoList(String id);
+    io.reactivex.Observable<List<Video>> getTvShowVideoList(String id);
 
-    io.reactivex.Observable<List<Review>> getReviewList(String id);
+    io.reactivex.Observable<List<Review>> getMovieReviewList(String id);
 
-    public io.reactivex.Observable<List<Review>> getTvReviewList(String id);
+    public io.reactivex.Observable<List<Review>> getTvShowReviewList(String id);
 
-    io.reactivex.Observable<List<Season>> getSeasonList(String id);
+    io.reactivex.Observable<List<Season>> getTvShowSeasonList(String id);
 
-    io.reactivex.Observable<List<Episode>> getEpisodeList(String id, int seasonNumber);
+    io.reactivex.Observable<List<Episode>> getTvShowEpisodeList(String id, int seasonNumber);
 
 
 }

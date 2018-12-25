@@ -40,34 +40,34 @@ public class DetailInteractorImpl implements DetailInteractor {
     }
 
     @Override
-    public Observable<List<Video>> getVideoList(String id) {
+    public Observable<List<Video>> getMovieVideoList(String id) {
         return moviesWebService.getVideosFromService(id).map(VideoWrapper::getVideoList);
     }
 
     @Override
-    public Observable<List<Video>> getTvVideoList(String id) {
+    public Observable<List<Video>> getTvShowVideoList(String id) {
         return tvShowsWebService.getTvVideosFromService(id).map(VideoWrapper::getVideoList);
     }
 
     @Override
-    public Observable<List<Review>> getReviewList(String id) {
+    public Observable<List<Review>> getMovieReviewList(String id) {
         return moviesWebService.getReviewsFromService(id).map(ReviewWrapper::getReviewList);
     }
 
     @Override
-    public Observable<List<Review>> getTvReviewList(String id) {
+    public Observable<List<Review>> getTvShowReviewList(String id) {
         return tvShowsWebService.getTvReviewsFromService(id).map(ReviewWrapper::getReviewList);
     }
 
 
     @Override
-    public Observable<List<Season>> getSeasonList(String id) {
+    public Observable<List<Season>> getTvShowSeasonList(String id) {
         return tvShowsWebService.getSingleTvShow(id).map(TvShowWrapper::getSeasonList);
     }
 
 
     @Override
-    public Observable<List<Episode>> getEpisodeList(String id, int seasonNumber) {
+    public Observable<List<Episode>> getTvShowEpisodeList(String id, int seasonNumber) {
         return tvShowsWebService.getEpisodesFromService(id, seasonNumber).map(EpisodeWrapper::getEpisodeList);
     }
 

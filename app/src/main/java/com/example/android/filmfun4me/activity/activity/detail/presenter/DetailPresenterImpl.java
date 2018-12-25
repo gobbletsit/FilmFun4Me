@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.model.DetailInteractor;
-import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.Movie;
@@ -20,9 +18,7 @@ import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.RxUtils;
-import com.google.gson.annotations.SerializedName;
 
-import java.security.PrivateKey;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -83,7 +79,7 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void showVideos(Movie movie) {
-        videoSubscription = detailInteractor.getVideoList(movie.getId())
+        videoSubscription = detailInteractor.getMovieVideoList(movie.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetVideosSuccess, t -> onGetVideoFailure());
@@ -91,7 +87,7 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void showReviews(Movie movie) {
-        reviewSubscription = detailInteractor.getReviewList(movie.getId())
+        reviewSubscription = detailInteractor.getMovieReviewList(movie.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetReviewSuccess, throwable -> onGetReviewFailure());
@@ -99,7 +95,7 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void showTvEpisodes(TvShow tvShow, int seasonNumber) {
-        episodeSubscription = detailInteractor.getEpisodeList(tvShow.getId(), seasonNumber)
+        episodeSubscription = detailInteractor.getTvShowEpisodeList(tvShow.getId(), seasonNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetEpisodesSuccess, throwable -> onGetEpisodesFailure());
@@ -112,7 +108,7 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void showSeasonList(TvShow tvShow) {
-        seasonSubscription = detailInteractor.getSeasonList(tvShow.getId())
+        seasonSubscription = detailInteractor.getTvShowSeasonList(tvShow.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetSeasonListSuccess, throwable -> onGetSeasonListFailure());
@@ -121,7 +117,7 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void showTvVideos(TvShow tvShow) {
-        videoSubscription = detailInteractor.getTvVideoList(tvShow.getId())
+        videoSubscription = detailInteractor.getTvShowVideoList(tvShow.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetVideosSuccess, t -> onGetVideoFailure());
