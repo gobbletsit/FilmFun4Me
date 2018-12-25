@@ -12,6 +12,7 @@ import com.example.android.filmfun4me.activity.activity.list.model.ListInteracto
 import com.example.android.filmfun4me.activity.activity.list.view.ListView;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
+import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.RxUtils;
 
 import java.util.ArrayList;
@@ -61,6 +62,15 @@ public class ListPresenterImpl implements ListPresenter {
         }
 
         getAllMovieGenres();
+    }
+
+    @Override
+    public void setTvShowView(ListView listView, int pagerPosition) {
+        if (pagerPosition == 0){
+            // show most popular tvshows
+        } else {
+            // show highest rated tv shows
+        }
     }
 
     // Show methods
@@ -155,6 +165,30 @@ public class ListPresenterImpl implements ListPresenter {
         view = null;
         RxUtils.unsubscribe(disposableSubscription);
         RxUtils.unsubscribe(disposableGenres);
+    }
+
+    @Override
+    public void showMostPopularTvShows() {
+        disposableSubscription = listInteractor.getListOfMostPopularTvShows()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onTvShowFetchSuccess, this::onTvShowFetchFailed);
+    }
+
+    @Override
+    public void showHighestRatedTvShows() {
+
+    }
+
+    // Success and failure methods for RX
+    private void onTvShowFetchSuccess(List<TvShow> tvShowList) {
+        if (isViewAttached()) {
+            view.setUpTvShowView(tvShowList);
+        }
+    }
+
+    private void onTvShowFetchFailed(Throwable e) {
+        view.loadingErrorMessage(e.getMessage());
     }
 
     private void compareGenreIdsAndLoadGenreList(List<Genre> genreList, ArrayList<String> singleGenreNamesList, int singleGenreId){

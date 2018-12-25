@@ -14,13 +14,13 @@ import com.example.android.filmfun4me.activity.activity.main.view.TvShowsFragmen
  * Created by gobov on 1/14/2018.
  */
 
-public class ListFragmentAdapter extends FragmentPagerAdapter{
+public class ListFragmentPagerAdapter extends FragmentPagerAdapter{
 
     private Context mContext;
 
     private int selectedButton;
 
-    ListFragmentAdapter(Context context, FragmentManager fm, int selectedButton) {
+    ListFragmentPagerAdapter(Context context, FragmentManager fm, int selectedButton) {
         super(fm);
 
         // for strings
@@ -31,18 +31,22 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        return ListFragment.newInstance(position);
+        return ListFragment.newInstance(position, selectedButton);
     }
 
     @Override
     public int getCount() {
-        return 3;
+        if (selectedButton == 0){
+            return 3;
+        } else {
+            return 2;
+        }
     }
 
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // you will set which names to retrieve based SELECTED BUTTON
+        // you will set which names to retrieve based on SELECTED BUTTON
         if (selectedButton == 0){
             if (position == 0){
                 return "Most Popular";
@@ -52,8 +56,11 @@ public class ListFragmentAdapter extends FragmentPagerAdapter{
                 return "Upcoming";
             }
         } else {
-            return null;
+            if (position == 1){
+                return "Most Popular";
+            } else {
+                return "Highest rated";
+            }
         }
-
     }
 }

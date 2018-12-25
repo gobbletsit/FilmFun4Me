@@ -2,7 +2,6 @@ package com.example.android.filmfun4me.activity.activity.list.view;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -10,27 +9,23 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
-import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
 import com.example.android.filmfun4me.activity.activity.list.presenter.ListPresenter;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
+import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.BaseUtils;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,6 +45,9 @@ public class ListFragment extends Fragment implements ListView {
 
     private static final String KEY_MOVIE = "movie";
     private static final String KEY_GENRE_NAMES_LIST = "genreNames";
+    private static final String SELECTED_BUTTON = "selectedButton";
+    private static final int BUTTON_MOVIES = 0;
+    private static final int BUTTON_TV_SHOWS = 1;
 
     RecyclerView recyclerView;
     RecyclerView.Adapter customAdapter;
@@ -78,10 +76,11 @@ public class ListFragment extends Fragment implements ListView {
     }
 
 
-    public static ListFragment newInstance(int position) {
+    public static ListFragment newInstance(int position, int selectedButton) {
         ListFragment listFragment = new ListFragment();
         Bundle args = new Bundle();
         args.putInt(PAGER_POSITION, position);
+        args.putInt(SELECTED_BUTTON, selectedButton);
         listFragment.setArguments(args);
         return listFragment;
     }
@@ -119,16 +118,11 @@ public class ListFragment extends Fragment implements ListView {
         recyclerView = view.findViewById(R.id.rec_list_activity);
         layoutInflater = getActivity().getLayoutInflater();
 
-        customAdapter = new CustomAdapter();
+        // ovo strpat u setMovie view, a za tv view promijenit adapter i tjt
 
-        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
-        scaleInAnimationAdapter.setDuration(400);
-        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
-        // disable the first scroll mode
-        scaleInAnimationAdapter.setFirstOnly(false);
-        recyclerView.setAdapter(scaleInAnimationAdapter);
 
-        // layoutManager = new GridLayoutManager(getActivity(), 2);
+
+
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -143,11 +137,14 @@ public class ListFragment extends Fragment implements ListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(PAGER_POSITION)){
+        if (getArguments() != null && getArguments().containsKey(PAGER_POSITION) && getArguments().containsKey(SELECTED_BUTTON)){
             pagerPosition = (int) getArguments().get(PAGER_POSITION);
+            int selectedButton = (int) getArguments().get(SELECTED_BUTTON);
 
-            if (isNetworkAvailable()) {
+            if (isNetworkAvailable()&& selectedButton == BUTTON_MOVIES) {
                 listPresenter.setMovieView(this, pagerPosition);
+            } else if (isNetworkAvailable() && selectedButton == BUTTON_TV_SHOWS){
+                listPresenter.setTvShowView(this, pagerPosition);
             }
         }
     }
@@ -167,7 +164,20 @@ public class ListFragment extends Fragment implements ListView {
     public void setUpMovieView(List<Movie> movieList) {
         this.movieList.clear();
         this.movieList.addAll(movieList);
+        // znaci ovo je malo cudno, treba ovo ljepse bit jer se jebeno dodavas presenterom sto je debilno
+        customAdapter = new ListMovieRecyclerAdapter(getActivity(), movieList, genreList, listPresenter);
+        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
+        scaleInAnimationAdapter.setDuration(400);
+        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
+        // disable the first scroll mode
+        scaleInAnimationAdapter.setFirstOnly(false);
         scaleInAnimationAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(scaleInAnimationAdapter);
+
+    }
+
+    @Override
+    public void setUpTvShowView(List<TvShow> tvShowList) {
 
     }
 
@@ -194,7 +204,6 @@ public class ListFragment extends Fragment implements ListView {
         this.genreList.clear();
         this.genreList.addAll(genreList);
     }
-
 
     @Override
     public String getSingleGenreName(int[] currentGenreIds, List<Genre> genreList) {
@@ -223,7 +232,7 @@ public class ListFragment extends Fragment implements ListView {
     }
 
 
-    private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+    /*private class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecyclerAdapter.ViewHolder> {
 
 
         @Override
@@ -276,7 +285,7 @@ public class ListFragment extends Fragment implements ListView {
                 listPresenter.whenMovieClicked(movie, genreList);
             }
         }
-    }
+    }*/
 
 
     @Override

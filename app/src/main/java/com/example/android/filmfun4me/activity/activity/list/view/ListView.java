@@ -20,6 +20,8 @@ public interface ListView {
     // Set view methods
     void setUpMovieView(List<Movie> movieList);
 
+    void setUpTvShowView(List<TvShow> tvShowList);
+
 
     void setViewColors(RecyclerView recyclerView, DividerItemDecoration itemDecoration, int themeColor);
 

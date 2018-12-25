@@ -29,6 +29,8 @@ public interface ListPresenter {
 
     void setMovieView(ListView listView, int pagerPosition);
 
+    void setTvShowView(ListView listView, int pagerPosition);
+
     // Genres
     void getAllMovieGenres();
 
@@ -36,6 +38,10 @@ public interface ListPresenter {
     void whenMovieClicked(Movie movie, List<Genre> genreList);
 
     void destroy();
+
+    void showMostPopularTvShows();
+
+    void showHighestRatedTvShows();
 
 }
 

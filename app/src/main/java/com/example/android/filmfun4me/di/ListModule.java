@@ -22,8 +22,8 @@ public class ListModule {
 
     // Context needed
     @Provides
-    ListInteractor providesListInteractor(MoviesWebService moviesWebService) {
-        return new ListInteractorImpl(moviesWebService);
+    ListInteractor providesListInteractor(MoviesWebService moviesWebService, TvShowsWebService tvShowsWebService) {
+        return new ListInteractorImpl(moviesWebService, tvShowsWebService);
     }
 
     @Provides

@@ -25,10 +25,12 @@ import io.reactivex.Observable;
 public class ListInteractorImpl implements ListInteractor {
 
     private MoviesWebService moviesWebService;
+    private TvShowsWebService tvShowsWebService;
 
     @Inject
-    public ListInteractorImpl(MoviesWebService moviesWebService) {
+    public ListInteractorImpl(MoviesWebService moviesWebService, TvShowsWebService tvShowsWebService) {
         this.moviesWebService = moviesWebService;
+        this.tvShowsWebService = tvShowsWebService;
     }
 
     @Override
@@ -49,6 +51,16 @@ public class ListInteractorImpl implements ListInteractor {
     @Override
     public Observable<List<Genre>> getListOfAllMovieGenres() {
         return moviesWebService.getListOfAllGenres().map(GenreWrapper::getGenreList);
+    }
+
+    @Override
+    public Observable<List<TvShow>> getListOfMostPopularTvShows() {
+        return tvShowsWebService.getPopularTvShows().map(TvShowWrapper::getTvShowList);
+    }
+
+    @Override
+    public Observable<List<TvShow>> getListOfHighestRatedTvShows() {
+        return tvShowsWebService.getHighestRatedTvShows().map(TvShowWrapper::getTvShowList);
     }
 
 }

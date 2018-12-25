@@ -1,16 +1,10 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
@@ -42,10 +36,10 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             Bundle extras = getIntent().getExtras();
             if (extras != null){
                 selectedButton = extras.getInt(SELECTED_BUTTON);
-                ListFragmentAdapter listFragmentAdapter = new ListFragmentAdapter(this, getSupportFragmentManager(), selectedButton);
+                ListFragmentPagerAdapter listFragmentPagerAdapter = new ListFragmentPagerAdapter(this, getSupportFragmentManager(), selectedButton);
                 ViewPager viewPager = this.findViewById(R.id.view_pager_list);
                 TabLayout tabLayout = this.findViewById(R.id.tab_layout_list);
-                viewPager.setAdapter(listFragmentAdapter);
+                viewPager.setAdapter(listFragmentPagerAdapter);
                 tabLayout.setupWithViewPager(viewPager);
             }
         }

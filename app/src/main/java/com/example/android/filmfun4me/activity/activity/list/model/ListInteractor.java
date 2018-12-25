@@ -24,6 +24,10 @@ public interface ListInteractor {
     // List of all possible genres
     Observable<List<Genre>> getListOfAllMovieGenres();
 
+    Observable<List<TvShow>> getListOfMostPopularTvShows();
+
+    Observable<List<TvShow>> getListOfHighestRatedTvShows();
+
 
 
 }
