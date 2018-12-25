@@ -72,6 +72,7 @@ public class ListPresenterImpl implements ListPresenter {
         } else {
             showHighestRatedTvShows();
         }
+        getAllMovieGenres();
     }
 
     // Show methods

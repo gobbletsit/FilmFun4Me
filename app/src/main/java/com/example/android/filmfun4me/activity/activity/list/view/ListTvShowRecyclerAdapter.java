@@ -21,11 +21,13 @@ import java.util.List;
 public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRecyclerAdapter.ViewHolder> {
 
     private List<TvShow> tvShowList;
+    private List<Genre> genreList;
     private Context context;
 
 
-    ListTvShowRecyclerAdapter (List<TvShow> tvShowList){
+    ListTvShowRecyclerAdapter (List<TvShow> tvShowList, List<Genre> genreList){
         this.tvShowList = tvShowList;
+        this.genreList = genreList;
     }
 
 
@@ -41,6 +43,12 @@ public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRe
 
         holder.tvShow = tvShowList.get(position);
 
+        holder.currentGenreIds = holder.tvShow.getGenreIds();
+
+        // pricekaj za ovo
+        String genreName = getSingleGenreName(holder.currentGenreIds, genreList);
+        holder.tv_genre.setText(genreName);
+
         holder.tv_title.setText(holder.tvShow.getTitle());
 
         Picasso.with(context).load(BaseUtils.getPosterPath(holder.tvShow.getPosterPath())).into(holder.iv_movie_poster);
@@ -54,17 +62,20 @@ public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRe
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private int[] currentGenreIds;
         private TvShow tvShow;
 
         private ViewGroup container;
         private TextView tv_title;
         private ImageView iv_movie_poster;
+        private TextView tv_genre;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.container = itemView.findViewById(R.id.list_item_container);
             this.tv_title = itemView.findViewById(R.id.tv_movie_title);
             this.iv_movie_poster = itemView.findViewById(R.id.imv_poster);
+            this.tv_genre = itemView.findViewById(R.id.tv_list_genre);
             this.container.setOnClickListener(this);
         }
 
@@ -72,6 +83,26 @@ public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRe
         public void onClick(View view) {
             // listPresenter.whenMovieClicked(tvShow, genreList);
         }
+    }
+
+    private String getSingleGenreName(int[] currentGenreIds, List<Genre> genreList) {
+
+        int singleGenreId;
+
+        String genreName = "";
+
+        for (int currentGenreId : currentGenreIds) {
+            singleGenreId = currentGenreId;
+
+            for (int a = 0; a < genreList.size(); a++) {
+                int preciseGenreId = genreList.get(a).getGenreId();
+
+                if (preciseGenreId == singleGenreId) {
+                    genreName = genreList.get(a).getGenreName();
+                }
+            }
+        }
+        return genreName;
     }
 }
 

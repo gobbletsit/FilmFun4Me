@@ -172,7 +172,7 @@ public class ListFragment extends Fragment implements ListView {
         this.tvShowList.clear();
         this.tvShowList.addAll(tvShowList);
         // znaci ovo je malo cudno, treba ovo ljepse bit jer se jebeno dodavas presenterom sto je debilno
-        customAdapter = new ListTvShowRecyclerAdapter(tvShowList);
+        customAdapter = new ListTvShowRecyclerAdapter(tvShowList, genreList);
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
