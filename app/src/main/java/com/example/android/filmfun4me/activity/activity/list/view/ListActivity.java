@@ -36,6 +36,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             Bundle extras = getIntent().getExtras();
             if (extras != null){
                 selectedButton = extras.getInt(SELECTED_BUTTON);
+                setTitle(getStringTitle(selectedButton));
                 ListFragmentPagerAdapter listFragmentPagerAdapter = new ListFragmentPagerAdapter(this, getSupportFragmentManager(), selectedButton);
                 ViewPager viewPager = this.findViewById(R.id.view_pager_list);
                 TabLayout tabLayout = this.findViewById(R.id.tab_layout_list);
@@ -53,5 +54,13 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         extras.putStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE, singleGenreNamesList);
         detailIntent.putExtras(extras);
         startActivity(detailIntent);
+    }
+
+    private String getStringTitle(int selectedButton){
+        if (selectedButton == 0){
+            return "Movies";
+        } else {
+            return "TV shows";
+        }
     }
 }

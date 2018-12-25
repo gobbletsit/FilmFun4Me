@@ -42,6 +42,9 @@ public class DetailActivity extends AppCompatActivity {
                 ArrayList<String> genreNamesListMovie = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
                 if (movie != null) {
                     switchToMovieDetailFragment(movie, genreNamesListMovie);
+                    if (movie.getTitle()!=null){
+                        setTitle(movie.getTitle());
+                    }
                 }
             } else {
                 TvShow tvShow = extras.getParcelable(KEY_TV_SHOW);
