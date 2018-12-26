@@ -16,7 +16,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String DETAIL_FRAG = "DETAIL_FRAG";
 
-    public static final String KEY_FRAGMENT_POSITION = "position";
+    public static final String SELECTED_BUTTON = "selectedButton";
 
     private static final String KEY_MOVIE = "movie";
     private static final String KEY_TV_SHOW = "tv_show";
@@ -31,18 +31,18 @@ public class DetailActivity extends AppCompatActivity {
         Intent listIntent = getIntent();
         Bundle extras = listIntent.getExtras();
 
-        int fragmentPosition;
+        int selectedButton;
 
         if (extras != null) {
-            fragmentPosition = extras.getInt(KEY_FRAGMENT_POSITION);
+            selectedButton = extras.getInt(SELECTED_BUTTON);
 
             // need to make this cleaner!
-            if (fragmentPosition == 0) {
+            if (selectedButton == 0) {
                 Movie movie = extras.getParcelable(KEY_MOVIE);
                 ArrayList<String> genreNamesListMovie = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
                 if (movie != null) {
                     switchToMovieDetailFragment(movie, genreNamesListMovie);
-                    if (movie.getTitle()!=null){
+                    if (movie.getTitle()!= null){
                         setTitle(movie.getTitle());
                     }
                 }
@@ -51,6 +51,9 @@ public class DetailActivity extends AppCompatActivity {
                 ArrayList<String> genreNamesListTv = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
                 if (tvShow != null) {
                     switchToTvShowDetailFragment(tvShow, genreNamesListTv);
+                    if (tvShow.getTitle()!= null){
+                        setTitle(tvShow.getTitle());
+                    }
                 }
             }
         }

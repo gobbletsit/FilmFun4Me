@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
 import com.example.android.filmfun4me.data.Movie;
+import com.example.android.filmfun4me.data.TvShow;
 
 import java.util.ArrayList;
 
@@ -47,11 +48,23 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     }
 
     @Override
-    public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList) {
+    public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList, int selectedButton) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
         Bundle extras = new Bundle();
         extras.putParcelable(KEY_MOVIE, movie);
         extras.putStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE, singleGenreNamesList);
+        extras.putInt(SELECTED_BUTTON, selectedButton);
+        detailIntent.putExtras(extras);
+        startActivity(detailIntent);
+    }
+
+    @Override
+    public void onTvShowClicked(TvShow tvShow, ArrayList<String> singleGenreNamesList, int selectedButton) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        Bundle extras = new Bundle();
+        extras.putParcelable(KEY_TV_SHOW, tvShow);
+        extras.putStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW, singleGenreNamesList);
+        extras.putInt(SELECTED_BUTTON, selectedButton);
         detailIntent.putExtras(extras);
         startActivity(detailIntent);
     }

@@ -23,11 +23,13 @@ public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRe
     private List<TvShow> tvShowList;
     private List<Genre> genreList;
     private Context context;
+    private ListPresenter listPresenter;
 
 
-    ListTvShowRecyclerAdapter (List<TvShow> tvShowList, List<Genre> genreList){
+    ListTvShowRecyclerAdapter (List<TvShow> tvShowList, List<Genre> genreList, ListPresenter listPresenter){
         this.tvShowList = tvShowList;
         this.genreList = genreList;
+        this.listPresenter = listPresenter;
     }
 
 
@@ -81,7 +83,7 @@ public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRe
 
         @Override
         public void onClick(View view) {
-            // listPresenter.whenMovieClicked(tvShow, genreList);
+            listPresenter.whenTvShowClicked(tvShow, genreList);
         }
     }
 

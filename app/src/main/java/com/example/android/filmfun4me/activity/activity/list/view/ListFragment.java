@@ -44,6 +44,7 @@ public class ListFragment extends Fragment implements ListView {
     ListPresenter listPresenter;
 
     private static final String SELECTED_BUTTON = "selectedButton";
+    private int selectedButton;
     private static final int BUTTON_MOVIES = 0;
     private static final int BUTTON_TV_SHOWS = 1;
 
@@ -130,7 +131,7 @@ public class ListFragment extends Fragment implements ListView {
 
         if (getArguments() != null && getArguments().containsKey(PAGER_POSITION) && getArguments().containsKey(SELECTED_BUTTON)){
             pagerPosition = (int) getArguments().get(PAGER_POSITION);
-            int selectedButton = (int) getArguments().get(SELECTED_BUTTON);
+            selectedButton = (int) getArguments().get(SELECTED_BUTTON);
 
             if (isNetworkAvailable()&& selectedButton == BUTTON_MOVIES) {
                 listPresenter.setMovieView(this, pagerPosition);
@@ -172,7 +173,7 @@ public class ListFragment extends Fragment implements ListView {
         this.tvShowList.clear();
         this.tvShowList.addAll(tvShowList);
         // znaci ovo je malo cudno, treba ovo ljepse bit jer se jebeno dodavas presenterom sto je debilno
-        customAdapter = new ListTvShowRecyclerAdapter(tvShowList, genreList);
+        customAdapter = new ListTvShowRecyclerAdapter(tvShowList, genreList, listPresenter);
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
@@ -183,10 +184,16 @@ public class ListFragment extends Fragment implements ListView {
     }
 
 
+    // ovo dvoje treba mijenjat, samo si ovako napravio kako bi radilo
     @Override
     public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList) {
 
-        callback.onMovieClicked(movie,singleGenreNamesList);
+        callback.onMovieClicked(movie,singleGenreNamesList, selectedButton);
+    }
+
+    @Override
+    public void onTvShowClicked(TvShow tvShow, ArrayList<String> singleGenreNamesList) {
+        callback.onTvShowClicked(tvShow, singleGenreNamesList, selectedButton);
     }
 
 
@@ -228,7 +235,8 @@ public class ListFragment extends Fragment implements ListView {
     }
 
     public interface Callback {
-        void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList);
+        void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList, int selectedButton);
+        void onTvShowClicked(TvShow tvShow, ArrayList<String> singleGenreNamesList, int selectedButton);
     }
 
 }

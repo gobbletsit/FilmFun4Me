@@ -141,6 +141,13 @@ public class ListPresenterImpl implements ListPresenter {
         view.onMovieClicked(movie, getSingleItemGenreList(currentGenreIds, genreList));
     }
 
+    @Override
+    public void whenTvShowClicked(TvShow tvShow, List<Genre> genreList) {
+        int[] currentGenreIds = tvShow.getGenreIds();
+
+        view.onTvShowClicked(tvShow, getSingleItemGenreList(currentGenreIds, genreList));
+    }
+
     // To compare to all the genres and get the match when found
     private ArrayList<String> getSingleItemGenreList(int[] currentGenreIds, List<Genre> genreList) {
 
