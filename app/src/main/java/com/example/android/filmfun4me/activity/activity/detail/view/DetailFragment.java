@@ -2,7 +2,6 @@ package com.example.android.filmfun4me.activity.activity.detail.view;
 
 
 import android.content.Intent;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -70,7 +69,7 @@ public class DetailFragment extends Fragment implements DetailView {
     @BindView(R.id.tv_seasons_label) TextView tvSeasonLabel;
     @BindView(R.id.tv_drop_rev_button) TextView reviewButtonTextView;
 
-    @BindView(R.id.image_view_trailer) ImageView ivTrailer;
+    @BindView(R.id.image_view_poster) ImageView ivPoster;
     @BindView(R.id.image_view_rating_star) ImageView ivRatingStar;
     @BindView(R.id.image_view_play_icon) ImageView ivPlayIcon;
 
@@ -278,19 +277,19 @@ public class DetailFragment extends Fragment implements DetailView {
         Video video = videos.get(0);
 
         if (Video.getUrl(video) != null) {
-            ivTrailer.setTag(Video.getUrl(video));
+            ivPoster.setTag(Video.getUrl(video));
         } else {
             ivPlayIcon.setVisibility(View.GONE);
         }
 
         if (Video.getThumbnailUrl(video) != null) {
-            Picasso.with(getActivity()).load(Video.getThumbnailUrl(video)).into(ivTrailer);
+            Picasso.with(getActivity()).load(Video.getThumbnailUrl(video)).into(ivPoster);
             ivPlayIcon.setVisibility(View.VISIBLE);
         } else {
             ivPlayIcon.setVisibility(View.GONE);
         }
 
-        ivTrailer.setOnClickListener(new View.OnClickListener() {
+        ivPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 detailPresenter.whenTrailerClicked(v);
