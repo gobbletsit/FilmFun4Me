@@ -157,6 +157,22 @@ public class ListPresenterImpl implements ListPresenter {
         return tvShowList.size();
     }
 
+    @Override
+    public void onMovieListItemInteraction(int itemPosition) {
+        Movie movie = movieList.get(itemPosition);
+        int[] currentGenreIds = movie.getGenreIds();
+
+        view.onMovieClicked(movie, getSingleItemGenreList(currentGenreIds, genreList));
+    }
+
+    @Override
+    public void onTvShowListItemInteraction(int itemPosition) {
+        TvShow tvShow = tvShowList.get(itemPosition);
+        int[] currentGenreIds = tvShow.getGenreIds();
+
+        view.onTvShowClicked(tvShow, getSingleItemGenreList(currentGenreIds, genreList));
+    }
+
     private void onMovieFetchFailed(Throwable e) {
         view.loadingErrorMessage(e.getMessage());
     }

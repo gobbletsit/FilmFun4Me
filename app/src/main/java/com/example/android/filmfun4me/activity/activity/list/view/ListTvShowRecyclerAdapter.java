@@ -59,7 +59,7 @@ public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRe
 
         @Override
         public void onClick(View view) {
-            //listPresenter.whenTvShowClicked(tvShow, genreList);
+            listPresenter.onTvShowListItemInteraction(getAdapterPosition());
         }
 
         @Override

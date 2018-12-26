@@ -20,9 +20,6 @@ import java.util.List;
 public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecyclerAdapter.ViewHolder> {
 
     private ListPresenter listPresenter;
-
-    private List<Movie> movieList;
-    private List<Genre> genreList;
     private Context context;
 
 
@@ -52,9 +49,6 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ListItemView {
 
-        private int[] currentGenreIds;
-        private Movie movie;
-
         private ViewGroup container;
         private TextView tv_title;
         private ImageView iv_movie_poster;
@@ -71,7 +65,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
 
         @Override
         public void onClick(View view) {
-            listPresenter.whenMovieClicked(movie, genreList);
+            listPresenter.onMovieListItemInteraction(getAdapterPosition());
         }
 
         @Override

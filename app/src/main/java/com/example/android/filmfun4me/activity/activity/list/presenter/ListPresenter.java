@@ -56,5 +56,9 @@ public interface ListPresenter {
 
     int getTvShowListItemRowCount();
 
+    void onMovieListItemInteraction(int itemPosition);
+
+    void onTvShowListItemInteraction(int itemPosition);
+
 }
 
