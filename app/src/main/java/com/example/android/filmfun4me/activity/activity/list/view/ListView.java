@@ -18,9 +18,9 @@ import java.util.List;
 public interface ListView {
 
     // Set view methods
-    void setUpMovieView(List<Movie> movieList);
+    void setUpMovieView();
 
-    void setUpTvShowView(List<TvShow> tvShowList);
+    void setUpTvShowView();
 
 
     // Click methods

@@ -10,25 +10,16 @@ import android.widget.TextView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.list.presenter.ListPresenter;
-import com.example.android.filmfun4me.data.Genre;
-import com.example.android.filmfun4me.data.Movie;
-import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRecyclerAdapter.ViewHolder> {
 
-    private List<TvShow> tvShowList;
-    private List<Genre> genreList;
     private Context context;
     private ListPresenter listPresenter;
 
 
-    ListTvShowRecyclerAdapter (List<TvShow> tvShowList, List<Genre> genreList, ListPresenter listPresenter){
-        this.tvShowList = tvShowList;
-        this.genreList = genreList;
+    ListTvShowRecyclerAdapter (ListPresenter listPresenter){
         this.listPresenter = listPresenter;
     }
 
@@ -42,30 +33,15 @@ public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRe
 
     @Override
     public void onBindViewHolder(ListTvShowRecyclerAdapter.ViewHolder holder, int position) {
-
-        holder.tvShow = tvShowList.get(position);
-
-        holder.currentGenreIds = holder.tvShow.getGenreIds();
-
-        // pricekaj za ovo
-        String genreName = getSingleGenreName(holder.currentGenreIds, genreList);
-        holder.tv_genre.setText(genreName);
-
-        holder.tv_title.setText(holder.tvShow.getTitle());
-
-        Picasso.with(context).load(BaseUtils.getPosterPath(holder.tvShow.getPosterPath())).into(holder.iv_movie_poster);
-
+        listPresenter.onBindTvShowListItemAtPosition(position, holder);
     }
 
     @Override
     public int getItemCount() {
-        return tvShowList.size();
+        return listPresenter.getTvShowListItemRowCount();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private int[] currentGenreIds;
-        private TvShow tvShow;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ListItemView {
 
         private ViewGroup container;
         private TextView tv_title;
@@ -83,28 +59,23 @@ public class ListTvShowRecyclerAdapter extends RecyclerView.Adapter<ListTvShowRe
 
         @Override
         public void onClick(View view) {
-            listPresenter.whenTvShowClicked(tvShow, genreList);
+            //listPresenter.whenTvShowClicked(tvShow, genreList);
         }
-    }
 
-    private String getSingleGenreName(int[] currentGenreIds, List<Genre> genreList) {
-
-        int singleGenreId;
-
-        String genreName = "";
-
-        for (int currentGenreId : currentGenreIds) {
-            singleGenreId = currentGenreId;
-
-            for (int a = 0; a < genreList.size(); a++) {
-                int preciseGenreId = genreList.get(a).getGenreId();
-
-                if (preciseGenreId == singleGenreId) {
-                    genreName = genreList.get(a).getGenreName();
-                }
-            }
+        @Override
+        public void setItemTitle(String itemTitle) {
+            tv_title.setText(itemTitle);
         }
-        return genreName;
+
+        @Override
+        public void setGenreName(String genreName) {
+            tv_genre.setText(genreName);
+        }
+
+        @Override
+        public void setItemPoster(String posterPath) {
+            Picasso.with(context).load(BaseUtils.getPosterPath(posterPath)).into(iv_movie_poster);
+        }
     }
 }
 

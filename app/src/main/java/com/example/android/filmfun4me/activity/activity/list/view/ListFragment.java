@@ -153,11 +153,8 @@ public class ListFragment extends Fragment implements ListView {
     }
 
     @Override
-    public void setUpMovieView(List<Movie> movieList) {
-        this.movieList.clear();
-        this.movieList.addAll(movieList);
-        // znaci ovo je malo cudno, treba ovo ljepse bit jer se jebeno dodavas presenterom sto je debilno
-        customAdapter = new ListMovieRecyclerAdapter(genreList, listPresenter);
+    public void setUpMovieView() {
+        customAdapter = new ListMovieRecyclerAdapter(listPresenter);
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
@@ -169,11 +166,8 @@ public class ListFragment extends Fragment implements ListView {
     }
 
     @Override
-    public void setUpTvShowView(List<TvShow> tvShowList) {
-        this.tvShowList.clear();
-        this.tvShowList.addAll(tvShowList);
-        // znaci ovo je malo cudno, treba ovo ljepse bit jer se jebeno dodavas presenterom sto je debilno
-        customAdapter = new ListTvShowRecyclerAdapter(tvShowList, genreList, listPresenter);
+    public void setUpTvShowView() {
+        customAdapter = new ListTvShowRecyclerAdapter(listPresenter);
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());

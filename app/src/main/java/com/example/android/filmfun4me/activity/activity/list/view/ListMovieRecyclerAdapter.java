@@ -17,8 +17,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecyclerAdapter.ViewHolder> {
 
     private ListPresenter listPresenter;
@@ -28,8 +26,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
     private Context context;
 
 
-    ListMovieRecyclerAdapter (List<Genre> genreList, ListPresenter listPresenter){
-        this.genreList = genreList;
+    ListMovieRecyclerAdapter (ListPresenter listPresenter){
         this.listPresenter = listPresenter;
     }
 
@@ -50,7 +47,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
 
     @Override
     public int getItemCount() {
-        return listPresenter.getListItemRowsCount();
+        return listPresenter.getMovieListItemRowsCount();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ListItemView {
@@ -84,7 +81,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
 
         @Override
         public void setGenreName(String genreName) {
-            // nothing for now
+            tv_genre.setText(genreName);
         }
 
         @Override

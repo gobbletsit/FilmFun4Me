@@ -47,6 +47,10 @@ public class ListPresenterImpl implements ListPresenter {
     // ovo je za isprobat oce li radit sve
     private List<Movie> movieList = new ArrayList<>(40);
 
+    private List<TvShow> tvShowList = new ArrayList<>(40);
+
+    private List<Genre> genreList = new ArrayList<>(40);
+
 
     public ListPresenterImpl(ListInteractor listInteractor, Context context) {
         this.listInteractor = listInteractor;
@@ -57,6 +61,8 @@ public class ListPresenterImpl implements ListPresenter {
     public void setMovieView(ListView listView, int pagerPosition) {
         this.view = listView;
 
+        getAllMovieGenres();
+
         if (pagerPosition == 0){
             showMostPopularMovies();
         } else if (pagerPosition == 1){
@@ -64,8 +70,6 @@ public class ListPresenterImpl implements ListPresenter {
         } else {
             showUpcomingMovies();
         }
-
-        getAllMovieGenres();
     }
 
     @Override
@@ -119,24 +123,38 @@ public class ListPresenterImpl implements ListPresenter {
 
     // Success and failure methods for RX
     private void onMovieFetchSuccess(List<Movie> movieList) {
-        // idemo ovo isprobat passive view approach from android pub
         this.movieList.clear();
         this.movieList.addAll(movieList);
         if (isViewAttached()) {
-            view.setUpMovieView(movieList);
+            view.setUpMovieView();
         }
 
     }
 
     public void onBindMovieListItemAtPosition(int position, ListItemView listItemView){
         Movie movie = movieList.get(position);
+        String genreName = getSingleGenreName(movie.getGenreIds());
         listItemView.setItemTitle(movie.getTitle());
-        //listItemView.setGenreName(// neki genre name);
         listItemView.setItemPoster(movie.getPosterPath());
+        listItemView.setGenreName(genreName);
     }
 
-    public int getListItemRowsCount(){
+    @Override
+    public void onBindTvShowListItemAtPosition(int position, ListItemView listItemView) {
+        TvShow tvShow = tvShowList.get(position);
+        String genreName = getSingleGenreName(tvShow.getGenreIds());
+        listItemView.setItemTitle(tvShow.getTitle());
+        listItemView.setItemPoster(tvShow.getPosterPath());
+        listItemView.setGenreName(genreName);
+    }
+
+    public int getMovieListItemRowsCount(){
         return movieList.size();
+    }
+
+    @Override
+    public int getTvShowListItemRowCount() {
+        return tvShowList.size();
     }
 
     private void onMovieFetchFailed(Throwable e) {
@@ -145,6 +163,8 @@ public class ListPresenterImpl implements ListPresenter {
 
 
     private void onGenreListFetchSuccess(List<Genre> genreList) {
+        this.genreList.clear();
+        this.genreList.addAll(genreList);
         view.loadUpAllGenreList(genreList);
     }
 
@@ -214,8 +234,10 @@ public class ListPresenterImpl implements ListPresenter {
 
     // Success and failure methods for RX
     private void onTvShowFetchSuccess(List<TvShow> tvShowList) {
+        this.tvShowList.clear();
+        this.tvShowList.addAll(tvShowList);
         if (isViewAttached()) {
-            view.setUpTvShowView(tvShowList);
+            view.setUpTvShowView();
         }
     }
 
@@ -236,7 +258,7 @@ public class ListPresenterImpl implements ListPresenter {
         }
     }
 
-    private String getSingleGenreName(int[] currentGenreIds, List<Genre> genreList) {
+    private String getSingleGenreName(int[] currentGenreIds) {
 
         int singleGenreId;
 

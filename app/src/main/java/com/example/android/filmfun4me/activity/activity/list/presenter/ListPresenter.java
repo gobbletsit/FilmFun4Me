@@ -50,7 +50,11 @@ public interface ListPresenter {
     // ovo je za shemu s adapterom
     void onBindMovieListItemAtPosition(int position, ListItemView listItemView);
 
-    int getListItemRowsCount();
+    void onBindTvShowListItemAtPosition(int position, ListItemView listItemView);
+
+    int getMovieListItemRowsCount();
+
+    int getTvShowListItemRowCount();
 
 }
 
