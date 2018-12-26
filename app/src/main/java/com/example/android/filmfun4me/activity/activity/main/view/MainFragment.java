@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.main.presenter.MainPresenter;
+import static com.example.android.filmfun4me.utils.Constants.*;
 
 import javax.inject.Inject;
 

@@ -29,10 +29,6 @@ public interface ListView {
     void onTvShowClicked(TvShow tvShow, ArrayList<String> singleGenreNamesList);
 
 
-    // Genre methods
-    void loadUpAllGenreList(List<Genre> genreList);
-
-
     void showLoading();
 
     void loadingErrorMessage(String error);

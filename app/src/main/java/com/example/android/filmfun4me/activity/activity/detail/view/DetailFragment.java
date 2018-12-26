@@ -31,6 +31,7 @@ import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.BaseUtils;
+import com.example.android.filmfun4me.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -46,16 +47,10 @@ import butterknife.ButterKnife;
 
 public class DetailFragment extends Fragment implements DetailView {
 
-    @Inject
-    DetailPresenter detailPresenter;
-
     private static final String TAG = DetailFragment.class.getSimpleName();
 
-    // storage keys
-    private static final String KEY_MOVIE = "movie";
-    private static final String KEY_TV_SHOW = "tv_show";
-    private static final String KEY_GENRE_NAMES_LIST_MOVIE = "genreNames";
-    private static final String KEY_GENRE_NAMES_LIST_TV_SHOW = "showGenreNames";
+    @Inject
+    DetailPresenter detailPresenter;
 
     // date formats
     private static final String INPUT_DATE_FORMAT = "yyyy-mm-dd";
@@ -110,8 +105,8 @@ public class DetailFragment extends Fragment implements DetailView {
     public static DetailFragment newInstance(Movie movie, ArrayList<String> genreNamesList) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable(KEY_MOVIE, movie);
-        args.putStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE, genreNamesList);
+        args.putParcelable(Constants.KEY_MOVIE, movie);
+        args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE, genreNamesList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -119,8 +114,8 @@ public class DetailFragment extends Fragment implements DetailView {
     public static DetailFragment newInstanceTv(TvShow tvShow, ArrayList<String> genreNamesList) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable(KEY_TV_SHOW, tvShow);
-        args.putStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW, genreNamesList);
+        args.putParcelable(Constants.KEY_TV_SHOW, tvShow);
+        args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW, genreNamesList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -129,9 +124,7 @@ public class DetailFragment extends Fragment implements DetailView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
         ((BaseApplication) getActivity().getApplication()).createDetailComponent().inject(this);
-
     }
 
     @Override
@@ -161,16 +154,16 @@ public class DetailFragment extends Fragment implements DetailView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(KEY_MOVIE)) {
-            Movie movie = (Movie) getArguments().get(KEY_MOVIE);
+        if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
+            Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
             if (movie != null) {
                 this.movie = movie;
                 detailPresenter.setView(this);
                 detailPresenter.showMovieDetails(movie);
 
             }
-        } else if (getArguments() != null && getArguments().containsKey(KEY_TV_SHOW)) {
-            TvShow tvShow = (TvShow) getArguments().get(KEY_TV_SHOW);
+        } else if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
+            TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
             if (tvShow != null) {
                 this.tvShow = tvShow;
                 detailPresenter.setView(this);
@@ -191,7 +184,7 @@ public class DetailFragment extends Fragment implements DetailView {
         tvDetailRating.setText(String.valueOf(movie.getVoteAverage()));
         tvDetailLang.setText(movie.getLanguage());
 
-        listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
+        listNames = getArguments().getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE);
         if (listNames != null){
             tvGenre.setText(getAppendedGenreNames(listNames));
         }
@@ -230,7 +223,7 @@ public class DetailFragment extends Fragment implements DetailView {
         tvDetailRating.setText(String.valueOf(tvShow.getVoteAverage()));
         tvDetailLang.setText(tvShow.getLanguage());
 
-        listNames = getArguments().getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
+        listNames = getArguments().getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW);
         if (listNames != null){
             tvGenre.setText(getAppendedGenreNames(listNames));
         }
@@ -269,16 +262,6 @@ public class DetailFragment extends Fragment implements DetailView {
         String videoUrl = (String) v.getTag();
         Intent playVideoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
         startActivity(playVideoIntent);
-    }
-
-    @Override
-    public void setMovieRatingStar(ImageView imageView) {
-        this.ivRatingStar = imageView;
-    }
-
-    @Override
-    public void setTvRatingStar(ImageView imageView) {
-        this.ivRatingStar = imageView;
     }
 
     @Override
@@ -426,24 +409,6 @@ public class DetailFragment extends Fragment implements DetailView {
 
         getArguments().clear();
         detailPresenter.destroy();
-    }
-
-    private void setColorOfText(int themeColor) {
-        tvDetailMovieTitle.setTextColor(themeColor);
-        tvDetailReleaseDate.setTextColor(themeColor);
-        tvDetailOverview.setTextColor(themeColor);
-        tvDetailRating.setTextColor(themeColor);
-        tvDetailLang.setTextColor(themeColor);
-        tvGenre.setTextColor(themeColor);
-        tvDateLabel.setTextColor(themeColor);
-        tvOverviewLabel.setTextColor(themeColor);
-        tvLangLabel.setTextColor(themeColor);
-        tvReviewLabel.setTextColor(getResources().getColor(R.color.colorSeasonsAndReviews));
-        reviewButtonTextView.setTextColor(getResources().getColor(R.color.colorSeasonsAndReviews));
-
-        // UNDERLINING TEXT VIEWS
-        tvReviewLabel.setPaintFlags(tvReviewLabel.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        reviewButtonTextView.setPaintFlags(reviewButtonTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
     private String formatDate(String date) {

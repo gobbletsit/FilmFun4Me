@@ -9,19 +9,13 @@ import android.os.Bundle;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
+import com.example.android.filmfun4me.utils.Constants;
 
 import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
     public static final String DETAIL_FRAG = "DETAIL_FRAG";
-
-    public static final String SELECTED_BUTTON = "selectedButton";
-
-    private static final String KEY_MOVIE = "movie";
-    private static final String KEY_TV_SHOW = "tv_show";
-    private static final String KEY_GENRE_NAMES_LIST_MOVIE = "genreNames";
-    private static final String KEY_GENRE_NAMES_LIST_TV_SHOW = "showGenreNames";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +28,12 @@ public class DetailActivity extends AppCompatActivity {
         int selectedButton;
 
         if (extras != null) {
-            selectedButton = extras.getInt(SELECTED_BUTTON);
+            selectedButton = extras.getInt(Constants.SELECTED_BUTTON);
 
             // need to make this cleaner!
             if (selectedButton == 0) {
-                Movie movie = extras.getParcelable(KEY_MOVIE);
-                ArrayList<String> genreNamesListMovie = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_MOVIE);
+                Movie movie = extras.getParcelable(Constants.KEY_MOVIE);
+                ArrayList<String> genreNamesListMovie = extras.getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE);
                 if (movie != null) {
                     switchToMovieDetailFragment(movie, genreNamesListMovie);
                     if (movie.getTitle()!= null){
@@ -47,8 +41,8 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                TvShow tvShow = extras.getParcelable(KEY_TV_SHOW);
-                ArrayList<String> genreNamesListTv = extras.getStringArrayList(KEY_GENRE_NAMES_LIST_TV_SHOW);
+                TvShow tvShow = extras.getParcelable(Constants.KEY_TV_SHOW);
+                ArrayList<String> genreNamesListTv = extras.getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW);
                 if (tvShow != null) {
                     switchToTvShowDetailFragment(tvShow, genreNamesListTv);
                     if (tvShow.getTitle()!= null){

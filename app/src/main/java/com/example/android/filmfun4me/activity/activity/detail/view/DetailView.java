@@ -32,7 +32,4 @@ public interface DetailView {
 
     void onTrailerClicked(View v);
 
-    void setMovieRatingStar(ImageView imageView);
-
-    void setTvRatingStar(ImageView imageView);
 }

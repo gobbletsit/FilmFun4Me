@@ -29,12 +29,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ListPresenterImpl implements ListPresenter {
 
-    // Prefs name
-    private static final String SELECTED_SHARED = "selectedShared";
-
-    // Prefs movie button tag
-    private static final String SELECTED_BUTTON_MOVIE = "selectedButton";
-
     private ListView view;
 
     private ListInteractor listInteractor;
@@ -42,27 +36,19 @@ public class ListPresenterImpl implements ListPresenter {
     private Disposable disposableSubscription;
     private Disposable disposableGenres;
 
-    private Context mContext;
-
-    // ovo je za isprobat oce li radit sve
     private List<Movie> movieList = new ArrayList<>(40);
-
     private List<TvShow> tvShowList = new ArrayList<>(40);
-
     private List<Genre> genreList = new ArrayList<>(40);
 
 
-    public ListPresenterImpl(ListInteractor listInteractor, Context context) {
+    public ListPresenterImpl(ListInteractor listInteractor) {
         this.listInteractor = listInteractor;
-        this.mContext = context;
     }
 
     @Override
     public void setMovieView(ListView listView, int pagerPosition) {
         this.view = listView;
-
         getAllMovieGenres();
-
         if (pagerPosition == 0){
             showMostPopularMovies();
         } else if (pagerPosition == 1){
@@ -75,12 +61,12 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void setTvShowView(ListView listView, int pagerPosition) {
         this.view = listView;
+        getAllMovieGenres();
         if (pagerPosition == 0){
             showMostPopularTvShows();
         } else {
             showHighestRatedTvShows();
         }
-        getAllMovieGenres();
     }
 
     // Show methods
@@ -181,25 +167,10 @@ public class ListPresenterImpl implements ListPresenter {
     private void onGenreListFetchSuccess(List<Genre> genreList) {
         this.genreList.clear();
         this.genreList.addAll(genreList);
-        view.loadUpAllGenreList(genreList);
     }
 
     private void onGenreListFetchFailed(Throwable e) {
         view.loadingErrorMessage(e.getMessage());
-    }
-
-    @Override
-    public void whenMovieClicked(Movie movie, List<Genre> genreList) {
-        int[] currentGenreIds = movie.getGenreIds();
-
-        view.onMovieClicked(movie, getSingleItemGenreList(currentGenreIds, genreList));
-    }
-
-    @Override
-    public void whenTvShowClicked(TvShow tvShow, List<Genre> genreList) {
-        int[] currentGenreIds = tvShow.getGenreIds();
-
-        view.onTvShowClicked(tvShow, getSingleItemGenreList(currentGenreIds, genreList));
     }
 
     // To compare to all the genres and get the match when found

@@ -43,28 +43,16 @@ public class ListFragment extends Fragment implements ListView {
     @Inject
     ListPresenter listPresenter;
 
+    private static final String PAGER_POSITION = "pager_position";
     private static final String SELECTED_BUTTON = "selectedButton";
-    private int selectedButton;
     private static final int BUTTON_MOVIES = 0;
     private static final int BUTTON_TV_SHOWS = 1;
 
-    RecyclerView recyclerView;
-    RecyclerView.Adapter customAdapter;
-
-    private List<Movie> movieList = new ArrayList<>(40);
-
-    private List<TvShow> tvShowList = new ArrayList<>(40);
-
-    private List<Genre> genreList = new ArrayList<>(40);
-
-    // To store for a single movie and pass it to detail activity
-    private ArrayList<String> singleGenreNamesList = new ArrayList<>(20);
-
-    private LinearLayoutManager layoutManager;
-
-    private static final String PAGER_POSITION = "pager_position";
+    private int selectedButton;
     private int pagerPosition;
 
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter customAdapter;
     private ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     private Callback callback;
@@ -115,7 +103,7 @@ public class ListFragment extends Fragment implements ListView {
 
         recyclerView = view.findViewById(R.id.rec_list_activity);
 
-        layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
@@ -146,10 +134,6 @@ public class ListFragment extends Fragment implements ListView {
     public void onDestroyView() {
         super.onDestroyView();
         listPresenter.destroy();
-        genreList.clear();
-        movieList.clear();
-        singleGenreNamesList.clear();
-
     }
 
     @Override
@@ -181,8 +165,7 @@ public class ListFragment extends Fragment implements ListView {
     // ovo dvoje treba mijenjat, samo si ovako napravio kako bi radilo
     @Override
     public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList) {
-
-        callback.onMovieClicked(movie,singleGenreNamesList, selectedButton);
+        callback.onMovieClicked(movie, singleGenreNamesList, selectedButton);
     }
 
     @Override
@@ -201,18 +184,11 @@ public class ListFragment extends Fragment implements ListView {
         Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void loadUpAllGenreList(List<Genre> genreList) {
-        this.genreList.clear();
-        this.genreList.addAll(genreList);
-    }
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         ((BaseApplication) getActivity().getApplication()).releaseListComponent();
-        singleGenreNamesList.clear();
     }
 
     private boolean isNetworkAvailable() {

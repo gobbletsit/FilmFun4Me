@@ -7,13 +7,12 @@ import android.os.Bundle;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.list.view.ListActivity;
+import com.example.android.filmfun4me.utils.Constants;
+import static com.example.android.filmfun4me.utils.Constants.*;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.Callback {
 
     private static final String MAIN_FRAG = "MAIN_FRAG";
-    private static final String SELECTED_BUTTON = "selectedButton";
-    private static final int BUTTON_MOVIES = 0;
-    private static final int BUTTON_TV_SHOWS = 1;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     public void onMoviesClicked() {
         Intent intent = new Intent(this, ListActivity.class);
         Bundle extras = new Bundle();
-        extras.putInt(SELECTED_BUTTON, BUTTON_MOVIES);
+        extras.putInt(Constants.SELECTED_BUTTON, Constants.BUTTON_MOVIES);
         intent.putExtras(extras);
         startActivity(intent);
     }
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     public void onTvShowsClicked() {
         Intent intent = new Intent(this, ListActivity.class);
         Bundle extras = new Bundle();
-        extras.putInt(SELECTED_BUTTON, BUTTON_TV_SHOWS);
+        extras.putInt(Constants.SELECTED_BUTTON, Constants.BUTTON_TV_SHOWS);
         intent.putExtras(extras);
         startActivity(intent);
     }

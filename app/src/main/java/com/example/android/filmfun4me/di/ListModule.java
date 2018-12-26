@@ -27,8 +27,8 @@ public class ListModule {
     }
 
     @Provides
-    ListPresenter provideListPresenter(ListInteractor listInteractor, Context context) {
-        return new ListPresenterImpl(listInteractor, context);
+    ListPresenter provideListPresenter(ListInteractor listInteractor) {
+        return new ListPresenterImpl(listInteractor);
     }
 
 }

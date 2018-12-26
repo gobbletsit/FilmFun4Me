@@ -35,11 +35,6 @@ public interface ListPresenter {
     // Genres
     void getAllMovieGenres();
 
-    // Clicks
-    void whenMovieClicked(Movie movie, List<Genre> genreList);
-
-    void whenTvShowClicked(TvShow tvShow, List<Genre> genreList);
-
     void destroy();
 
     void showMostPopularTvShows();
