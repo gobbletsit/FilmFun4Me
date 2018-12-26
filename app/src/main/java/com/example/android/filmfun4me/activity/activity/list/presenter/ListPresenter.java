@@ -20,29 +20,20 @@ import java.util.List;
 
 public interface ListPresenter {
 
-    // Movies
+    void setMovieView(ListView listView, int pagerPosition);
+
+    void setTvShowView(ListView listView, int pagerPosition);
+
     void showMostPopularMovies();
 
     void showHighestRatedMovies();
 
     void showUpcomingMovies();
 
-
-    void setMovieView(ListView listView, int pagerPosition);
-
-    void setTvShowView(ListView listView, int pagerPosition);
-
-    // Genres
-    void getAllMovieGenres();
-
-    void destroy();
-
     void showMostPopularTvShows();
 
     void showHighestRatedTvShows();
 
-
-    // ovo je za shemu s adapterom
     void onBindMovieListItemAtPosition(int position, ListItemView listItemView);
 
     void onBindTvShowListItemAtPosition(int position, ListItemView listItemView);
@@ -54,6 +45,10 @@ public interface ListPresenter {
     void onMovieListItemInteraction(int itemPosition);
 
     void onTvShowListItemInteraction(int itemPosition);
+
+    void getAllMovieGenres();
+
+    void destroy();
 
 }
 

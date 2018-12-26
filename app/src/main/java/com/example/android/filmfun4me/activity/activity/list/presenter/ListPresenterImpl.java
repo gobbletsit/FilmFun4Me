@@ -97,24 +97,12 @@ public class ListPresenterImpl implements ListPresenter {
                 .subscribe(this::onMovieFetchSuccess, this::onMovieFetchFailed);
     }
 
-    // Genre methods
-    @Override
-    public void getAllMovieGenres() {
-        disposableGenres = listInteractor.getListOfAllMovieGenres()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGenreListFetchSuccess, this::onGenreListFetchFailed);
-    }
-
-
-    // Success and failure methods for RX
     private void onMovieFetchSuccess(List<Movie> movieList) {
         this.movieList.clear();
         this.movieList.addAll(movieList);
         if (isViewAttached()) {
             view.setUpMovieView();
         }
-
     }
 
     public void onBindMovieListItemAtPosition(int position, ListItemView listItemView){
@@ -125,22 +113,8 @@ public class ListPresenterImpl implements ListPresenter {
         listItemView.setGenreName(genreName);
     }
 
-    @Override
-    public void onBindTvShowListItemAtPosition(int position, ListItemView listItemView) {
-        TvShow tvShow = tvShowList.get(position);
-        String genreName = getSingleGenreName(tvShow.getGenreIds());
-        listItemView.setItemTitle(tvShow.getTitle());
-        listItemView.setItemPoster(tvShow.getPosterPath());
-        listItemView.setGenreName(genreName);
-    }
-
     public int getMovieListItemRowsCount(){
         return movieList.size();
-    }
-
-    @Override
-    public int getTvShowListItemRowCount() {
-        return tvShowList.size();
     }
 
     @Override
@@ -151,54 +125,8 @@ public class ListPresenterImpl implements ListPresenter {
         view.onMovieClicked(movie, getSingleItemGenreList(currentGenreIds, genreList));
     }
 
-    @Override
-    public void onTvShowListItemInteraction(int itemPosition) {
-        TvShow tvShow = tvShowList.get(itemPosition);
-        int[] currentGenreIds = tvShow.getGenreIds();
-
-        view.onTvShowClicked(tvShow, getSingleItemGenreList(currentGenreIds, genreList));
-    }
-
     private void onMovieFetchFailed(Throwable e) {
         view.loadingErrorMessage(e.getMessage());
-    }
-
-
-    private void onGenreListFetchSuccess(List<Genre> genreList) {
-        this.genreList.clear();
-        this.genreList.addAll(genreList);
-    }
-
-    private void onGenreListFetchFailed(Throwable e) {
-        view.loadingErrorMessage(e.getMessage());
-    }
-
-    // To compare to all the genres and get the match when found
-    private ArrayList<String> getSingleItemGenreList(int[] currentGenreIds, List<Genre> genreList) {
-
-        ArrayList<String> singleGenreNamesList = new ArrayList<>(10);
-        // Going through the single item genre list ids
-        for (int singleGenreId : currentGenreIds) {
-            compareGenreIdsAndLoadGenreList(genreList, singleGenreNamesList, singleGenreId);
-        }
-        return singleGenreNamesList;
-    }
-
-    private boolean isViewAttached() {
-        return view != null;
-    }
-
-    private void showLoading() {
-        if (isViewAttached()) {
-            view.showLoading();
-        }
-    }
-
-    @Override
-    public void destroy() {
-        view = null;
-        RxUtils.unsubscribe(disposableSubscription);
-        RxUtils.unsubscribe(disposableGenres);
     }
 
     @Override
@@ -228,7 +156,47 @@ public class ListPresenterImpl implements ListPresenter {
         }
     }
 
+    @Override
+    public void onBindTvShowListItemAtPosition(int position, ListItemView listItemView) {
+        TvShow tvShow = tvShowList.get(position);
+        String genreName = getSingleGenreName(tvShow.getGenreIds());
+        listItemView.setItemTitle(tvShow.getTitle());
+        listItemView.setItemPoster(tvShow.getPosterPath());
+        listItemView.setGenreName(genreName);
+    }
+
+    @Override
+    public int getTvShowListItemRowCount() {
+        return tvShowList.size();
+    }
+
+    @Override
+    public void onTvShowListItemInteraction(int itemPosition) {
+        TvShow tvShow = tvShowList.get(itemPosition);
+        int[] currentGenreIds = tvShow.getGenreIds();
+
+        view.onTvShowClicked(tvShow, getSingleItemGenreList(currentGenreIds, genreList));
+    }
+
     private void onTvShowFetchFailed(Throwable e) {
+        view.loadingErrorMessage(e.getMessage());
+    }
+
+    // GENRE
+    @Override
+    public void getAllMovieGenres() {
+        disposableGenres = listInteractor.getListOfAllMovieGenres()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGenreListFetchSuccess, this::onGenreListFetchFailed);
+    }
+
+    private void onGenreListFetchSuccess(List<Genre> genreList) {
+        this.genreList.clear();
+        this.genreList.addAll(genreList);
+    }
+
+    private void onGenreListFetchFailed(Throwable e) {
         view.loadingErrorMessage(e.getMessage());
     }
 
@@ -243,6 +211,17 @@ public class ListPresenterImpl implements ListPresenter {
                 break;
             }
         }
+    }
+
+    // To compare to all the genres and get the match when found
+    private ArrayList<String> getSingleItemGenreList(int[] currentGenreIds, List<Genre> genreList) {
+
+        ArrayList<String> singleGenreNamesList = new ArrayList<>(10);
+        // Going through the single item genre list ids
+        for (int singleGenreId : currentGenreIds) {
+            compareGenreIdsAndLoadGenreList(genreList, singleGenreNamesList, singleGenreId);
+        }
+        return singleGenreNamesList;
     }
 
     private String getSingleGenreName(int[] currentGenreIds) {
@@ -263,5 +242,22 @@ public class ListPresenterImpl implements ListPresenter {
             }
         }
         return genreName;
+    }
+
+    private boolean isViewAttached() {
+        return view != null;
+    }
+
+    private void showLoading() {
+        if (isViewAttached()) {
+            view.showLoading();
+        }
+    }
+
+    @Override
+    public void destroy() {
+        view = null;
+        RxUtils.unsubscribe(disposableSubscription);
+        RxUtils.unsubscribe(disposableGenres);
     }
 }

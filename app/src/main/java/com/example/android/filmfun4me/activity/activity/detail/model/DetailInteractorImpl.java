@@ -28,7 +28,6 @@ public class DetailInteractorImpl implements DetailInteractor {
     private MoviesWebService moviesWebService;
     private TvShowsWebService tvShowsWebService;
 
-
     public DetailInteractorImpl(MoviesWebService moviesWebService,TvShowsWebService tvShowsWebService) {
         this.moviesWebService = moviesWebService;
         this.tvShowsWebService = tvShowsWebService;
@@ -59,17 +58,13 @@ public class DetailInteractorImpl implements DetailInteractor {
         return tvShowsWebService.getTvReviewsFromService(id).map(ReviewWrapper::getReviewList);
     }
 
-
     @Override
     public Observable<List<Season>> getTvShowSeasonList(String id) {
         return tvShowsWebService.getSingleTvShow(id).map(TvShowWrapper::getSeasonList);
     }
 
-
     @Override
     public Observable<List<Episode>> getTvShowEpisodeList(String id, int seasonNumber) {
         return tvShowsWebService.getEpisodesFromService(id, seasonNumber).map(EpisodeWrapper::getEpisodeList);
     }
-
-
 }
