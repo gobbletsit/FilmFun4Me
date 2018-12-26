@@ -157,7 +157,7 @@ public class ListFragment extends Fragment implements ListView {
         this.movieList.clear();
         this.movieList.addAll(movieList);
         // znaci ovo je malo cudno, treba ovo ljepse bit jer se jebeno dodavas presenterom sto je debilno
-        customAdapter = new ListMovieRecyclerAdapter(movieList, genreList, listPresenter);
+        customAdapter = new ListMovieRecyclerAdapter(genreList, listPresenter);
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());

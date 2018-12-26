@@ -28,8 +28,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
     private Context context;
 
 
-    ListMovieRecyclerAdapter (List<Movie> movieList, List<Genre> genreList, ListPresenter listPresenter){
-        this.movieList = movieList;
+    ListMovieRecyclerAdapter (List<Genre> genreList, ListPresenter listPresenter){
         this.genreList = genreList;
         this.listPresenter = listPresenter;
     }
@@ -45,25 +44,16 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
     @Override
     public void onBindViewHolder(ListMovieRecyclerAdapter.ViewHolder holder, int position) {
 
-        holder.movie = movieList.get(position);
-
-        holder.currentGenreIds = holder.movie.getGenreIds();
-
-        // pricekaj za ovo
-        String genreName = getSingleGenreName(holder.currentGenreIds, genreList);
-        holder.tv_genre.setText(genreName);
-        holder.tv_title.setText(holder.movie.getTitle());
-
-        Picasso.with(context).load(BaseUtils.getPosterPath(holder.movie.getPosterPath())).into(holder.iv_movie_poster);
+        listPresenter.onBindMovieListItemAtPosition(position, holder);
 
     }
 
     @Override
     public int getItemCount() {
-        return movieList.size();
+        return listPresenter.getListItemRowsCount();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ListItemView {
 
         private int[] currentGenreIds;
         private Movie movie;
@@ -86,26 +76,22 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
         public void onClick(View view) {
             listPresenter.whenMovieClicked(movie, genreList);
         }
-    }
 
-    private String getSingleGenreName(int[] currentGenreIds, List<Genre> genreList) {
-
-        int singleGenreId;
-
-        String genreName = "";
-
-        for (int currentGenreId : currentGenreIds) {
-            singleGenreId = currentGenreId;
-
-            for (int a = 0; a < genreList.size(); a++) {
-                int preciseGenreId = genreList.get(a).getGenreId();
-
-                if (preciseGenreId == singleGenreId) {
-                    genreName = genreList.get(a).getGenreName();
-                }
-            }
+        @Override
+        public void setItemTitle(String itemTitle) {
+            tv_title.setText(itemTitle);
         }
-        return genreName;
+
+        @Override
+        public void setGenreName(String genreName) {
+            // nothing for now
+        }
+
+        @Override
+        public void setItemPoster(String posterPath) {
+            Picasso.with(context).load(BaseUtils.getPosterPath(posterPath)).into(iv_movie_poster);
+        }
     }
+
 }
 

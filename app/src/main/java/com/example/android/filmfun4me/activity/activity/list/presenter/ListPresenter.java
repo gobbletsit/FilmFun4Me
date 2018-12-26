@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import com.example.android.filmfun4me.activity.activity.list.view.ListItemView;
 import com.example.android.filmfun4me.activity.activity.list.view.ListView;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
@@ -44,6 +45,12 @@ public interface ListPresenter {
     void showMostPopularTvShows();
 
     void showHighestRatedTvShows();
+
+
+    // ovo je za shemu s adapterom
+    void onBindMovieListItemAtPosition(int position, ListItemView listItemView);
+
+    int getListItemRowsCount();
 
 }
 

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.list.model.ListInteractor;
+import com.example.android.filmfun4me.activity.activity.list.view.ListItemView;
 import com.example.android.filmfun4me.activity.activity.list.view.ListView;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
@@ -42,6 +43,9 @@ public class ListPresenterImpl implements ListPresenter {
     private Disposable disposableGenres;
 
     private Context mContext;
+
+    // ovo je za isprobat oce li radit sve
+    private List<Movie> movieList = new ArrayList<>(40);
 
 
     public ListPresenterImpl(ListInteractor listInteractor, Context context) {
@@ -115,10 +119,24 @@ public class ListPresenterImpl implements ListPresenter {
 
     // Success and failure methods for RX
     private void onMovieFetchSuccess(List<Movie> movieList) {
+        // idemo ovo isprobat passive view approach from android pub
+        this.movieList.clear();
+        this.movieList.addAll(movieList);
         if (isViewAttached()) {
             view.setUpMovieView(movieList);
         }
 
+    }
+
+    public void onBindMovieListItemAtPosition(int position, ListItemView listItemView){
+        Movie movie = movieList.get(position);
+        listItemView.setItemTitle(movie.getTitle());
+        //listItemView.setGenreName(// neki genre name);
+        listItemView.setItemPoster(movie.getPosterPath());
+    }
+
+    public int getListItemRowsCount(){
+        return movieList.size();
     }
 
     private void onMovieFetchFailed(Throwable e) {
@@ -216,5 +234,25 @@ public class ListPresenterImpl implements ListPresenter {
                 break;
             }
         }
+    }
+
+    private String getSingleGenreName(int[] currentGenreIds, List<Genre> genreList) {
+
+        int singleGenreId;
+
+        String genreName = "";
+
+        for (int currentGenreId : currentGenreIds) {
+            singleGenreId = currentGenreId;
+
+            for (int a = 0; a < genreList.size(); a++) {
+                int preciseGenreId = genreList.get(a).getGenreId();
+
+                if (preciseGenreId == singleGenreId) {
+                    genreName = genreList.get(a).getGenreName();
+                }
+            }
+        }
+        return genreName;
     }
 }
