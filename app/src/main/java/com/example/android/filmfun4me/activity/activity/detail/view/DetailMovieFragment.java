@@ -1,6 +1,7 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -135,7 +136,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
             if (movie != null) {
                 detailPresenter.setView(this);
                 detailPresenter.showMovieDetails(movie);
-
             }
         }
     }
@@ -170,7 +170,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
         recyclerViewReviews.addItemDecoration(itemDecoration);
 
-        //detailPresenter.setColorOfMovieRatingStar(ivRatingStar);
         detailPresenter.showMovieVideos(movie);
         detailPresenter.showMovieReviews(movie);
     }
@@ -228,7 +227,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
     }
 
@@ -237,7 +235,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         super.onDestroyView();
         reviewList.clear();
         listNames.clear();
-
         getArguments().clear();
         detailPresenter.destroy();
     }
@@ -255,17 +252,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
             Log.e(TAG, e.toString());
         }
         return formattedDate;
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(getActivity());
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private String getAppendedGenreNames (ArrayList<String> genreNamesList){
