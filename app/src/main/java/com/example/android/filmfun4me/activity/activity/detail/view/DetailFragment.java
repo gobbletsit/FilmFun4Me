@@ -70,13 +70,11 @@ public class DetailFragment extends Fragment implements DetailView {
     @BindView(R.id.tv_drop_rev_button) TextView reviewButtonTextView;
 
     @BindView(R.id.image_view_poster) ImageView ivPoster;
-    @BindView(R.id.image_view_rating_star) ImageView ivRatingStar;
-    @BindView(R.id.image_view_play_icon) ImageView ivPlayIcon;
 
     @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
 
-    @BindView(R.id.linear_reviews_container) LinearLayout reviewsContainerLinearLayout;
-    @BindView(R.id.linear_review_button_container) LinearLayout reviewButtonLinearLayout;
+    /*@BindView(R.id.linear_reviews_container) LinearLayout reviewsContainerLinearLayout;
+    @BindView(R.id.linear_review_button_container) LinearLayout reviewButtonLinearLayout;*/
     @BindView(R.id.linear_season_button_container) LinearLayout seasonButtonLinearLayout;
 
     private LinearLayoutManager layoutManager;
@@ -137,11 +135,11 @@ public class DetailFragment extends Fragment implements DetailView {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewReviews.setLayoutManager(layoutManager);
 
-        reviewButtonLinearLayout.setOnClickListener(new View.OnClickListener() {
+        reviewButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (reviewList.size() != 0) {
-                    reviewsContainerLinearLayout.setVisibility(View.VISIBLE);
+                    recyclerViewReviews.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -203,7 +201,6 @@ public class DetailFragment extends Fragment implements DetailView {
         itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
         recyclerViewReviews.addItemDecoration(itemDecoration);
 
-        seasonButtonLinearLayout.setVisibility(View.GONE);
         tvSeasonLabel.setVisibility(View.GONE);
 
         //detailPresenter.setColorOfMovieRatingStar(ivRatingStar);
@@ -252,7 +249,7 @@ public class DetailFragment extends Fragment implements DetailView {
         this.customEpisodeAdapter.notifyDataSetChanged();
 
         if (episodeList.size() != 0) {
-            reviewsContainerLinearLayout.setVisibility(View.VISIBLE);
+            recyclerViewReviews.setVisibility(View.VISIBLE);
         }
     }
 
@@ -278,15 +275,10 @@ public class DetailFragment extends Fragment implements DetailView {
 
         if (Video.getUrl(video) != null) {
             ivPoster.setTag(Video.getUrl(video));
-        } else {
-            ivPlayIcon.setVisibility(View.GONE);
         }
 
         if (Video.getThumbnailUrl(video) != null) {
             Picasso.with(getActivity()).load(Video.getThumbnailUrl(video)).into(ivPoster);
-            ivPlayIcon.setVisibility(View.VISIBLE);
-        } else {
-            ivPlayIcon.setVisibility(View.GONE);
         }
 
         ivPoster.setOnClickListener(new View.OnClickListener() {
