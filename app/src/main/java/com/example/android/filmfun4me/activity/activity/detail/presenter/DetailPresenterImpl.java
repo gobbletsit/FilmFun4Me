@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.model.DetailInteractor;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeView;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailReviewItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.Movie;
@@ -45,7 +46,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     private Disposable singleShowSubscription;
 
     private ArrayList<Episode> episodeList = new ArrayList<>(40);
-
+    private List<Review> reviewList = new ArrayList<>(40);
 
     public DetailPresenterImpl(DetailInteractor detailInteractor, Context context) {
         this.detailInteractor = detailInteractor;
@@ -82,6 +83,18 @@ public class DetailPresenterImpl implements DetailPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetReviewSuccess, throwable -> onGetReviewFailure());
+    }
+
+    @Override
+    public int getReviewListItemRowsCount() {
+        return reviewList.size();
+    }
+
+    @Override
+    public void onBindReviewListItemOnPosition(int position, DetailReviewItemView detailReviewItemView) {
+        Review review = reviewList.get(position);
+        detailReviewItemView.setReviewAuthorName(review.getReviewAuthor());
+        detailReviewItemView.setReviewContent(review.getReviewContent());
     }
 
     @Override
@@ -158,6 +171,8 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     // REVIEWS
     private void onGetReviewSuccess(List<Review> reviewList) {
+        this.reviewList.clear();
+        this.reviewList.addAll(reviewList);
         if (isViewAttached()) {
             detailView.showReviews(reviewList);
         }

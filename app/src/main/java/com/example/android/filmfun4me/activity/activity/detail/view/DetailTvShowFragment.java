@@ -40,7 +40,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailTvShowFragment extends Fragment implements DetailView {
+public class DetailTvShowFragment extends android.support.v4.app.Fragment implements DetailView {
 
     private static final String TAG = DetailTvShowFragment.class.getSimpleName();
 
@@ -59,14 +59,13 @@ public class DetailTvShowFragment extends Fragment implements DetailView {
     @BindView(R.id.tv_detail_tv_show_lang) TextView tvDetailTvShowLang;
     @BindView(R.id.tv_detail_tv_show_genre) TextView tvTvShowGenre;
 
-    @BindView(R.id.image_view_poster) ImageView ivTvShowPoster;
+    @BindView(R.id.image_view_poster_tv_show) ImageView ivTvShowPoster;
 
     @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
 
     @BindView(R.id.linear_season_button_container) LinearLayout seasonButtonLinearLayout;
 
     private LinearLayoutManager episodeListLayoutManager;
-    private LayoutInflater layoutInflater;
 
     private TvShow tvShow;
 
@@ -105,7 +104,6 @@ public class DetailTvShowFragment extends Fragment implements DetailView {
 
         ButterKnife.bind(this, view);
 
-        layoutInflater = getActivity().getLayoutInflater();
         episodeListLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewEpisodes.setLayoutManager(episodeListLayoutManager);
 
@@ -147,7 +145,7 @@ public class DetailTvShowFragment extends Fragment implements DetailView {
             tvTvShowGenre.setText(getAppendedGenreNames(listNames));
         }
 
-        customEpisodeAdapter = new ListEpisodeRecyclerAdapter();
+        customEpisodeAdapter = new ListEpisodeRecyclerAdapter(detailPresenter);
         recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(

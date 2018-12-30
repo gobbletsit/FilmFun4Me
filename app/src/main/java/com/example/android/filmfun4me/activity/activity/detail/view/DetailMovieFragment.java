@@ -63,10 +63,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @BindView(R.id.tv_detail_lang) TextView tvDetailLang;
     @BindView(R.id.tv_review_label) TextView tvReviewLabel;
     @BindView(R.id.tv_detail_genre) TextView tvGenre;
-    @BindView(R.id.tv_detail_lang_label) TextView tvLangLabel;
-    @BindView(R.id.tv_detail_overview_label) TextView tvOverviewLabel;
-    @BindView(R.id.tv_detail_date_label) TextView tvDateLabel;
-    @BindView(R.id.tv_seasons_label) TextView tvSeasonLabel;
+
     @BindView(R.id.tv_drop_rev_button) TextView reviewButtonTextView;
 
     @BindView(R.id.image_view_poster) ImageView ivPoster;
@@ -74,27 +71,16 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
     @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
 
-    /*@BindView(R.id.linear_reviews_container) LinearLayout reviewsContainerLinearLayout;
-    @BindView(R.id.linear_review_button_container) LinearLayout reviewButtonLinearLayout;*/
     @BindView(R.id.linear_season_button_container) LinearLayout seasonButtonLinearLayout;
 
     private LinearLayoutManager reviewListLayoutManager;
-    private LinearLayoutManager episodeListLayoutManager;
-    private LayoutInflater layoutInflater;
-
-    private Movie movie;
-    private TvShow tvShow;
 
     private List<Review> reviewList = new ArrayList<>(20);
-    private List<Season> seasonList = new ArrayList<>(20);
-    private List<Episode> episodeList = new ArrayList<>(20);
 
     // genre list
     ArrayList<String> listNames;
 
-    private CustomReviewAdapter customReviewAdapter;
-    private CustomEpisodeAdapter customEpisodeAdapter;
-
+    private ListReviewRecyclerAdapter customReviewAdapter;
 
     public DetailMovieFragment() {
         // Required empty public constructor
@@ -106,15 +92,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_MOVIE, movie);
         args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE, genreNamesList);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static DetailMovieFragment newInstanceTv(TvShow tvShow, ArrayList<String> genreNamesList) {
-        DetailMovieFragment fragment = new DetailMovieFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(Constants.KEY_TV_SHOW, tvShow);
-        args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW, genreNamesList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -133,9 +110,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
         ButterKnife.bind(this, view);
 
-        layoutInflater = getActivity().getLayoutInflater();
         reviewListLayoutManager = new LinearLayoutManager(getActivity());
-        episodeListLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager episodeListLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
         recyclerViewEpisodes.setLayoutManager(episodeListLayoutManager);
 
@@ -162,20 +138,11 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
             Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
             if (movie != null) {
-                this.movie = movie;
                 detailPresenter.setView(this);
                 detailPresenter.showMovieDetails(movie);
 
             }
-        } else if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
-            TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
-            if (tvShow != null) {
-                this.tvShow = tvShow;
-                detailPresenter.setView(this);
-                detailPresenter.showTvShowDetails(tvShow.getId());
-            }
         }
-
     }
 
     @Override
@@ -194,9 +161,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
             tvGenre.setText(getAppendedGenreNames(listNames));
         }
 
-        customReviewAdapter = new CustomReviewAdapter();
+        customReviewAdapter = new ListReviewRecyclerAdapter(detailPresenter);
         // recycler view
-        layoutInflater = getActivity().getLayoutInflater();
         reviewListLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
         recyclerViewReviews.setAdapter(customReviewAdapter);
@@ -209,8 +175,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
         recyclerViewReviews.addItemDecoration(itemDecoration);
 
-        tvSeasonLabel.setVisibility(View.GONE);
-
         //detailPresenter.setColorOfMovieRatingStar(ivRatingStar);
         detailPresenter.showMovieVideos(movie);
         detailPresenter.showMovieReviews(movie);
@@ -218,47 +182,12 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
     @Override
     public void showTvDetails(TvShow tvShow) {
-
-        String releaseDate = " " + formatDate(tvShow.getReleaseDate());
-
-        tvDetailMovieTitle.setText(tvShow.getTitle());
-        tvDetailReleaseDate.setText(releaseDate);
-        tvDetailOverview.setText(tvShow.getOverview());
-        tvDetailRating.setText(String.valueOf(tvShow.getVoteAverage()));
-        tvDetailLang.setText(tvShow.getLanguage());
-
-        listNames = getArguments().getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW);
-        if (listNames != null){
-            tvGenre.setText(getAppendedGenreNames(listNames));
-        }
-
-        tvReviewLabel.setVisibility(View.GONE);
-        reviewButtonTextView.setVisibility(View.GONE);
-
-        customEpisodeAdapter = new CustomEpisodeAdapter();
-        recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
-
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(
-                recyclerViewReviews.getContext(),
-                episodeListLayoutManager.getOrientation()
-        );
-
-        itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
-        recyclerViewReviews.addItemDecoration(itemDecoration);
-
-        detailPresenter.showTvVideos(tvShow);
-        detailPresenter.showSeasonList(tvShow);
+        //  DO NOTHING
     }
 
     @Override
     public void showEpisodeList(List<Episode> episodeList) {
-        this.episodeList.clear();
-        this.episodeList.addAll(episodeList);
-        this.customEpisodeAdapter.notifyDataSetChanged();
-
-        if (episodeList.size() != 0) {
-            recyclerViewEpisodes.setVisibility(View.VISIBLE);
-        }
+        // DO NOTHING
     }
 
     @Override
@@ -270,10 +199,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
     @Override
     public void showSeasonList(List<Season> seasonList) {
-        this.seasonList.clear();
-        this.seasonList.addAll(seasonList);
-
-        detailPresenter.setSeasons(seasonList, seasonButtonLinearLayout, tvShow);
+        // DO NOTHING
     }
 
     @Override
@@ -310,88 +236,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         }
 
     }
-
-    public class CustomReviewAdapter extends RecyclerView.Adapter<CustomReviewAdapter.ViewHolder> {
-
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = layoutInflater.inflate(R.layout.review_list_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            Review review = reviewList.get(position);
-
-            holder.tvReviewAuthor.setText(review.getReviewAuthor());
-            holder.tvReviewAuthor.setTextColor(getResources().getColor(R.color.colorSeasonsAndReviews));
-            holder.tvReviewContent.setText(review.getReviewContent());
-            holder.tvReviewContent.setTextColor(getResources().getColor(R.color.colorSeasonsAndReviews));
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return reviewList.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            @BindView(R.id.tv_review_author) TextView tvReviewAuthor;
-            @BindView(R.id.tv_review_content) TextView tvReviewContent;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                ButterKnife.bind(this, itemView);
-            }
-        }
-    }
-
-    // EPISODE LIST ADAPTER
-    public class CustomEpisodeAdapter extends RecyclerView.Adapter<CustomEpisodeAdapter.ViewHolder> {
-        @Override
-        public CustomEpisodeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = layoutInflater.inflate(R.layout.episode_list_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(CustomEpisodeAdapter.ViewHolder holder, int position) {
-            Episode episode = episodeList.get(position);
-
-            holder.tv__episode_title.setText(episode.getName());
-            holder.tv_episode_overview.setText(episode.getOverview());
-
-            String posterPath = episode.getPosterPath();
-
-            if (posterPath != null) {
-                Picasso.with(getActivity()).load(BaseUtils.getPosterPath(episode.getPosterPath())).into(holder.iv_episode_poster);
-            } else {
-                Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(holder.iv_episode_poster);
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return episodeList.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            private TextView tv__episode_title;
-            private TextView tv_episode_overview;
-            private ImageView iv_episode_poster;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                this.tv__episode_title = itemView.findViewById(R.id.tv_episode_title);
-                this.tv_episode_overview = itemView.findViewById(R.id.tv_episode_overview);
-                this.iv_episode_poster = itemView.findViewById(R.id.imv_episode_poster);
-            }
-        }
-    }
-
 
     @Override
     public void onDestroy() {

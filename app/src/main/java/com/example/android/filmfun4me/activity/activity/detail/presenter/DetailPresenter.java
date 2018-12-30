@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeView;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailReviewItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.Season;
@@ -27,6 +28,10 @@ public interface DetailPresenter {
     void showMovieVideos(Movie movie);
 
     void showMovieReviews(Movie movie);
+
+    int getReviewListItemRowsCount();
+
+    void onBindReviewListItemOnPosition(int position, DetailReviewItemView detailReviewItemView);
 
 
     // Tv-show
