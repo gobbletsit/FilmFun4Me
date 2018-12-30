@@ -24,7 +24,7 @@ public interface DetailView {
 
     void showVideos(List<Video> videos);
 
-    void showReviews(List<Review> reviews);
+    void showReviews();
 
     void showSeasonList(List<Season> seasonList);
 

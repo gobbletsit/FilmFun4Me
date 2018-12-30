@@ -69,9 +69,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @BindView(R.id.image_view_poster) ImageView ivPoster;
 
     @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
-    @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
-
-    @BindView(R.id.linear_season_button_container) LinearLayout seasonButtonLinearLayout;
 
     private LinearLayoutManager reviewListLayoutManager;
 
@@ -111,17 +108,15 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         ButterKnife.bind(this, view);
 
         reviewListLayoutManager = new LinearLayoutManager(getActivity());
-        LinearLayoutManager episodeListLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
-        recyclerViewEpisodes.setLayoutManager(episodeListLayoutManager);
 
         reviewButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (reviewList.size() != 0 && recyclerViewReviews.getVisibility() == View.VISIBLE) {
+                if (recyclerViewReviews.getVisibility() == View.VISIBLE) {
                     reviewButtonTextView.setText("+");
                     recyclerViewReviews.setVisibility(View.GONE);
-                } else if (reviewList.size() != 0 && recyclerViewReviews.getVisibility() == View.GONE){
+                } else if (recyclerViewReviews.getVisibility() == View.GONE){
                     reviewButtonTextView.setText("-");
                     recyclerViewReviews.setVisibility(View.VISIBLE);
                 }
@@ -225,16 +220,9 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
 
     @Override
-    public void showReviews(List<Review> reviews) {
-        this.reviewList.clear();
-        this.reviewList.addAll(reviews);
-        this.customReviewAdapter.notifyDataSetChanged();
-
-        if (reviewList.size() == 0) {
-            tvReviewLabel.setVisibility(View.INVISIBLE);
-            reviewButtonTextView.setVisibility(View.INVISIBLE);
-        }
-
+    public void showReviews() {
+        tvReviewLabel.setVisibility(View.VISIBLE);
+        reviewButtonTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -284,7 +272,12 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         String genreName = "";
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < genreNamesList.size(); i++) {
-            genreName = builder.append(genreNamesList.get(i)).append(" , ").toString();
+            if (i != genreNamesList.size() -1){
+                genreName = builder.append(genreNamesList.get(i)).append(", ").toString();
+            } else {
+                genreName = builder.append(genreNamesList.get(i)).toString();
+            }
+
         }
         return genreName;
     }

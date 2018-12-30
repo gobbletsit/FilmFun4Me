@@ -173,8 +173,8 @@ public class DetailPresenterImpl implements DetailPresenter {
     private void onGetReviewSuccess(List<Review> reviewList) {
         this.reviewList.clear();
         this.reviewList.addAll(reviewList);
-        if (isViewAttached()) {
-            detailView.showReviews(reviewList);
+        if (isViewAttached() && reviewList.size() != 0) {
+            detailView.showReviews();
         }
     }
 

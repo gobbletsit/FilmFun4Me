@@ -181,7 +181,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     }
 
     @Override
-    public void showReviews(List<Review> reviews) {
+    public void showReviews() {
         // DO NOTHING
     }
 
