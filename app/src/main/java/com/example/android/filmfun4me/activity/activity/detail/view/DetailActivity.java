@@ -15,7 +15,8 @@ import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
-    public static final String DETAIL_FRAG = "DETAIL_FRAG";
+    public static final String DETAIL_MOVIE_FRAG = "DETAIL_MOVIE_FRAG";
+    public static final String DETAIL_TV_SHOW_FRAG = "DETAIL_TV_SHOW_FRAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +61,17 @@ public class DetailActivity extends AppCompatActivity {
 
     private void switchToMovieDetailFragment(Movie movie, ArrayList<String> genreNamesListMovie){
         FragmentManager manager = getSupportFragmentManager();
-        DetailFragment fragment = DetailFragment.newInstance(movie, genreNamesListMovie);
+        DetailMovieFragment fragment = DetailMovieFragment.newInstance(movie, genreNamesListMovie);
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.root_activity_detail, fragment, DETAIL_FRAG);
+        transaction.replace(R.id.root_activity_detail, fragment, DETAIL_MOVIE_FRAG);
         transaction.commit();
     }
 
     private void switchToTvShowDetailFragment(TvShow tvShow, ArrayList<String> genreNamesListTv){
         FragmentManager manager = getSupportFragmentManager();
-        DetailFragment fragment = DetailFragment.newInstanceTv(tvShow, genreNamesListTv);
+        DetailTvShowFragment fragment = DetailTvShowFragment.newInstance(tvShow, genreNamesListTv);
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.root_activity_detail, fragment, DETAIL_FRAG);
+        transaction.replace(R.id.root_activity_detail, fragment, DETAIL_TV_SHOW_FRAG);
         transaction.commit();
     }
 }

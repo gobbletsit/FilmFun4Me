@@ -1,4 +1,71 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
-public class ListEpisodeRecyclerAdapter {
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.android.filmfun4me.R;
+import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
+import com.example.android.filmfun4me.activity.activity.list.view.ListMovieRecyclerAdapter;
+import com.example.android.filmfun4me.utils.BaseUtils;
+import com.squareup.picasso.Picasso;
+
+public class ListEpisodeRecyclerAdapter extends RecyclerView.Adapter<ListEpisodeRecyclerAdapter.ViewHolder> {
+
+    private Context context;
+    private DetailPresenter detailPresenter;
+
+    public ListEpisodeRecyclerAdapter (DetailPresenter detailPresenter){
+        this.detailPresenter = detailPresenter;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        context = parent.getContext();
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.episode_list_item, parent, false);
+        return new ListEpisodeRecyclerAdapter.ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        detailPresenter.onBindEpisodeListItemOnPosition(position, holder);
+    }
+
+    @Override
+    public int getItemCount() {
+        return detailPresenter.getEpisodeListItemRowsCount();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements DetailEpisodeView {
+
+        private TextView tv_episode_title;
+        private TextView tv_episode_overview;
+        private ImageView iv_episode_poster;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            this.tv_episode_title = itemView.findViewById(R.id.tv_episode_title);
+            this.tv_episode_overview = itemView.findViewById(R.id.tv_episode_overview);
+            this.iv_episode_poster = itemView.findViewById(R.id.imv_episode_poster);
+        }
+
+        @Override
+        public void setEpisodeTitle(String episodeTitle) {
+            tv_episode_title.setText(episodeTitle);
+        }
+
+        @Override
+        public void setEpisodeOverview(String episodeOverview) {
+            tv_episode_overview.setText(episodeOverview);
+        }
+
+        @Override
+        public void setEpisodePoster(String episodePosterPath) {
+            Picasso.with(context).load(BaseUtils.getPosterPath(episodePosterPath)).into(iv_episode_poster);
+        }
+    }
 }

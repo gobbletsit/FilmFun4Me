@@ -44,9 +44,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailFragment extends Fragment implements DetailView {
+public class DetailMovieFragment extends Fragment implements DetailView {
 
-    private static final String TAG = DetailFragment.class.getSimpleName();
+    private static final String TAG = DetailMovieFragment.class.getSimpleName();
 
     @Inject
     DetailPresenter detailPresenter;
@@ -72,12 +72,14 @@ public class DetailFragment extends Fragment implements DetailView {
     @BindView(R.id.image_view_poster) ImageView ivPoster;
 
     @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
+    @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
 
     /*@BindView(R.id.linear_reviews_container) LinearLayout reviewsContainerLinearLayout;
     @BindView(R.id.linear_review_button_container) LinearLayout reviewButtonLinearLayout;*/
     @BindView(R.id.linear_season_button_container) LinearLayout seasonButtonLinearLayout;
 
-    private LinearLayoutManager layoutManager;
+    private LinearLayoutManager reviewListLayoutManager;
+    private LinearLayoutManager episodeListLayoutManager;
     private LayoutInflater layoutInflater;
 
     private Movie movie;
@@ -94,13 +96,13 @@ public class DetailFragment extends Fragment implements DetailView {
     private CustomEpisodeAdapter customEpisodeAdapter;
 
 
-    public DetailFragment() {
+    public DetailMovieFragment() {
         // Required empty public constructor
     }
 
 
-    public static DetailFragment newInstance(Movie movie, ArrayList<String> genreNamesList) {
-        DetailFragment fragment = new DetailFragment();
+    public static DetailMovieFragment newInstance(Movie movie, ArrayList<String> genreNamesList) {
+        DetailMovieFragment fragment = new DetailMovieFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_MOVIE, movie);
         args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE, genreNamesList);
@@ -108,8 +110,8 @@ public class DetailFragment extends Fragment implements DetailView {
         return fragment;
     }
 
-    public static DetailFragment newInstanceTv(TvShow tvShow, ArrayList<String> genreNamesList) {
-        DetailFragment fragment = new DetailFragment();
+    public static DetailMovieFragment newInstanceTv(TvShow tvShow, ArrayList<String> genreNamesList) {
+        DetailMovieFragment fragment = new DetailMovieFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_TV_SHOW, tvShow);
         args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW, genreNamesList);
@@ -127,18 +129,24 @@ public class DetailFragment extends Fragment implements DetailView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
         ButterKnife.bind(this, view);
 
         layoutInflater = getActivity().getLayoutInflater();
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewReviews.setLayoutManager(layoutManager);
+        reviewListLayoutManager = new LinearLayoutManager(getActivity());
+        episodeListLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
+        recyclerViewEpisodes.setLayoutManager(episodeListLayoutManager);
 
         reviewButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (reviewList.size() != 0) {
+                if (reviewList.size() != 0 && recyclerViewReviews.getVisibility() == View.VISIBLE) {
+                    reviewButtonTextView.setText("+");
+                    recyclerViewReviews.setVisibility(View.GONE);
+                } else if (reviewList.size() != 0 && recyclerViewReviews.getVisibility() == View.GONE){
+                    reviewButtonTextView.setText("-");
                     recyclerViewReviews.setVisibility(View.VISIBLE);
                 }
             }
@@ -189,13 +197,13 @@ public class DetailFragment extends Fragment implements DetailView {
         customReviewAdapter = new CustomReviewAdapter();
         // recycler view
         layoutInflater = getActivity().getLayoutInflater();
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewReviews.setLayoutManager(layoutManager);
+        reviewListLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
         recyclerViewReviews.setAdapter(customReviewAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
                 recyclerViewReviews.getContext(),
-                layoutManager.getOrientation()
+                reviewListLayoutManager.getOrientation()
         );
 
         itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
@@ -228,11 +236,11 @@ public class DetailFragment extends Fragment implements DetailView {
         reviewButtonTextView.setVisibility(View.GONE);
 
         customEpisodeAdapter = new CustomEpisodeAdapter();
-        recyclerViewReviews.setAdapter(customEpisodeAdapter);
+        recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
                 recyclerViewReviews.getContext(),
-                layoutManager.getOrientation()
+                episodeListLayoutManager.getOrientation()
         );
 
         itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
@@ -249,7 +257,7 @@ public class DetailFragment extends Fragment implements DetailView {
         this.customEpisodeAdapter.notifyDataSetChanged();
 
         if (episodeList.size() != 0) {
-            recyclerViewReviews.setVisibility(View.VISIBLE);
+            recyclerViewEpisodes.setVisibility(View.VISIBLE);
         }
     }
 

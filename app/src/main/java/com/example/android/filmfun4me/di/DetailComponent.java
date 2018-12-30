@@ -1,9 +1,8 @@
 package com.example.android.filmfun4me.di;
 
-import com.example.android.filmfun4me.activity.activity.detail.view.DetailFragment;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailMovieFragment;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailTvShowFragment;
 
-import dagger.Component;
-import dagger.Module;
 import dagger.Subcomponent;
 
 /**
@@ -13,6 +12,8 @@ import dagger.Subcomponent;
 @Subcomponent(modules = {DetailModule.class})
 public interface DetailComponent {
 
-    void inject(DetailFragment detailFragment);
+    void inject(DetailMovieFragment detailMovieFragment);
+
+    void inject(DetailTvShowFragment detailTvShowFragment);
 
 }

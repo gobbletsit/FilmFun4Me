@@ -37,9 +37,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
 
     @Override
     public void onBindViewHolder(ListMovieRecyclerAdapter.ViewHolder holder, int position) {
-
         listPresenter.onBindMovieListItemAtPosition(position, holder);
-
     }
 
     @Override

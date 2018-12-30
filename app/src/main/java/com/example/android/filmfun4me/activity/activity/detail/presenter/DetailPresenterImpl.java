@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.model.DetailInteractor;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.Movie;
@@ -19,6 +20,7 @@ import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.RxUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -41,6 +43,8 @@ public class DetailPresenterImpl implements DetailPresenter {
     private Disposable seasonSubscription;
     private Disposable episodeSubscription;
     private Disposable singleShowSubscription;
+
+    private ArrayList<Episode> episodeList = new ArrayList<>(40);
 
 
     public DetailPresenterImpl(DetailInteractor detailInteractor, Context context) {
@@ -176,6 +180,8 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     // EPISODES
     private void onGetEpisodesSuccess(List<Episode> episodeList) {
+        this.episodeList.clear();
+        this.episodeList.addAll(episodeList);
         if (isViewAttached()) {
             detailView.showEpisodeList(episodeList);
         }
@@ -209,5 +215,18 @@ public class DetailPresenterImpl implements DetailPresenter {
                 }
             });
         }
+    }
+
+    @Override
+    public int getEpisodeListItemRowsCount() {
+        return episodeList.size();
+    }
+
+    @Override
+    public void onBindEpisodeListItemOnPosition(int position, DetailEpisodeView detailEpisodeView) {
+        Episode episode = episodeList.get(position);
+        detailEpisodeView.setEpisodeTitle(episode.getName());
+        detailEpisodeView.setEpisodeOverview(episode.getOverview());
+        detailEpisodeView.setEpisodePoster(episode.getPosterPath());
     }
 }
