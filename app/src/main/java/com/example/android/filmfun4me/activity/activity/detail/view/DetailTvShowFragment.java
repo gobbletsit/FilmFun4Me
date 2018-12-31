@@ -26,6 +26,7 @@ import com.example.android.filmfun4me.data.Review;
 import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
+import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.Constants;
 import com.squareup.picasso.Picasso;
 
@@ -140,6 +141,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         tvDetailTvShowRating.setText(String.valueOf(tvShow.getVoteAverage()));
         tvDetailTvShowLang.setText(tvShow.getLanguage());
 
+        Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(tvShow.getBackdropPath())).into(ivTvShowPoster);
+
         listNames = getArguments().getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW);
         if (listNames != null){
             tvTvShowGenre.setText(getAppendedGenreNames(listNames));
@@ -162,7 +165,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showVideos(List<Video> videos) {
-        Video video = videos.get(0);
+        /*Video video = videos.get(0);
 
         if (Video.getUrl(video) != null) {
             ivTvShowPoster.setTag(Video.getUrl(video));
@@ -177,7 +180,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
             public void onClick(View v) {
                 detailPresenter.whenTrailerClicked(v);
             }
-        });
+        });*/
     }
 
     @Override
@@ -247,7 +250,11 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         String genreName = "";
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < genreNamesList.size(); i++) {
-            genreName = builder.append(genreNamesList.get(i)).append(" , ").toString();
+            if (i != genreNamesList.size() -1){
+                genreName = builder.append(genreNamesList.get(i)).append(", ").toString();
+            } else {
+                genreName = builder.append(genreNamesList.get(i)).toString();
+            }
         }
         return genreName;
     }

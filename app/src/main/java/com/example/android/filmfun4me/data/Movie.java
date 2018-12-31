@@ -43,6 +43,9 @@ public class Movie implements Parcelable {
     @SerializedName("genre_ids")
     private int[] genreIds;
 
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+
     public Movie() {
     }
 
@@ -57,6 +60,7 @@ public class Movie implements Parcelable {
         revenue = in.readLong();
         language = in.readString();
         genreIds = in.createIntArray();
+        backdropPath = in.readString();
 
     }
 
@@ -144,6 +148,14 @@ public class Movie implements Parcelable {
         this.genreIds = genreIds;
     }
 
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -160,5 +172,6 @@ public class Movie implements Parcelable {
         parcel.writeLong(revenue);
         parcel.writeString(language);
         parcel.writeIntArray(genreIds);
+        parcel.writeString(backdropPath);
     }
 }

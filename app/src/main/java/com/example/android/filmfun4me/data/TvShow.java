@@ -40,10 +40,13 @@ public class TvShow implements Parcelable {
     @SerializedName("number_of_seasons")
     private int number_of_seasons;
 
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+
     // For detail Tv-show that is passed from TvShowWrapper
     public TvShow(String id, String releaseDate, String posterPath,
                   String title, double voteAverage, String overview,
-                  String language, int[] genreIds, int number_of_seasons) {
+                  String language, int[] genreIds, int number_of_seasons, String backdropPath) {
         this.id = id;
         this.releaseDate = releaseDate;
         this.posterPath = posterPath;
@@ -53,7 +56,7 @@ public class TvShow implements Parcelable {
         this.language = language;
         this.genreIds = genreIds;
         this.number_of_seasons = number_of_seasons;
-
+        this.backdropPath = backdropPath;
     }
 
     // Has to be read in the same order as it is written in "writeToParcel" method
@@ -67,6 +70,7 @@ public class TvShow implements Parcelable {
         overview = in.readString();
         language = in.readString();
         genreIds = in.createIntArray();
+        backdropPath = in.readString();
     }
 
     public static final Creator<TvShow> CREATOR = new Creator<TvShow>() {
@@ -154,6 +158,14 @@ public class TvShow implements Parcelable {
         this.number_of_seasons = numberOfSeasons;
     }
 
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -170,5 +182,6 @@ public class TvShow implements Parcelable {
         parcel.writeString(overview);
         parcel.writeString(language);
         parcel.writeIntArray(genreIds);
+        parcel.writeString(backdropPath);
     }
 }

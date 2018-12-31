@@ -151,6 +151,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         tvDetailRating.setText(String.valueOf(movie.getVoteAverage()));
         tvDetailLang.setText(movie.getLanguage());
 
+        Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(movie.getBackdropPath())).into(ivPoster);
+
         listNames = getArguments().getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE);
         if (listNames != null){
             tvGenre.setText(getAppendedGenreNames(listNames));
@@ -199,7 +201,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @Override
     public void showVideos(List<Video> videos) {
 
-        Video video = videos.get(0);
+        /*Video video = videos.get(0);
 
         if (Video.getUrl(video) != null) {
             ivPoster.setTag(Video.getUrl(video));
@@ -214,7 +216,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
             public void onClick(View v) {
                 detailPresenter.whenTrailerClicked(v);
             }
-        });
+        });*/
     }
 
 

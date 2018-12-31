@@ -43,6 +43,9 @@ public class TvShowWrapper {
     @SerializedName("seasons")
     private List<Season> seasonList;
 
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+
     public List<TvShow> getTvShowList() {
         return tvShowList;
     }
@@ -53,7 +56,7 @@ public class TvShowWrapper {
 
     // For details query
     public TvShow getTvShow() {
-        return new TvShow(id, releaseDate, posterPath, title, voteAverage, overview, language, genreIds, number_of_seasons);
+        return new TvShow(id, releaseDate, posterPath, title, voteAverage, overview, language, genreIds, number_of_seasons, backdropPath);
     }
 
     public List<Season> getSeasonList() {
