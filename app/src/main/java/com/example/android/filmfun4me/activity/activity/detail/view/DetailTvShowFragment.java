@@ -70,7 +70,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     private TvShow tvShow;
 
     private List<Season> seasonList = new ArrayList<>(20);
-    private List<Episode> episodeList = new ArrayList<>(20);
 
     // genre list
     ArrayList<String> listNames;
@@ -196,14 +195,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     }
 
     @Override
-    public void showEpisodeList(List<Episode> episodeList) {
-        this.episodeList.clear();
-        this.episodeList.addAll(episodeList);
-        this.customEpisodeAdapter.notifyDataSetChanged();
-
-        if (episodeList.size() != 0) {
-            recyclerViewEpisodes.setVisibility(View.VISIBLE);
-        }
+    public void showEpisodeList() {
+        recyclerViewEpisodes.setVisibility(View.VISIBLE);
     }
 
     @Override

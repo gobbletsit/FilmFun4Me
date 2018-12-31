@@ -28,7 +28,7 @@ public interface DetailView {
 
     void showSeasonList(List<Season> seasonList);
 
-    void showEpisodeList(List<Episode> episodeList);
+    void showEpisodeList();
 
     void onTrailerClicked(View v);
 

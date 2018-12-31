@@ -73,12 +73,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
     private LinearLayoutManager reviewListLayoutManager;
 
-    private List<Review> reviewList = new ArrayList<>(20);
-
     // genre list
     ArrayList<String> listNames;
-
-    private ListReviewRecyclerAdapter customReviewAdapter;
 
     public DetailMovieFragment() {
         // Required empty public constructor
@@ -158,7 +154,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
             tvGenre.setText(getAppendedGenreNames(listNames));
         }
 
-        customReviewAdapter = new ListReviewRecyclerAdapter(detailPresenter);
+        ListReviewRecyclerAdapter customReviewAdapter = new ListReviewRecyclerAdapter(detailPresenter);
         // recycler view
         reviewListLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
@@ -235,7 +231,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        reviewList.clear();
         listNames.clear();
         getArguments().clear();
         detailPresenter.destroy();

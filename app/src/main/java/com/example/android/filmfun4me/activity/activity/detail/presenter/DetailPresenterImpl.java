@@ -198,7 +198,7 @@ public class DetailPresenterImpl implements DetailPresenter {
         this.episodeList.clear();
         this.episodeList.addAll(episodeList);
         if (isViewAttached()) {
-            detailView.showEpisodeList(episodeList);
+            detailView.showEpisodeList();
         }
     }
 
