@@ -2,6 +2,7 @@ package com.example.android.filmfun4me.activity.activity.detail.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,21 +37,29 @@ public class ListVideosRecyclerAdapter extends RecyclerView.Adapter<ListVideosRe
 
     @Override
     public int getItemCount() {
-        return detailPresenter.getVideoListItemRowsCount();
+        int videoListSize = detailPresenter.getVideoListItemRowsCount();
+        Log.e("VIDEORECYCLERADAPTER", "VIDEO LIST SIZE = " + videoListSize);
+        return videoListSize;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements DetailVIdeoItemView {
+    class ViewHolder extends RecyclerView.ViewHolder implements DetailVIdeoItemView, View.OnClickListener {
 
         ImageView videoImageView;
         TextView videoTitleTextView;
+        ViewGroup listVideoItemContainer;
 
         ViewHolder(View itemView) {
             super(itemView);
+            videoImageView = itemView.findViewById(R.id.image_view_video_poster);
+            videoTitleTextView = itemView.findViewById(R.id.text_view_video_title);
+            listVideoItemContainer = itemView.findViewById(R.id.video_list_item_container);
+            listVideoItemContainer.setOnClickListener(this);
         }
 
         @Override
         public void setImageViewVideoTag(String videoUrl) {
             videoImageView.setTag(videoUrl);
+            listVideoItemContainer.setTag(videoUrl);
         }
 
         @Override
@@ -61,6 +70,11 @@ public class ListVideosRecyclerAdapter extends RecyclerView.Adapter<ListVideosRe
         @Override
         public void setVideoTitle(String videoTitle) {
             videoTitleTextView.setText(videoTitle);
+        }
+
+        @Override
+        public void onClick(View v) {
+            detailPresenter.whenTrailerClicked(v);
         }
     }
 }

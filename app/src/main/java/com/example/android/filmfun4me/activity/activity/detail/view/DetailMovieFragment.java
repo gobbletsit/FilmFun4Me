@@ -69,8 +69,10 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
     @BindView(R.id.image_view_poster) ImageView ivPoster;
 
+    @BindView(R.id.recycler_movie_videos) RecyclerView recyclerViewVideos;
     @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
 
+    private LinearLayoutManager videoListLayoutManager;
     private LinearLayoutManager reviewListLayoutManager;
 
     // genre list
@@ -105,7 +107,9 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         ButterKnife.bind(this, view);
 
         reviewListLayoutManager = new LinearLayoutManager(getActivity());
+        videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
+        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
 
         reviewButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +148,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         tvDetailMovieTitle.setText(movie.getTitle());
         tvDetailReleaseDate.setText(releaseDate);
         tvDetailOverview.setText(movie.getOverview());
-        tvDetailRating.setText(String.valueOf(movie.getVoteAverage()));
+        tvDetailRating.setText(String.valueOf(movie.getVoteAverage()) + "/10");
         tvDetailLang.setText(movie.getLanguage());
 
         Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(movie.getBackdropPath())).into(ivPoster);
@@ -159,6 +163,11 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         reviewListLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
         recyclerViewReviews.setAdapter(customReviewAdapter);
+
+        ListVideosRecyclerAdapter listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
+        videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
+        recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
                 recyclerViewReviews.getContext(),
