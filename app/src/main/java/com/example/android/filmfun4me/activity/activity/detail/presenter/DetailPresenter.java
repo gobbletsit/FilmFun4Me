@@ -1,16 +1,15 @@
 package com.example.android.filmfun4me.activity.activity.detail.presenter;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeView;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailReviewItemView;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailVIdeoItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
-import com.example.android.filmfun4me.data.Video;
 
 import java.util.List;
 
@@ -47,7 +46,11 @@ public interface DetailPresenter {
 
     int getEpisodeListItemRowsCount();
 
-    void onBindEpisodeListItemOnPosition(int position, DetailEpisodeView detailEpisodeView);
+    void onBindEpisodeListItemOnPosition(int position, DetailEpisodeItemView detailEpisodeItemView);
+
+    int getVideoListItemRowsCount();
+
+    void onBindVideoListItemOnPosition(int position, DetailVIdeoItemView detailVideoItemView);
 
 
     // Clicks

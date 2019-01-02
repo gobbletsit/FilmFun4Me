@@ -16,9 +16,14 @@ public class Video implements Parcelable {
 
     @SerializedName("key")
     private String key;
+    @SerializedName("id")
     private String id;
+    @SerializedName("site")
     private String site;
+    @SerializedName("size")
     private int size;
+    @SerializedName("name")
+    private String title;
 
     // Has to be read in the same order as it is written in "writeToParcel" method
     private Video(Parcel in) {
@@ -26,6 +31,7 @@ public class Video implements Parcelable {
         this.key = in.readString();
         this.site = in.readString();
         this.size = in.readInt();
+        this.title = in.readString();
     }
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {
@@ -88,6 +94,14 @@ public class Video implements Parcelable {
         this.size = size;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -99,5 +113,6 @@ public class Video implements Parcelable {
         dest.writeString(id);
         dest.writeString(site);
         dest.writeInt(size);
+        dest.writeString(title);
     }
 }

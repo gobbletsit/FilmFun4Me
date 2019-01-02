@@ -1,17 +1,16 @@
 package com.example.android.filmfun4me.activity.activity.detail.presenter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.model.DetailInteractor;
-import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeView;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailReviewItemView;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailVIdeoItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.Movie;
@@ -20,6 +19,7 @@ import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.RxUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +47,7 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     private ArrayList<Episode> episodeList = new ArrayList<>(40);
     private List<Review> reviewList = new ArrayList<>(40);
+    private List<Video> videoList = new ArrayList<>(40);
 
     public DetailPresenterImpl(DetailInteractor detailInteractor, Context context) {
         this.detailInteractor = detailInteractor;
@@ -159,6 +160,8 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     // VIDEOS (TRAILERS)
     private void onGetVideosSuccess(List<Video> videoList) {
+        this.videoList.clear();
+        this.videoList.addAll(videoList);
         if (isViewAttached()) {
             detailView.showVideos(videoList);
         }
@@ -238,10 +241,31 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void onBindEpisodeListItemOnPosition(int position, DetailEpisodeView detailEpisodeView) {
+    public void onBindEpisodeListItemOnPosition(int position, DetailEpisodeItemView detailEpisodeItemView) {
         Episode episode = episodeList.get(position);
-        detailEpisodeView.setEpisodeTitle(episode.getName());
-        detailEpisodeView.setEpisodeOverview(episode.getOverview());
-        detailEpisodeView.setEpisodePoster(episode.getPosterPath());
+        detailEpisodeItemView.setEpisodeTitle(episode.getName());
+        detailEpisodeItemView.setEpisodeOverview(episode.getOverview());
+        detailEpisodeItemView.setEpisodePoster(episode.getPosterPath());
+    }
+
+    @Override
+    public int getVideoListItemRowsCount() {
+        return videoList.size();
+    }
+
+    @Override
+    public void onBindVideoListItemOnPosition(int position, DetailVIdeoItemView detailVideoItemView) {
+        Video video = videoList.get(position);
+        if (Video.getUrl(video) != null) {
+            detailVideoItemView.setImageViewVideoTag(Video.getUrl(video));
+        }
+
+        if (Video.getThumbnailUrl(video) != null) {
+            detailVideoItemView.setImageViewVideoThumbnailUrl(Video.getThumbnailUrl(video));
+        }
+
+        if (video.getTitle()!= null){
+            detailVideoItemView.setVideoTitle(video.getTitle());
+        }
     }
 }

@@ -10,11 +10,10 @@ import android.widget.TextView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
-import com.example.android.filmfun4me.activity.activity.list.view.ListMovieRecyclerAdapter;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.squareup.picasso.Picasso;
 
-public class ListEpisodeRecyclerAdapter extends RecyclerView.Adapter<ListEpisodeRecyclerAdapter.ViewHolder> {
+public class ListEpisodeRecyclerAdapter extends RecyclerView.Adapter<ListEpisodeRecyclerAdapter.ItemViewHolder> {
 
     private Context context;
     private DetailPresenter detailPresenter;
@@ -24,14 +23,14 @@ public class ListEpisodeRecyclerAdapter extends RecyclerView.Adapter<ListEpisode
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.episode_list_item, parent, false);
-        return new ListEpisodeRecyclerAdapter.ViewHolder(view);
+        return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ItemViewHolder holder, int position) {
         detailPresenter.onBindEpisodeListItemOnPosition(position, holder);
     }
 
@@ -40,13 +39,13 @@ public class ListEpisodeRecyclerAdapter extends RecyclerView.Adapter<ListEpisode
         return detailPresenter.getEpisodeListItemRowsCount();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements DetailEpisodeView {
+    class ItemViewHolder extends RecyclerView.ViewHolder implements DetailEpisodeItemView {
 
         private TextView tv_episode_title;
         private TextView tv_episode_overview;
         private ImageView iv_episode_poster;
 
-        ViewHolder(View itemView) {
+        ItemViewHolder(View itemView) {
             super(itemView);
             this.tv_episode_title = itemView.findViewById(R.id.tv_episode_title);
             this.tv_episode_overview = itemView.findViewById(R.id.tv_episode_overview);
