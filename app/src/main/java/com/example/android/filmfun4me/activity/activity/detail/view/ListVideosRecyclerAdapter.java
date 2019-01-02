@@ -2,11 +2,13 @@ package com.example.android.filmfun4me.activity.activity.detail.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
 import com.example.android.filmfun4me.data.Video;
 import com.squareup.picasso.Picasso;
@@ -23,7 +25,8 @@ public class ListVideosRecyclerAdapter extends RecyclerView.Adapter<ListVideosRe
     @Override
     public ListVideosRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return null;
+        View view = LayoutInflater.from(context).inflate(R.layout.video_list_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
