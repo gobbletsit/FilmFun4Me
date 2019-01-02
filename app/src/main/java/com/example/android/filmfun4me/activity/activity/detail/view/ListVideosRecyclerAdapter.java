@@ -7,11 +7,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
 import com.example.android.filmfun4me.data.Video;
+import com.squareup.picasso.Picasso;
 
 public class ListVideosRecyclerAdapter extends RecyclerView.Adapter<ListVideosRecyclerAdapter.ViewHolder> {
 
     private Context context;
+    private DetailPresenter detailPresenter;
+
+    public ListVideosRecyclerAdapter (DetailPresenter detailPresenter){
+        this.detailPresenter = detailPresenter;
+    }
 
     @Override
     public ListVideosRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -21,22 +28,36 @@ public class ListVideosRecyclerAdapter extends RecyclerView.Adapter<ListVideosRe
 
     @Override
     public void onBindViewHolder(ListVideosRecyclerAdapter.ViewHolder holder, int position) {
-        // onBindItemAtPosition
+        detailPresenter.onBindVideoListItemOnPosition(position, holder);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
-        // getRowsItemCount
+        return detailPresenter.getVideoListItemRowsCount();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements DetailVIdeoItemView {
 
         ImageView videoImageView;
         TextView videoTitleTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
+        }
+
+        @Override
+        public void setImageViewVideoTag(String videoUrl) {
+            videoImageView.setTag(videoUrl);
+        }
+
+        @Override
+        public void setImageViewVideoThumbnailUrl(String videoThumbnailUrl) {
+            Picasso.with(context).load(videoThumbnailUrl).into(videoImageView);
+        }
+
+        @Override
+        public void setVideoTitle(String videoTitle) {
+            videoTitleTextView.setText(videoTitle);
         }
     }
 }
