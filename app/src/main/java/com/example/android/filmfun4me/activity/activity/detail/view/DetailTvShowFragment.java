@@ -28,6 +28,7 @@ import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.Constants;
+import com.example.android.filmfun4me.utils.DateUtils;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -146,7 +147,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showTvDetails(TvShow tvShow) {
-        String releaseDate = " " + formatDate(tvShow.getReleaseDate());
+        String releaseDate = " " + DateUtils.formatDate(tvShow.getReleaseDate(),TAG);
 
         tvDetailTvShowTitle.setText(tvShow.getTitle());
         tvDetailTvShowReleaseDate.setText(releaseDate);
@@ -224,22 +225,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         super.onDestroy();
 
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
-    }
-
-    private String formatDate(String date) {
-
-        SimpleDateFormat formatInput = new SimpleDateFormat(INPUT_DATE_FORMAT, java.util.Locale.getDefault());
-        SimpleDateFormat formatOutput = new SimpleDateFormat(OUTPUT_DATE_FORMAT, java.util.Locale.getDefault());
-
-        String formattedDate = "";
-        try {
-            Date newDate = formatInput.parse(date);
-            formattedDate = formatOutput.format(newDate);
-        } catch (ParseException e) {
-            Log.e(TAG, e.toString());
-        }
-        return formattedDate;
-
     }
 
     private String getAppendedGenreNames (ArrayList<String> genreNamesList){

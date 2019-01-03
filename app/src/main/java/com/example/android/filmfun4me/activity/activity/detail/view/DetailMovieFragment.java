@@ -33,6 +33,7 @@ import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.Constants;
+import com.example.android.filmfun4me.utils.DateUtils;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -52,10 +53,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
     @Inject
     DetailPresenter detailPresenter;
-
-    // date formats
-    private static final String INPUT_DATE_FORMAT = "yyyy-mm-dd";
-    private static final String OUTPUT_DATE_FORMAT = "dd, MMM yyyy";
 
     // view binding
     @BindView(R.id.tv_detail_movie_title) TextView tvDetailMovieTitle;
@@ -154,7 +151,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @Override
     public void showMovieDetails(Movie movie) {
 
-        String releaseDate = " " + formatDate(movie.getReleaseDate());
+        String releaseDate = " " + DateUtils.formatDate(movie.getReleaseDate(), TAG);
 
         tvDetailMovieTitle.setText(movie.getTitle());
         tvDetailReleaseDate.setText(releaseDate);
@@ -236,21 +233,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         listNames.clear();
         getArguments().clear();
         detailPresenter.destroy();
-    }
-
-    private String formatDate(String date) {
-
-        SimpleDateFormat formatInput = new SimpleDateFormat(INPUT_DATE_FORMAT, java.util.Locale.getDefault());
-        SimpleDateFormat formatOutput = new SimpleDateFormat(OUTPUT_DATE_FORMAT, java.util.Locale.getDefault());
-
-        String formattedDate = "";
-        try {
-            Date newDate = formatInput.parse(date);
-            formattedDate = formatOutput.format(newDate);
-        } catch (ParseException e) {
-            Log.e(TAG, e.toString());
-        }
-        return formattedDate;
     }
 
     private String getAppendedGenreNames (ArrayList<String> genreNamesList){
