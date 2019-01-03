@@ -1,7 +1,6 @@
 package com.example.android.filmfun4me.di;
 
 import com.example.android.filmfun4me.activity.activity.main.view.MainFragment;
-import com.example.android.filmfun4me.activity.activity.main.view.TvShowsFragment;
 
 import dagger.Subcomponent;
 
@@ -13,7 +12,5 @@ import dagger.Subcomponent;
 public interface MainComponent {
 
     MainFragment inject(MainFragment fragment);
-
-    TvShowsFragment inject(TvShowsFragment fragment);
 
 }

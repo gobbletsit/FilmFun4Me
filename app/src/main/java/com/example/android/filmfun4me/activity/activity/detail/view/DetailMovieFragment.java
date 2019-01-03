@@ -2,6 +2,7 @@ package com.example.android.filmfun4me.activity.activity.detail.view;
 
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -75,8 +76,12 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     private LinearLayoutManager videoListLayoutManager;
     private LinearLayoutManager reviewListLayoutManager;
 
+    private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
+
     // genre list
     ArrayList<String> listNames;
+
+    private Callback callback;
 
     public DetailMovieFragment() {
         // Required empty public constructor
@@ -90,6 +95,12 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE, genreNamesList);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callback = (Callback) context;
     }
 
     @Override
@@ -164,7 +175,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
         recyclerViewReviews.setAdapter(customReviewAdapter);
 
-        ListVideosRecyclerAdapter listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
+        listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
         videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewVideos.setLayoutManager(videoListLayoutManager);
         recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
@@ -192,10 +203,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
     @Override
-    public void onTrailerClicked(View v) {
-        String videoUrl = (String) v.getTag();
-        Intent playVideoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
-        startActivity(playVideoIntent);
+    public void onTrailerClicked(String videoUrl) {
+        callback.onTrailerClick(videoUrl);
     }
 
     @Override
@@ -204,8 +213,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
     @Override
-    public void showVideos(List<Video> videos) {
-        // NOT NEEEDED FOR NOW
+    public void showVideos() {
+        listVideosRecyclerAdapter.notifyDataSetChanged();
     }
 
 

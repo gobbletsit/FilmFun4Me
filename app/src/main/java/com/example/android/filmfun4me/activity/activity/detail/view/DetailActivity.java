@@ -1,6 +1,7 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
@@ -15,7 +16,7 @@ import com.example.android.filmfun4me.utils.Constants;
 
 import java.util.ArrayList;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements Callback {
 
     public static final String DETAIL_MOVIE_FRAG = "DETAIL_MOVIE_FRAG";
     public static final String DETAIL_TV_SHOW_FRAG = "DETAIL_TV_SHOW_FRAG";
@@ -97,5 +98,11 @@ public class DetailActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTrailerClick(String videoUrl) {
+        Intent playVideoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
+        startActivity(playVideoIntent);
     }
 }

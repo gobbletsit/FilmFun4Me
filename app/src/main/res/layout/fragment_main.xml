@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#202020"
+    android:background="@color/colorPrimaryMain"
     tools:context=".activity.activity.main.view.MainFragment">
 
     <ImageButton
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#202020"
+        android:background="@color/colorPrimaryMain"
         android:src="@drawable/m_ic"/>
 
 
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#202020"
+        android:background="@color/colorPrimaryMain"
         android:src="@drawable/television"/>
 
 

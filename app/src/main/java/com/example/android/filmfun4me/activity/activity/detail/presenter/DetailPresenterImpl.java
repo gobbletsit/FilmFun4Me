@@ -107,7 +107,8 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void whenTrailerClicked(View view) {
-        detailView.onTrailerClicked(view);
+        String videoUrl = (String) view.getTag();
+        detailView.onTrailerClicked(videoUrl);
     }
 
     @Override
@@ -161,6 +162,9 @@ public class DetailPresenterImpl implements DetailPresenter {
     private void onGetVideosSuccess(List<Video> videoList) {
         this.videoList.clear();
         this.videoList.addAll(videoList);
+        if (isViewAttached()){
+            detailView.showVideos();
+        }
     }
 
     private void onGetVideoFailure() {

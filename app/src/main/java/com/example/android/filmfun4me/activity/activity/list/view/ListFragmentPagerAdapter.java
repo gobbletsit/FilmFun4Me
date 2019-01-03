@@ -1,14 +1,9 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import com.example.android.filmfun4me.R;
-import com.example.android.filmfun4me.activity.activity.main.view.MainFragment;
-import com.example.android.filmfun4me.activity.activity.main.view.TvShowsFragment;
 
 /**
  * Created by gobov on 1/14/2018.

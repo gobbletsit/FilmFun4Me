@@ -22,7 +22,7 @@ public interface DetailView {
 
     void showTvDetails(TvShow tvShow);
 
-    void showVideos(List<Video> videos);
+    void showVideos();
 
     void showReviews();
 
@@ -30,6 +30,6 @@ public interface DetailView {
 
     void showEpisodeList();
 
-    void onTrailerClicked(View v);
+    void onTrailerClicked(String videoUrl);
 
 }

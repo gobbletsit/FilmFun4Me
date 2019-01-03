@@ -1,6 +1,7 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -77,6 +78,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     ArrayList<String> listNames;
 
     private ListEpisodeRecyclerAdapter customEpisodeAdapter;
+    private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
+
+    private Callback callback;
 
     public DetailTvShowFragment (){
         // required empty public constructor
@@ -89,6 +93,12 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW, genreNamesList);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callback = (Callback) context;
     }
 
     @Override
@@ -154,7 +164,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         customEpisodeAdapter = new ListEpisodeRecyclerAdapter(detailPresenter);
         recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
 
-        ListVideosRecyclerAdapter listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
+        listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
         recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
 
 
@@ -171,8 +181,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     }
 
     @Override
-    public void showVideos(List<Video> videos) {
-        // NOT NEEDED FOR NOW
+    public void showVideos() {
+        listVideosRecyclerAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -196,10 +206,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     }
 
     @Override
-    public void onTrailerClicked(View v) {
-        String videoUrl = (String) v.getTag();
-        Intent playVideoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
-        startActivity(playVideoIntent);
+    public void onTrailerClicked(String videoUrl) {
+        callback.onTrailerClick(videoUrl);
     }
 
     @Override
