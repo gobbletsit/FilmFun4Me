@@ -10,6 +10,7 @@ import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.model.DetailInteractor;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailReviewItemView;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailSeasonItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailVIdeoItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Episode;
@@ -47,6 +48,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     private ArrayList<Episode> episodeList = new ArrayList<>(40);
     private List<Review> reviewList = new ArrayList<>(40);
     private List<Video> videoList = new ArrayList<>(40);
+    private List<Season> seasonList = new ArrayList<>(40);
 
     public DetailPresenterImpl(DetailInteractor detailInteractor, Context context) {
         this.detailInteractor = detailInteractor;
@@ -98,8 +100,8 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void showTvEpisodes(TvShow tvShow, int seasonNumber) {
-        episodeSubscription = detailInteractor.getTvShowEpisodeList(tvShow.getId(), seasonNumber)
+    public void showTvEpisodes(String tvShowId, int seasonNumber) {
+        episodeSubscription = detailInteractor.getTvShowEpisodeList(tvShowId, seasonNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetEpisodesSuccess, throwable -> onGetEpisodesFailure());
@@ -108,7 +110,9 @@ public class DetailPresenterImpl implements DetailPresenter {
     @Override
     public void whenTrailerClicked(View view) {
         String videoUrl = (String) view.getTag();
-        detailView.onTrailerClicked(videoUrl);
+        if (videoUrl != null){
+            detailView.onTrailerClicked(videoUrl);
+        }
     }
 
     @Override
@@ -188,7 +192,11 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     // SEASONS
     private void onGetSeasonListSuccess(List<Season> seasonList) {
-        detailView.showSeasonList(seasonList);
+        this.seasonList.clear();
+        this.seasonList.addAll(seasonList);
+        if (isViewAttached()){
+            detailView.showSeasonList();
+        }
     }
 
     private void onGetSeasonListFailure() {
@@ -209,31 +217,6 @@ public class DetailPresenterImpl implements DetailPresenter {
         // NOTHING
     }
 
-
-    @Override
-    public void setSeasons(List<Season> seasonList, LinearLayout seasonButtonLinearLayout, TvShow tvShow) {
-        for (int i = 0; i < seasonList.size(); i++) {
-            Season currentSeason = seasonList.get(i);
-
-            // Creating programmatically because of unknown number of seasons
-            // refactor ovo obavezno, mora i moze bit ljepse
-            TextView textView[] = new TextView[seasonList.size()];
-            textView[i] = new TextView(mContext);
-            textView[i].setText(String.valueOf(currentSeason.getSeasonNumber()));
-            seasonButtonLinearLayout.addView(textView[i]);
-            textView[i].setPaintFlags(textView[i].getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            textView[i].setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-            textView[i].setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-            textView[i].setPadding(16, 6, 12, 6);
-            textView[i].setTextSize(mContext.getResources().getDimension(R.dimen.seasonTextSize));
-            textView[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showTvEpisodes(tvShow, currentSeason.getSeasonNumber());
-                }
-            });
-        }
-    }
 
     @Override
     public int getEpisodeListItemRowsCount() {
@@ -267,5 +250,22 @@ public class DetailPresenterImpl implements DetailPresenter {
         if (video.getTitle()!= null){
             detailVideoItemView.setVideoTitle(video.getTitle());
         }
+    }
+
+    @Override
+    public int getSeasonListItemRowsCount() {
+        return seasonList.size();
+    }
+
+    @Override
+    public void onBindSeasonListItemOnPosition(int position, DetailSeasonItemView detailSeasonItemView) {
+        Season season = seasonList.get(position);
+        detailSeasonItemView.setSeasonButtonNumber(String.valueOf(season.getSeasonNumber()));
+    }
+
+    @Override
+    public void onSeasonListItemInteraction(String tvShowId, int position) {
+        Season season = seasonList.get(position);
+        showTvEpisodes(tvShowId, season.getSeasonNumber());
     }
 }

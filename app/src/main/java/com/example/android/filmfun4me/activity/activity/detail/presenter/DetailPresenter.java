@@ -5,6 +5,7 @@ import android.widget.LinearLayout;
 
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailReviewItemView;
+import com.example.android.filmfun4me.activity.activity.detail.view.DetailSeasonItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailVIdeoItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Movie;
@@ -40,9 +41,7 @@ public interface DetailPresenter {
 
     void showSeasonList(TvShow tvShow);
 
-    void showTvEpisodes(TvShow tvShow, int seasonNumber);
-
-    void setSeasons(List<Season> seasonList, LinearLayout seasonButtonLinearLayout, TvShow tvShow);
+    void showTvEpisodes(String tvShowId, int seasonNumber);
 
     int getEpisodeListItemRowsCount();
 
@@ -51,6 +50,13 @@ public interface DetailPresenter {
     int getVideoListItemRowsCount();
 
     void onBindVideoListItemOnPosition(int position, DetailVIdeoItemView detailVideoItemView);
+
+    int getSeasonListItemRowsCount();
+
+    void onBindSeasonListItemOnPosition(int position, DetailSeasonItemView detailSeasonItemView);
+
+    void onSeasonListItemInteraction(String tvShowId, int seasonNumber);
+
 
 
     // Clicks

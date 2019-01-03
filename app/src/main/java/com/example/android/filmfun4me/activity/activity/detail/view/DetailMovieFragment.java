@@ -205,7 +205,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
     @Override
-    public void showSeasonList(List<Season> seasonList) {
+    public void showSeasonList() {
         // DO NOTHING
     }
 

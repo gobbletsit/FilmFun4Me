@@ -26,7 +26,7 @@ public interface DetailView {
 
     void showReviews();
 
-    void showSeasonList(List<Season> seasonList);
+    void showSeasonList();
 
     void showEpisodeList();
 

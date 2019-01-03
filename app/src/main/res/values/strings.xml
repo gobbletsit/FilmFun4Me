@@ -20,7 +20,7 @@
     <string name="detail_date_label">Release date : </string>
     <string name="detail_reviews_label">Reviews </string>
     <string name="detail_reviews_plus">+</string>
-    <string name="detail_season_label">Seasons :</string>
+    <string name="detail_season_label">Seasons</string>
 
     <string-array name="sort_by">
         <item>Most popular</item>

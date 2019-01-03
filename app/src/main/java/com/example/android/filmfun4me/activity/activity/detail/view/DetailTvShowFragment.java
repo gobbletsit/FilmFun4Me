@@ -49,10 +49,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @Inject
     DetailPresenter detailPresenter;
 
-    // date formats
-    private static final String INPUT_DATE_FORMAT = "yyyy-mm-dd";
-    private static final String OUTPUT_DATE_FORMAT = "dd, MMM yyyy";
-
     // view binding
     @BindView(R.id.tv_detail_tv_show_title) TextView tvDetailTvShowTitle;
     @BindView(R.id.tv_detail_tv_show_release_date) TextView tvDetailTvShowReleaseDate;
@@ -65,21 +61,20 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @BindView(R.id.recycler_tv_show_videos) RecyclerView recyclerViewVideos;
     @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
-
-    @BindView(R.id.linear_season_button_container) LinearLayout seasonButtonLinearLayout;
+    @BindView(R.id.recycler_season_list) RecyclerView recyclerViewSeasons;
 
     private LinearLayoutManager episodeListLayoutManager;
     private LinearLayoutManager videoListLayoutManager;
+    private LinearLayoutManager seasonListLayoutManager;
 
     private TvShow tvShow;
-
-    private List<Season> seasonList = new ArrayList<>(20);
 
     // genre list
     ArrayList<String> listNames;
 
     private ListEpisodeRecyclerAdapter customEpisodeAdapter;
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
+    private ListSeasonButtonRecyclerAdapter listSeasonButtonRecyclerAdapter;
 
     private Callback callback;
 
@@ -122,6 +117,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewVideos.setLayoutManager(videoListLayoutManager);
 
+        seasonListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewSeasons.setLayoutManager(seasonListLayoutManager);
+
         return view;
     }
 
@@ -137,7 +135,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
                 detailPresenter.showTvShowDetails(tvShow.getId());
             }
         }
-
     }
 
     @Override
@@ -168,6 +165,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
         recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
 
+        listSeasonButtonRecyclerAdapter = new ListSeasonButtonRecyclerAdapter(detailPresenter, tvShow.getId());
+        recyclerViewSeasons.setAdapter(listSeasonButtonRecyclerAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
                 recyclerViewEpisodes.getContext(),
@@ -193,11 +192,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     // NEEDS REFACTORING
     @Override
-    public void showSeasonList(List<Season> seasonList) {
-        this.seasonList.clear();
-        this.seasonList.addAll(seasonList);
-
-        detailPresenter.setSeasons(seasonList, seasonButtonLinearLayout, tvShow);
+    public void showSeasonList() {
+        listSeasonButtonRecyclerAdapter.notifyDataSetChanged();
+        //detailPresenter.setSeasons(seasonList, seasonButtonLinearLayout, tvShow);
     }
 
     @Override
@@ -215,7 +212,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void onDestroyView() {
         super.onDestroyView();
         listNames.clear();
-
         getArguments().clear();
         detailPresenter.destroy();
     }
@@ -223,7 +219,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
     }
 
