@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface DetailView {
 
-    void showDetails(Movie movie);
+    void showMovieDetails(Movie movie);
 
     void showTvDetails(TvShow tvShow);
 

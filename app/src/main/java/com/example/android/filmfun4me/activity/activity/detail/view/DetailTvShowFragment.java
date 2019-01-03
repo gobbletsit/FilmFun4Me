@@ -61,11 +61,13 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @BindView(R.id.image_view_poster_tv_show) ImageView ivTvShowPoster;
 
+    @BindView(R.id.recycler_tv_show_videos) RecyclerView recyclerViewVideos;
     @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
 
     @BindView(R.id.linear_season_button_container) LinearLayout seasonButtonLinearLayout;
 
     private LinearLayoutManager episodeListLayoutManager;
+    private LinearLayoutManager videoListLayoutManager;
 
     private TvShow tvShow;
 
@@ -106,6 +108,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         episodeListLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewEpisodes.setLayoutManager(episodeListLayoutManager);
 
+        videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
+
         return view;
     }
 
@@ -125,7 +130,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     }
 
     @Override
-    public void showDetails(Movie movie) {
+    public void showMovieDetails(Movie movie) {
         // NOTHING HERE
     }
 
@@ -136,7 +141,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         tvDetailTvShowTitle.setText(tvShow.getTitle());
         tvDetailTvShowReleaseDate.setText(releaseDate);
         tvDetailTvShowOverview.setText(tvShow.getOverview());
-        tvDetailTvShowRating.setText(String.valueOf(tvShow.getVoteAverage()));
+        tvDetailTvShowRating.setText(String.valueOf(tvShow.getVoteAverage()) + "/10");
         tvDetailTvShowLang.setText(tvShow.getLanguage());
 
         Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(tvShow.getBackdropPath())).into(ivTvShowPoster);
@@ -148,6 +153,10 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
         customEpisodeAdapter = new ListEpisodeRecyclerAdapter(detailPresenter);
         recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
+
+        ListVideosRecyclerAdapter listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
+        recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
+
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(
                 recyclerViewEpisodes.getContext(),
@@ -163,22 +172,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showVideos(List<Video> videos) {
-        /*Video video = videos.get(0);
-
-        if (Video.getUrl(video) != null) {
-            ivTvShowPoster.setTag(Video.getUrl(video));
-        }
-
-        if (Video.getThumbnailUrl(video) != null) {
-            Picasso.with(getActivity()).load(Video.getThumbnailUrl(video)).into(ivTvShowPoster);
-        }
-
-        ivTvShowPoster.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                detailPresenter.whenTrailerClicked(v);
-            }
-        });*/
+        // NOT NEEDED FOR NOW
     }
 
     @Override
@@ -186,6 +180,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         // DO NOTHING
     }
 
+    // NEEDS REFACTORING
     @Override
     public void showSeasonList(List<Season> seasonList) {
         this.seasonList.clear();
@@ -196,6 +191,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showEpisodeList() {
+        customEpisodeAdapter.notifyDataSetChanged();
         recyclerViewEpisodes.setVisibility(View.VISIBLE);
     }
 

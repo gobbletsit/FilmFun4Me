@@ -141,7 +141,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
     @Override
-    public void showDetails(Movie movie) {
+    public void showMovieDetails(Movie movie) {
 
         String releaseDate = " " + formatDate(movie.getReleaseDate());
 
@@ -205,23 +205,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
     @Override
     public void showVideos(List<Video> videos) {
-
-        /*Video video = videos.get(0);
-
-        if (Video.getUrl(video) != null) {
-            ivPoster.setTag(Video.getUrl(video));
-        }
-
-        if (Video.getThumbnailUrl(video) != null) {
-            Picasso.with(getActivity()).load(Video.getThumbnailUrl(video)).into(ivPoster);
-        }
-
-        ivPoster.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                detailPresenter.whenTrailerClicked(v);
-            }
-        });*/
+        // NOT NEEEDED FOR NOW
     }
 
 

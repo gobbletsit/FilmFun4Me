@@ -37,9 +37,7 @@ public class ListVideosRecyclerAdapter extends RecyclerView.Adapter<ListVideosRe
 
     @Override
     public int getItemCount() {
-        int videoListSize = detailPresenter.getVideoListItemRowsCount();
-        Log.e("VIDEORECYCLERADAPTER", "VIDEO LIST SIZE = " + videoListSize);
-        return videoListSize;
+        return detailPresenter.getVideoListItemRowsCount();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements DetailVIdeoItemView, View.OnClickListener {

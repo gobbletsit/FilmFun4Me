@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
+    android:background="@color/colorPrimary"
     android:id="@+id/episode_list_item_container">
 
 
@@ -26,6 +27,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:textColor="@color/colorAccent"
             android:textSize="18sp"
             android:textStyle="bold"
             android:padding="8dp"
@@ -35,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
+            android:textColor="@color/colorAccent"
             android:textSize="12sp"
             android:textStyle="italic"
             android:padding="8dp"

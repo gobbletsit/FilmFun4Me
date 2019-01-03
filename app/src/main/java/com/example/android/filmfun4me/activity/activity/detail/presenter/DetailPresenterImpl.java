@@ -19,7 +19,6 @@ import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.RxUtils;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     @Override
     public void showMovieDetails(Movie movie) {
         if (isViewAttached()) {
-            detailView.showDetails(movie);
+            detailView.showMovieDetails(movie);
         }
 
     }
@@ -162,9 +161,6 @@ public class DetailPresenterImpl implements DetailPresenter {
     private void onGetVideosSuccess(List<Video> videoList) {
         this.videoList.clear();
         this.videoList.addAll(videoList);
-        if (isViewAttached()) {
-            detailView.showVideos(videoList);
-        }
     }
 
     private void onGetVideoFailure() {
@@ -216,14 +212,14 @@ public class DetailPresenterImpl implements DetailPresenter {
             Season currentSeason = seasonList.get(i);
 
             // Creating programmatically because of unknown number of seasons
-            // ovo bi po nekoj fori trebalo ic u view jer je glup i moze ovo radit
             // refactor ovo obavezno, mora i moze bit ljepse
             TextView textView[] = new TextView[seasonList.size()];
             textView[i] = new TextView(mContext);
             textView[i].setText(String.valueOf(currentSeason.getSeasonNumber()));
             seasonButtonLinearLayout.addView(textView[i]);
             textView[i].setPaintFlags(textView[i].getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            textView[i].setTextColor(mContext.getResources().getColor(R.color.colorSeasonsAndReviews));
+            textView[i].setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            textView[i].setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
             textView[i].setPadding(16, 6, 12, 6);
             textView[i].setTextSize(mContext.getResources().getDimension(R.dimen.seasonTextSize));
             textView[i].setOnClickListener(new View.OnClickListener() {
