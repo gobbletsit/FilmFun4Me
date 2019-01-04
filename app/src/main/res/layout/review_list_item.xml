@@ -20,6 +20,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
         android:background="@color/colorPrimary"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:scrollHorizontally="true"
         android:padding="8dp"
         android:textSize="12sp"
         android:textStyle="italic" />

@@ -47,18 +47,14 @@ public class DetailActivity extends AppCompatActivity implements Callback {
             ArrayList<String> genreNamesListMovie = extras.getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE);
             if (movie != null) {
                 switchToMovieDetailFragment(movie, genreNamesListMovie);
-                if (movie.getTitle()!= null){
-                    setTitle(movie.getTitle());
-                }
+                setTitle("Movie details");
             }
         } else {
             TvShow tvShow = extras.getParcelable(Constants.KEY_TV_SHOW);
             ArrayList<String> genreNamesListTv = extras.getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW);
             if (tvShow != null) {
                 switchToTvShowDetailFragment(tvShow, genreNamesListTv);
-                if (tvShow.getTitle()!= null){
-                    setTitle(tvShow.getTitle());
-                }
+                setTitle("TV show details");
             }
         }
     }
