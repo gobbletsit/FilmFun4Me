@@ -28,7 +28,7 @@ public class DetailModule {
 
     @DetailScope
     @Provides
-    DetailPresenter providesDetailPresenter(DetailInteractor detailInteractor, Context context) {
-        return new DetailPresenterImpl(detailInteractor, context);
+    DetailPresenter providesDetailPresenter(DetailInteractor detailInteractor) {
+        return new DetailPresenterImpl(detailInteractor);
     }
 }

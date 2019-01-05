@@ -35,8 +35,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DetailPresenterImpl implements DetailPresenter {
 
-    private Context mContext;
-
     private DetailView detailView;
     private DetailInteractor detailInteractor;
 
@@ -51,9 +49,8 @@ public class DetailPresenterImpl implements DetailPresenter {
     private List<Video> videoList = new ArrayList<>(40);
     private List<Season> seasonList = new ArrayList<>(40);
 
-    public DetailPresenterImpl(DetailInteractor detailInteractor, Context context) {
+    public DetailPresenterImpl(DetailInteractor detailInteractor) {
         this.detailInteractor = detailInteractor;
-        this.mContext = context;
     }
 
     @Override
