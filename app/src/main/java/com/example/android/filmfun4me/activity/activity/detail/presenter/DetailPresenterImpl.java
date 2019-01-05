@@ -2,6 +2,7 @@ package com.example.android.filmfun4me.activity.activity.detail.presenter;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     private Disposable seasonSubscription;
     private Disposable episodeSubscription;
     private Disposable singleShowSubscription;
+    private Disposable singleMovieSubscription;
 
     private ArrayList<Episode> episodeList = new ArrayList<>(40);
     private List<Review> reviewList = new ArrayList<>(40);
@@ -57,10 +59,12 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void showMovieDetails(Movie movie) {
-        if (isViewAttached()) {
-            detailView.showMovieDetails(movie);
-        }
-
+        singleMovieSubscription = detailInteractor.getSingleMovie(movie.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGetMovieSuccess, throwable -> onGetMovieFailure());
+        showMovieVideos(movie);
+        showMovieReviews(movie);
     }
 
     @Override
@@ -146,11 +150,23 @@ public class DetailPresenterImpl implements DetailPresenter {
         RxUtils.unsubscribe(seasonSubscription);
         RxUtils.unsubscribe(episodeSubscription);
         RxUtils.unsubscribe(singleShowSubscription);
+        RxUtils.unsubscribe(singleMovieSubscription);
 
     }
 
     private boolean isViewAttached() {
         return detailView != null;
+    }
+
+    private void onGetMovieSuccess(Movie movie){
+
+        detailView.showMovieDetails(movie);
+        Log.e("PROVJERA", "onGetMovieSuccess: " + movie.getBackdropPath());
+
+    }
+
+    private void onGetMovieFailure(){
+        // nothing for now
     }
 
     private void onGetTvShowSuccess(TvShow tvShow) {

@@ -22,10 +22,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.resource.gif.GifDrawableEncoder;
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
 import com.example.android.filmfun4me.data.Episode;
+import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.Review;
 import com.example.android.filmfun4me.data.Season;
@@ -119,6 +121,25 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
         recyclerViewVideos.setLayoutManager(videoListLayoutManager);
 
+        ListReviewRecyclerAdapter customReviewAdapter = new ListReviewRecyclerAdapter(detailPresenter);
+        // recycler view
+        reviewListLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
+        recyclerViewReviews.setAdapter(customReviewAdapter);
+
+        listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
+        videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
+        recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(
+                recyclerViewReviews.getContext(),
+                reviewListLayoutManager.getOrientation()
+        );
+
+        itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
+        recyclerViewReviews.addItemDecoration(itemDecoration);
+
         reviewButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,9 +177,22 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         tvDetailMovieTitle.setText(movie.getTitle());
         tvDetailReleaseDate.setText(releaseDate);
         tvDetailOverview.setText(movie.getOverview());
+        Log.i(TAG, "OVERVIEW = " + movie.getOverview());
         tvDetailRating.setText(String.valueOf(movie.getVoteAverage()) + "/10");
         tvDetailLang.setText(movie.getLanguage());
 
+
+        if (movie.getMovieDetailGenreList() != null){
+            List<Genre> genres = movie.getMovieDetailGenreList();
+            Genre genre = genres.get(0);
+            Log.i(TAG, "DETAIL GENRE IN POSITION 1 = " + genre.getGenreName());
+        } else {
+            Log.e(TAG, "NESTO NE VALJA SA ZANROVIMA");
+        }
+
+
+        String testBackdropPath = BaseUtils.getBackdropPath(movie.getBackdropPath());
+        Log.i(TAG, "TEST BACKDROP PATH IS = " + testBackdropPath);
         Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(movie.getBackdropPath())).into(ivPoster);
 
         listNames = getArguments().getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE);
@@ -166,27 +200,10 @@ public class DetailMovieFragment extends Fragment implements DetailView {
             tvGenre.setText(getAppendedGenreNames(listNames));
         }
 
-        ListReviewRecyclerAdapter customReviewAdapter = new ListReviewRecyclerAdapter(detailPresenter);
-        // recycler view
-        reviewListLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
-        recyclerViewReviews.setAdapter(customReviewAdapter);
 
-        listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
-        videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
-        recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
 
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(
-                recyclerViewReviews.getContext(),
-                reviewListLayoutManager.getOrientation()
-        );
-
-        itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
-        recyclerViewReviews.addItemDecoration(itemDecoration);
-
-        detailPresenter.showMovieVideos(movie);
-        detailPresenter.showMovieReviews(movie);
+        //detailPresenter.showMovieVideos(movie);
+        //detailPresenter.showMovieReviews(movie);
     }
 
     @Override
@@ -230,7 +247,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        listNames.clear();
+        //listNames.clear();
         getArguments().clear();
         detailPresenter.destroy();
     }

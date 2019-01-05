@@ -18,5 +18,4 @@ public class BaseUtils {
         return BASE_POSTER_PATH + posterPath;
     }
 
-    public static String getBackdropPath (String backdropPath){return BASE_BACKDROP_PATH + backdropPath;}
-}
+    public static String getBackdropPath (String backdropPath){return BASE_BACKDROP_PATH + backdropPath;}}

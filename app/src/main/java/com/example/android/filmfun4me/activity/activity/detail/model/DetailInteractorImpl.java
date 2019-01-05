@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.EpisodeWrapper;
+import com.example.android.filmfun4me.data.Movie;
+import com.example.android.filmfun4me.data.MoviesWrapper;
 import com.example.android.filmfun4me.data.Review;
 import com.example.android.filmfun4me.data.ReviewWrapper;
 import com.example.android.filmfun4me.data.Season;
@@ -31,6 +33,11 @@ public class DetailInteractorImpl implements DetailInteractor {
     public DetailInteractorImpl(MoviesWebService moviesWebService,TvShowsWebService tvShowsWebService) {
         this.moviesWebService = moviesWebService;
         this.tvShowsWebService = tvShowsWebService;
+    }
+
+    @Override
+    public Observable<Movie> getSingleMovie(String id) {
+        return moviesWebService.getMovieDetails(id);
     }
 
     @Override

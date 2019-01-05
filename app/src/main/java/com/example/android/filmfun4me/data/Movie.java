@@ -1,5 +1,7 @@
 package com.example.android.filmfun4me.data;
 
+import android.content.Loader;
+import android.location.GnssClock;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -46,21 +48,25 @@ public class Movie implements Parcelable {
     @SerializedName("backdrop_path")
     private String backdropPath;
 
+    @SerializedName("genres")
+    private List<Genre> movieDetailGenreList;
+
     public Movie() {
     }
 
     // Has to be read in the same order as it is written in "writeToParcel" method
     protected Movie(Parcel in) {
         id = in.readString();
-        releaseDate = in.readString();
+        //releaseDate = in.readString();
         posterPath = in.readString();
         title = in.readString();
-        voteAverage = in.readDouble();
-        overview = in.readString();
-        revenue = in.readLong();
-        language = in.readString();
+        //voteAverage = in.readDouble();
+        //overview = in.readString();
+        //revenue = in.readLong();
+        //language = in.readString();
         genreIds = in.createIntArray();
-        backdropPath = in.readString();
+        //backdropPath = in.readString();
+        //movieDetailGenreList = in.createTypedArrayList(Genre.CREATOR);
 
     }
 
@@ -156,6 +162,14 @@ public class Movie implements Parcelable {
         this.backdropPath = backdropPath;
     }
 
+    public List<Genre> getMovieDetailGenreList() {
+        return movieDetailGenreList;
+    }
+
+    public void setMovieDetailGenreList(List movieDetailGenreList) {
+        this.movieDetailGenreList = movieDetailGenreList;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -164,14 +178,15 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
-        parcel.writeString(releaseDate);
+        //parcel.writeString(releaseDate);
         parcel.writeString(posterPath);
         parcel.writeString(title);
-        parcel.writeDouble(voteAverage);
-        parcel.writeString(overview);
-        parcel.writeLong(revenue);
-        parcel.writeString(language);
+        //parcel.writeDouble(voteAverage);
+        //parcel.writeString(overview);
+        //parcel.writeLong(revenue);
+        //parcel.writeString(language);
         parcel.writeIntArray(genreIds);
-        parcel.writeString(backdropPath);
+        //parcel.writeString(backdropPath);
+        //parcel.writeTypedList(movieDetailGenreList);
     }
 }

@@ -29,7 +29,7 @@ public interface MoviesWebService {
 
     // need to implement this, and pass on movieId instead of Movie parcelable(refactor)
     @GET("3/movie/{movieId}")
-    Observable<MoviesWrapper> getMovieDetails(@Path("movieId")String movieId);
+    Observable<Movie> getMovieDetails(@Path("movieId")String movieId);
 
     @GET("3/movie/{movieId}/videos")
     Observable<VideoWrapper> getVideosFromService(@Path("movieId") String movieId);
