@@ -42,7 +42,6 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     private Disposable videoSubscription;
     private Disposable reviewSubscription;
-    private Disposable seasonSubscription;
     private Disposable episodeSubscription;
     private Disposable singleShowSubscription;
     private Disposable singleMovieSubscription;
@@ -68,11 +67,12 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void showTvShowDetails(String id) {
-        singleShowSubscription = detailInteractor.getSingleTvShow(id)
+    public void showTvShowDetails(TvShow tvShow) {
+        singleShowSubscription = detailInteractor.getSingleTvShow(tvShow.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetTvShowSuccess, throwable -> onGetTvShowFailure());
+        showTvVideos(tvShow);
     }
 
     @Override
@@ -120,15 +120,6 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void showSeasonList(TvShow tvShow) {
-        seasonSubscription = detailInteractor.getTvShowSeasonList(tvShow.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetSeasonListSuccess, throwable -> onGetSeasonListFailure());
-
-    }
-
-    @Override
     public void showTvVideos(TvShow tvShow) {
         videoSubscription = detailInteractor.getTvShowVideoList(tvShow.getId())
                 .subscribeOn(Schedulers.io())
@@ -147,7 +138,6 @@ public class DetailPresenterImpl implements DetailPresenter {
         detailView = null;
         RxUtils.unsubscribe(videoSubscription);
         RxUtils.unsubscribe(reviewSubscription);
-        RxUtils.unsubscribe(seasonSubscription);
         RxUtils.unsubscribe(episodeSubscription);
         RxUtils.unsubscribe(singleShowSubscription);
         RxUtils.unsubscribe(singleMovieSubscription);
@@ -159,10 +149,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetMovieSuccess(Movie movie){
-
         detailView.showMovieDetails(movie);
-        Log.e("PROVJERA", "onGetMovieSuccess: " + movie.getBackdropPath());
-
     }
 
     private void onGetMovieFailure(){
@@ -171,6 +158,9 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     private void onGetTvShowSuccess(TvShow tvShow) {
         detailView.showTvDetails(tvShow);
+        seasonList.clear();
+        seasonList.addAll(tvShow.getSeasonList());
+        detailView.showSeasonList();
     }
 
     private void onGetTvShowFailure() {
@@ -204,21 +194,6 @@ public class DetailPresenterImpl implements DetailPresenter {
     private void onGetReviewFailure() {
         // NOTHING
     }
-
-
-    // SEASONS
-    private void onGetSeasonListSuccess(List<Season> seasonList) {
-        this.seasonList.clear();
-        this.seasonList.addAll(seasonList);
-        if (isViewAttached()){
-            detailView.showSeasonList();
-        }
-    }
-
-    private void onGetSeasonListFailure() {
-        // NOTHING
-    }
-
 
     // EPISODES
     private void onGetEpisodesSuccess(List<Episode> episodeList) {

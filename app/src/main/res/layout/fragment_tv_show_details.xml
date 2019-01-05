@@ -114,7 +114,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_detail_tv_show_date_label"
             app:layout_constraintLeft_toLeftOf="@id/tv_detail_tv_show_overview_label"
-            app:layout_constraintRight_toRightOf="@id/tv_detail_tv_show_overview_label"
+            app:layout_constraintRight_toLeftOf="@id/tv_detail_tv_show_lang"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_tv_show_overview"/>
 
         <TextView

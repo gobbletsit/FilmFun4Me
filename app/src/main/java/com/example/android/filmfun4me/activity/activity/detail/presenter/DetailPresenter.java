@@ -35,11 +35,9 @@ public interface DetailPresenter {
 
 
     // Tv-show
-    void showTvShowDetails(String id);
+    void showTvShowDetails(TvShow tvShow);
 
     void showTvVideos(TvShow tvShow);
-
-    void showSeasonList(TvShow tvShow);
 
     void showTvEpisodes(String tvShowId, int seasonNumber);
 

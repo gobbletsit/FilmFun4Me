@@ -3,11 +3,9 @@ package com.example.android.filmfun4me.network;
 import com.example.android.filmfun4me.data.EpisodeWrapper;
 import com.example.android.filmfun4me.data.GenreWrapper;
 import com.example.android.filmfun4me.data.ReviewWrapper;
-import com.example.android.filmfun4me.data.SeasonWrapper;
+import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.TvShowWrapper;
 import com.example.android.filmfun4me.data.VideoWrapper;
-
-import java.util.Observable;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -25,7 +23,7 @@ public interface TvShowsWebService {
     io.reactivex.Observable<TvShowWrapper> getHighestRatedTvShows();
 
     @GET("3/tv/{tv_id}")
-    io.reactivex.Observable<TvShowWrapper> getSingleTvShow(@Path("tv_id") String tvId);
+    io.reactivex.Observable<TvShow> getSingleTvShow(@Path("tv_id") String tvId);
 
     @GET("3/genre/tv/list")
     io.reactivex.Observable<GenreWrapper> getListOfAllTvGenres();

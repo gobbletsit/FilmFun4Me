@@ -57,17 +57,9 @@ public class Movie implements Parcelable {
     // Has to be read in the same order as it is written in "writeToParcel" method
     protected Movie(Parcel in) {
         id = in.readString();
-        //releaseDate = in.readString();
         posterPath = in.readString();
         title = in.readString();
-        //voteAverage = in.readDouble();
-        //overview = in.readString();
-        //revenue = in.readLong();
-        //language = in.readString();
         genreIds = in.createIntArray();
-        //backdropPath = in.readString();
-        //movieDetailGenreList = in.createTypedArrayList(Genre.CREATOR);
-
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -166,7 +158,7 @@ public class Movie implements Parcelable {
         return movieDetailGenreList;
     }
 
-    public void setMovieDetailGenreList(List movieDetailGenreList) {
+    public void setMovieDetailGenreList(List<Genre> movieDetailGenreList) {
         this.movieDetailGenreList = movieDetailGenreList;
     }
 
@@ -178,15 +170,8 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
-        //parcel.writeString(releaseDate);
         parcel.writeString(posterPath);
         parcel.writeString(title);
-        //parcel.writeDouble(voteAverage);
-        //parcel.writeString(overview);
-        //parcel.writeLong(revenue);
-        //parcel.writeString(language);
         parcel.writeIntArray(genreIds);
-        //parcel.writeString(backdropPath);
-        //parcel.writeTypedList(movieDetailGenreList);
     }
 }

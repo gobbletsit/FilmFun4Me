@@ -1,17 +1,11 @@
 package com.example.android.filmfun4me.activity.activity.detail.model;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.EpisodeWrapper;
 import com.example.android.filmfun4me.data.Movie;
-import com.example.android.filmfun4me.data.MoviesWrapper;
 import com.example.android.filmfun4me.data.Review;
 import com.example.android.filmfun4me.data.ReviewWrapper;
-import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
-import com.example.android.filmfun4me.data.TvShowWrapper;
 import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.data.VideoWrapper;
 import com.example.android.filmfun4me.network.MoviesWebService;
@@ -42,7 +36,7 @@ public class DetailInteractorImpl implements DetailInteractor {
 
     @Override
     public Observable<TvShow> getSingleTvShow(String id) {
-        return tvShowsWebService.getSingleTvShow(id).map(TvShowWrapper::getTvShow);
+        return tvShowsWebService.getSingleTvShow(id);
     }
 
     @Override
@@ -63,11 +57,6 @@ public class DetailInteractorImpl implements DetailInteractor {
     @Override
     public Observable<List<Review>> getTvShowReviewList(String id) {
         return tvShowsWebService.getTvReviewsFromService(id).map(ReviewWrapper::getReviewList);
-    }
-
-    @Override
-    public Observable<List<Season>> getTvShowSeasonList(String id) {
-        return tvShowsWebService.getSingleTvShow(id).map(TvShowWrapper::getSeasonList);
     }
 
     @Override

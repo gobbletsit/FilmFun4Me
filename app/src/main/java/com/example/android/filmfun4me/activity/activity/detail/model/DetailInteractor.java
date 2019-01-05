@@ -28,8 +28,6 @@ public interface DetailInteractor {
 
     public io.reactivex.Observable<List<Review>> getTvShowReviewList(String id);
 
-    io.reactivex.Observable<List<Season>> getTvShowSeasonList(String id);
-
     io.reactivex.Observable<List<Episode>> getTvShowEpisodeList(String id, int seasonNumber);
 
 

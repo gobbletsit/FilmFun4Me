@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by gobov on 1/12/2018.
  */
@@ -43,34 +45,15 @@ public class TvShow implements Parcelable {
     @SerializedName("backdrop_path")
     private String backdropPath;
 
-    // For detail Tv-show that is passed from TvShowWrapper
-    public TvShow(String id, String releaseDate, String posterPath,
-                  String title, double voteAverage, String overview,
-                  String language, int[] genreIds, int number_of_seasons, String backdropPath) {
-        this.id = id;
-        this.releaseDate = releaseDate;
-        this.posterPath = posterPath;
-        this.title = title;
-        this.voteAverage = voteAverage;
-        this.overview = overview;
-        this.language = language;
-        this.genreIds = genreIds;
-        this.number_of_seasons = number_of_seasons;
-        this.backdropPath = backdropPath;
-    }
+    @SerializedName("seasons")
+    private List<Season> seasonList;
 
     // Has to be read in the same order as it is written in "writeToParcel" method
     protected TvShow(Parcel in) {
-        number_of_seasons = in.readInt();
         id = in.readString();
-        releaseDate = in.readString();
         posterPath = in.readString();
         title = in.readString();
-        voteAverage = in.readDouble();
-        overview = in.readString();
-        language = in.readString();
         genreIds = in.createIntArray();
-        backdropPath = in.readString();
     }
 
     public static final Creator<TvShow> CREATOR = new Creator<TvShow>() {
@@ -166,6 +149,14 @@ public class TvShow implements Parcelable {
         this.backdropPath = backdropPath;
     }
 
+    public List<Season> getSeasonList() {
+        return seasonList;
+    }
+
+    public void setSeasonList(List<Season> seasonList) {
+        this.seasonList = seasonList;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -173,15 +164,9 @@ public class TvShow implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(number_of_seasons);
         parcel.writeString(id);
-        parcel.writeString(releaseDate);
         parcel.writeString(posterPath);
         parcel.writeString(title);
-        parcel.writeDouble(voteAverage);
-        parcel.writeString(overview);
-        parcel.writeString(language);
         parcel.writeIntArray(genreIds);
-        parcel.writeString(backdropPath);
     }
 }

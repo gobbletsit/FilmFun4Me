@@ -64,10 +64,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @BindView(R.id.recycler_season_list) RecyclerView recyclerViewSeasons;
 
     private LinearLayoutManager episodeListLayoutManager;
-    private LinearLayoutManager videoListLayoutManager;
-    private LinearLayoutManager seasonListLayoutManager;
-
-    private TvShow tvShow;
 
     // genre list
     ArrayList<String> listNames;
@@ -114,10 +110,10 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         episodeListLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewEpisodes.setLayoutManager(episodeListLayoutManager);
 
-        videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewVideos.setLayoutManager(videoListLayoutManager);
 
-        seasonListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager seasonListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewSeasons.setLayoutManager(seasonListLayoutManager);
 
         return view;
@@ -130,9 +126,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
             TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
             if (tvShow != null) {
-                this.tvShow = tvShow;
                 detailPresenter.setView(this);
-                detailPresenter.showTvShowDetails(tvShow.getId());
+                detailPresenter.showTvShowDetails(tvShow);
             }
         }
     }
@@ -177,7 +172,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         recyclerViewEpisodes.addItemDecoration(itemDecoration);
 
         detailPresenter.showTvVideos(tvShow);
-        detailPresenter.showSeasonList(tvShow);
     }
 
     @Override
@@ -194,7 +188,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @Override
     public void showSeasonList() {
         listSeasonButtonRecyclerAdapter.notifyDataSetChanged();
-        //detailPresenter.setSeasons(seasonList, seasonButtonLinearLayout, tvShow);
     }
 
     @Override
