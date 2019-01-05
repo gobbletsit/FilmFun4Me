@@ -20,9 +20,8 @@ import java.util.List;
 
 public interface ListPresenter {
 
+    // Movie
     void setMovieView(ListView listView, int pagerPosition);
-
-    void setTvShowView(ListView listView, int pagerPosition);
 
     void showMostPopularMovies();
 
@@ -30,23 +29,23 @@ public interface ListPresenter {
 
     void showUpcomingMovies();
 
+    void onBindMovieListItemAtPosition(int position, ListItemView listItemView);
+    int getMovieListItemRowsCount();
+    void onMovieListItemInteraction(int itemPosition);
+
+    // TV show
+    void setTvShowView(ListView listView, int pagerPosition);
+
     void showMostPopularTvShows();
 
     void showHighestRatedTvShows();
 
-    void onBindMovieListItemAtPosition(int position, ListItemView listItemView);
-
     void onBindTvShowListItemAtPosition(int position, ListItemView listItemView);
-
-    int getMovieListItemRowsCount();
-
     int getTvShowListItemRowCount();
-
-    void onMovieListItemInteraction(int itemPosition);
-
     void onTvShowListItemInteraction(int itemPosition);
 
-    void getAllMovieGenres();
+    // Both
+    void getGenres();
 
     void destroy();
 

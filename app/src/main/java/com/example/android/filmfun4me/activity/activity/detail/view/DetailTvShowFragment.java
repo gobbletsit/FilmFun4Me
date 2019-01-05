@@ -1,41 +1,29 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
-import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.Movie;
-import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
-import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.Constants;
 import com.example.android.filmfun4me.utils.DateUtils;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -126,7 +114,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
             TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
             if (tvShow != null) {
-                detailPresenter.setView(this);
+                detailPresenter.setDetailView(this);
                 detailPresenter.showTvShowDetails(tvShow);
             }
         }

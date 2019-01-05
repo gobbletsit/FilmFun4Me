@@ -1,47 +1,33 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.resource.gif.GifDrawableEncoder;
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
-import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
-import com.example.android.filmfun4me.data.Review;
-import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
-import com.example.android.filmfun4me.data.Video;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.Constants;
 import com.example.android.filmfun4me.utils.DateUtils;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -163,7 +149,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
             Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
             if (movie != null) {
-                detailPresenter.setView(this);
+                detailPresenter.setDetailView(this);
                 detailPresenter.showMovieDetails(movie);
             }
         }

@@ -1,13 +1,5 @@
 package com.example.android.filmfun4me.activity.activity.list.presenter;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
-import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.list.model.ListInteractor;
 import com.example.android.filmfun4me.activity.activity.list.view.ListItemView;
 import com.example.android.filmfun4me.activity.activity.list.view.ListView;
@@ -48,28 +40,16 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void setMovieView(ListView listView, int pagerPosition) {
         this.view = listView;
-        getAllMovieGenres();
-        if (pagerPosition == 0){
+        getGenres();
+        if (pagerPosition == 0) {
             showMostPopularMovies();
-        } else if (pagerPosition == 1){
+        } else if (pagerPosition == 1) {
             showHighestRatedMovies();
         } else {
             showUpcomingMovies();
         }
     }
 
-    @Override
-    public void setTvShowView(ListView listView, int pagerPosition) {
-        this.view = listView;
-        getAllMovieGenres();
-        if (pagerPosition == 0){
-            showMostPopularTvShows();
-        } else {
-            showHighestRatedTvShows();
-        }
-    }
-
-    // Show methods
     @Override
     public void showMostPopularMovies() {
         showLoading();
@@ -97,6 +77,25 @@ public class ListPresenterImpl implements ListPresenter {
                 .subscribe(this::onMovieFetchSuccess, this::onMovieFetchFailed);
     }
 
+    public void onBindMovieListItemAtPosition(int position, ListItemView listItemView) {
+        Movie movie = movieList.get(position);
+        String genreName = getSingleGenreName(movie.getGenreIds());
+        listItemView.setItemTitle(movie.getTitle());
+        listItemView.setItemPoster(movie.getPosterPath());
+        listItemView.setGenreName(genreName);
+    }
+
+    public int getMovieListItemRowsCount() {
+        return movieList.size();
+    }
+
+    @Override
+    public void onMovieListItemInteraction(int itemPosition) {
+        Movie movie = movieList.get(itemPosition);
+        int[] currentGenreIds = movie.getGenreIds();
+        view.onMovieClicked(movie, getSingleItemGenreList(currentGenreIds, genreList));
+    }
+
     private void onMovieFetchSuccess(List<Movie> movieList) {
         this.movieList.clear();
         this.movieList.addAll(movieList);
@@ -105,28 +104,19 @@ public class ListPresenterImpl implements ListPresenter {
         }
     }
 
-    public void onBindMovieListItemAtPosition(int position, ListItemView listItemView){
-        Movie movie = movieList.get(position);
-        String genreName = getSingleGenreName(movie.getGenreIds());
-        listItemView.setItemTitle(movie.getTitle());
-        listItemView.setItemPoster(movie.getPosterPath());
-        listItemView.setGenreName(genreName);
-    }
-
-    public int getMovieListItemRowsCount(){
-        return movieList.size();
+    private void onMovieFetchFailed(Throwable e) {
+        view.loadingErrorMessage(e.getMessage());
     }
 
     @Override
-    public void onMovieListItemInteraction(int itemPosition) {
-        Movie movie = movieList.get(itemPosition);
-        int[] currentGenreIds = movie.getGenreIds();
-
-        view.onMovieClicked(movie, getSingleItemGenreList(currentGenreIds, genreList));
-    }
-
-    private void onMovieFetchFailed(Throwable e) {
-        view.loadingErrorMessage(e.getMessage());
+    public void setTvShowView(ListView listView, int pagerPosition) {
+        this.view = listView;
+        getGenres();
+        if (pagerPosition == 0) {
+            showMostPopularTvShows();
+        } else {
+            showHighestRatedTvShows();
+        }
     }
 
     @Override
@@ -145,15 +135,6 @@ public class ListPresenterImpl implements ListPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onTvShowFetchSuccess, this::onTvShowFetchFailed);
-    }
-
-    // Success and failure methods for RX
-    private void onTvShowFetchSuccess(List<TvShow> tvShowList) {
-        this.tvShowList.clear();
-        this.tvShowList.addAll(tvShowList);
-        if (isViewAttached()) {
-            view.setUpTvShowView();
-        }
     }
 
     @Override
@@ -178,13 +159,21 @@ public class ListPresenterImpl implements ListPresenter {
         view.onTvShowClicked(tvShow, getSingleItemGenreList(currentGenreIds, genreList));
     }
 
+    private void onTvShowFetchSuccess(List<TvShow> tvShowList) {
+        this.tvShowList.clear();
+        this.tvShowList.addAll(tvShowList);
+        if (isViewAttached()) {
+            view.setUpTvShowView();
+        }
+    }
+
     private void onTvShowFetchFailed(Throwable e) {
         view.loadingErrorMessage(e.getMessage());
     }
 
     // GENRE
     @Override
-    public void getAllMovieGenres() {
+    public void getGenres() {
         disposableGenres = listInteractor.getListOfAllMovieGenres()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -200,7 +189,7 @@ public class ListPresenterImpl implements ListPresenter {
         view.loadingErrorMessage(e.getMessage());
     }
 
-    private void compareGenreIdsAndLoadGenreList(List<Genre> genreList, ArrayList<String> singleGenreNamesList, int singleGenreId){
+    private void compareGenreIdsAndLoadGenreList(List<Genre> genreList, ArrayList<String> singleGenreNamesList, int singleGenreId) {
         // Going through list of all possible genres
         for (int a = 0; a < genreList.size(); a++) {
             int preciseGenreId = genreList.get(a).getGenreId();

@@ -20,7 +20,7 @@ import java.util.List;
 
 public interface DetailPresenter {
 
-    void setView(DetailView detailView);
+    void setDetailView(DetailView detailView);
 
     // Movie
     void showMovieDetails(Movie movie);
@@ -29,10 +29,8 @@ public interface DetailPresenter {
 
     void showMovieReviews(Movie movie);
 
-    int getReviewListItemRowsCount();
-
     void onBindReviewListItemOnPosition(int position, DetailReviewItemView detailReviewItemView);
-
+    int getReviewListItemRowsCount();
 
     // Tv-show
     void showTvShowDetails(TvShow tvShow);
@@ -41,23 +39,17 @@ public interface DetailPresenter {
 
     void showTvEpisodes(String tvShowId, int seasonNumber);
 
+    void onBindEpisodeListItemOnPosition(int position, DetailEpisodeItemView detailEpisodeItemView);
     int getEpisodeListItemRowsCount();
 
-    void onBindEpisodeListItemOnPosition(int position, DetailEpisodeItemView detailEpisodeItemView);
-
-    int getVideoListItemRowsCount();
-
-    void onBindVideoListItemOnPosition(int position, DetailVIdeoItemView detailVideoItemView);
-
-    int getSeasonListItemRowsCount();
-
     void onBindSeasonListItemOnPosition(int position, DetailSeasonItemView detailSeasonItemView);
-
+    int getSeasonListItemRowsCount();
     void onSeasonListItemInteraction(String tvShowId, int seasonNumber);
 
+    // Both
+    void onBindVideoListItemOnPosition(int position, DetailVIdeoItemView detailVideoItemView);
+    int getVideoListItemRowsCount();
 
-
-    // Clicks
     void whenTrailerClicked(View view);
 
     void destroy();

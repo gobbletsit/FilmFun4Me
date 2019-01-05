@@ -1,13 +1,7 @@
 package com.example.android.filmfun4me.activity.activity.detail.presenter;
 
-import android.content.Context;
-import android.graphics.Paint;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.model.DetailInteractor;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailReviewItemView;
@@ -38,24 +32,28 @@ public class DetailPresenterImpl implements DetailPresenter {
     private DetailView detailView;
     private DetailInteractor detailInteractor;
 
+    private Disposable detailsSubscription;
     private Disposable videoSubscription;
     private Disposable reviewSubscription;
     private Disposable episodeSubscription;
-    private Disposable singleShowSubscription;
-    private Disposable singleMovieSubscription;
 
-    private ArrayList<Episode> episodeList = new ArrayList<>(40);
     private List<Review> reviewList = new ArrayList<>(40);
     private List<Video> videoList = new ArrayList<>(40);
     private List<Season> seasonList = new ArrayList<>(40);
+    private List<Episode> episodeList = new ArrayList<>(40);
 
     public DetailPresenterImpl(DetailInteractor detailInteractor) {
         this.detailInteractor = detailInteractor;
     }
 
     @Override
+    public void setDetailView(DetailView detailView) {
+        this.detailView = detailView;
+    }
+
+    @Override
     public void showMovieDetails(Movie movie) {
-        singleMovieSubscription = detailInteractor.getSingleMovie(movie.getId())
+        detailsSubscription = detailInteractor.getSingleMovie(movie.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetMovieSuccess, throwable -> onGetMovieFailure());
@@ -63,13 +61,12 @@ public class DetailPresenterImpl implements DetailPresenter {
         showMovieReviews(movie);
     }
 
-    @Override
-    public void showTvShowDetails(TvShow tvShow) {
-        singleShowSubscription = detailInteractor.getSingleTvShow(tvShow.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetTvShowSuccess, throwable -> onGetTvShowFailure());
-        showTvVideos(tvShow);
+    private void onGetMovieSuccess(Movie movie){
+        detailView.showMovieDetails(movie);
+    }
+
+    private void onGetMovieFailure(){
+        // nothing for now
     }
 
     @Override
@@ -88,9 +85,16 @@ public class DetailPresenterImpl implements DetailPresenter {
                 .subscribe(this::onGetReviewSuccess, throwable -> onGetReviewFailure());
     }
 
-    @Override
-    public int getReviewListItemRowsCount() {
-        return reviewList.size();
+    private void onGetReviewSuccess(List<Review> reviewList) {
+        this.reviewList.clear();
+        this.reviewList.addAll(reviewList);
+        if (isViewAttached() && reviewList.size() != 0) {
+            detailView.showReviews();
+        }
+    }
+
+    private void onGetReviewFailure() {
+        // nothing for now
     }
 
     @Override
@@ -101,56 +105,17 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
-    public void showTvEpisodes(String tvShowId, int seasonNumber) {
-        episodeSubscription = detailInteractor.getTvShowEpisodeList(tvShowId, seasonNumber)
+    public int getReviewListItemRowsCount() {
+        return reviewList.size();
+    }
+
+    @Override
+    public void showTvShowDetails(TvShow tvShow) {
+        detailsSubscription = detailInteractor.getSingleTvShow(tvShow.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetEpisodesSuccess, throwable -> onGetEpisodesFailure());
-    }
-
-    @Override
-    public void whenTrailerClicked(View view) {
-        String videoUrl = (String) view.getTag();
-        if (videoUrl != null){
-            detailView.onTrailerClicked(videoUrl);
-        }
-    }
-
-    @Override
-    public void showTvVideos(TvShow tvShow) {
-        videoSubscription = detailInteractor.getTvShowVideoList(tvShow.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetVideosSuccess, t -> onGetVideoFailure());
-    }
-
-
-    @Override
-    public void setView(DetailView detailView) {
-        this.detailView = detailView;
-    }
-
-    @Override
-    public void destroy() {
-        detailView = null;
-        RxUtils.unsubscribe(videoSubscription);
-        RxUtils.unsubscribe(reviewSubscription);
-        RxUtils.unsubscribe(episodeSubscription);
-        RxUtils.unsubscribe(singleShowSubscription);
-        RxUtils.unsubscribe(singleMovieSubscription);
-
-    }
-
-    private boolean isViewAttached() {
-        return detailView != null;
-    }
-
-    private void onGetMovieSuccess(Movie movie){
-        detailView.showMovieDetails(movie);
-    }
-
-    private void onGetMovieFailure(){
-        // nothing for now
+                .subscribe(this::onGetTvShowSuccess, throwable -> onGetTvShowFailure());
+        showTvVideos(tvShow);
     }
 
     private void onGetTvShowSuccess(TvShow tvShow) {
@@ -161,38 +126,25 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetTvShowFailure() {
-        // NOTHING
+        // nothing for now
     }
 
-
-    // VIDEOS (TRAILERS)
-    private void onGetVideosSuccess(List<Video> videoList) {
-        this.videoList.clear();
-        this.videoList.addAll(videoList);
-        if (isViewAttached()){
-            detailView.showVideos();
-        }
+    @Override
+    public void showTvVideos(TvShow tvShow) {
+        videoSubscription = detailInteractor.getTvShowVideoList(tvShow.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGetVideosSuccess, t -> onGetVideoFailure());
     }
 
-    private void onGetVideoFailure() {
-        //NOTHING
+    @Override
+    public void showTvEpisodes(String tvShowId, int seasonNumber) {
+        episodeSubscription = detailInteractor.getTvShowEpisodeList(tvShowId, seasonNumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGetEpisodesSuccess, throwable -> onGetEpisodesFailure());
     }
 
-
-    // REVIEWS
-    private void onGetReviewSuccess(List<Review> reviewList) {
-        this.reviewList.clear();
-        this.reviewList.addAll(reviewList);
-        if (isViewAttached() && reviewList.size() != 0) {
-            detailView.showReviews();
-        }
-    }
-
-    private void onGetReviewFailure() {
-        // NOTHING
-    }
-
-    // EPISODES
     private void onGetEpisodesSuccess(List<Episode> episodeList) {
         this.episodeList.clear();
         this.episodeList.addAll(episodeList);
@@ -202,13 +154,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetEpisodesFailure() {
-        // NOTHING
-    }
-
-
-    @Override
-    public int getEpisodeListItemRowsCount() {
-        return episodeList.size();
+        // nothing for now
     }
 
     @Override
@@ -220,8 +166,42 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     @Override
+    public int getEpisodeListItemRowsCount() {
+        return episodeList.size();
+    }
+
+    @Override
+    public void onBindSeasonListItemOnPosition(int position, DetailSeasonItemView detailSeasonItemView) {
+        Season season = seasonList.get(position);
+        detailSeasonItemView.setSeasonButtonNumber(String.valueOf(season.getSeasonNumber()));
+    }
+
+    @Override
+    public int getSeasonListItemRowsCount() {
+        return seasonList.size();
+    }
+
+    @Override
+    public void onSeasonListItemInteraction(String tvShowId, int position) {
+        Season season = seasonList.get(position);
+        showTvEpisodes(tvShowId, season.getSeasonNumber());
+    }
+
+    @Override
     public int getVideoListItemRowsCount() {
         return videoList.size();
+    }
+
+    private void onGetVideosSuccess(List<Video> videoList) {
+        this.videoList.clear();
+        this.videoList.addAll(videoList);
+        if (isViewAttached()){
+            detailView.showVideos();
+        }
+    }
+
+    private void onGetVideoFailure() {
+        // nothing for now
     }
 
     @Override
@@ -240,20 +220,24 @@ public class DetailPresenterImpl implements DetailPresenter {
         }
     }
 
-    @Override
-    public int getSeasonListItemRowsCount() {
-        return seasonList.size();
+    private boolean isViewAttached() {
+        return detailView != null;
     }
 
     @Override
-    public void onBindSeasonListItemOnPosition(int position, DetailSeasonItemView detailSeasonItemView) {
-        Season season = seasonList.get(position);
-        detailSeasonItemView.setSeasonButtonNumber(String.valueOf(season.getSeasonNumber()));
+    public void whenTrailerClicked(View view) {
+        String videoUrl = (String) view.getTag();
+        if (videoUrl != null){
+            detailView.onTrailerClicked(videoUrl);
+        }
     }
 
     @Override
-    public void onSeasonListItemInteraction(String tvShowId, int position) {
-        Season season = seasonList.get(position);
-        showTvEpisodes(tvShowId, season.getSeasonNumber());
+    public void destroy() {
+        detailView = null;
+        RxUtils.unsubscribe(detailsSubscription);
+        RxUtils.unsubscribe(videoSubscription);
+        RxUtils.unsubscribe(reviewSubscription);
+        RxUtils.unsubscribe(episodeSubscription);
     }
 }
