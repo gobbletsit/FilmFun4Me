@@ -5,6 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
@@ -65,5 +67,12 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         } else {
             return "TV shows";
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return true;
     }
 }
