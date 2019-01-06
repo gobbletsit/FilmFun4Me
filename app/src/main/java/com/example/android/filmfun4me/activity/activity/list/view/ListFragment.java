@@ -137,26 +137,13 @@ public class ListFragment extends Fragment implements ListView {
     @Override
     public void setUpMovieView() {
         customAdapter = new ListMovieRecyclerAdapter(listPresenter);
-        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
-        scaleInAnimationAdapter.setDuration(400);
-        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
-        // disable the first scroll mode
-        scaleInAnimationAdapter.setFirstOnly(false);
-        scaleInAnimationAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(scaleInAnimationAdapter);
-
+        setAnimationAdapter();
     }
 
     @Override
     public void setUpTvShowView() {
         customAdapter = new ListTvShowRecyclerAdapter(listPresenter);
-        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
-        scaleInAnimationAdapter.setDuration(400);
-        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
-        // disable the first scroll mode
-        scaleInAnimationAdapter.setFirstOnly(false);
-        scaleInAnimationAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(scaleInAnimationAdapter);
+        setAnimationAdapter();
     }
 
     @Override
@@ -192,6 +179,16 @@ public class ListFragment extends Fragment implements ListView {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void setAnimationAdapter(){
+        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
+        scaleInAnimationAdapter.setDuration(400);
+        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
+        // disable the first scroll mode
+        scaleInAnimationAdapter.setFirstOnly(false);
+        scaleInAnimationAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(scaleInAnimationAdapter);
     }
 
     @Override
