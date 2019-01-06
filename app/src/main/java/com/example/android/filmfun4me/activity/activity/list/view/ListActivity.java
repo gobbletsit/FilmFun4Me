@@ -1,10 +1,13 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -13,8 +16,6 @@ import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivi
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.Constants;
-
-import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
@@ -40,22 +41,22 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     }
 
     @Override
-    public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList, int selectedButton) {
+    public void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
         Bundle extras = new Bundle();
         extras.putParcelable(Constants.KEY_MOVIE, movie);
-        extras.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE, singleGenreNamesList);
+        extras.putString(Constants.KEY_SINGLE_MOVIE_GENRES, singleMovieGenres);
         extras.putInt(Constants.SELECTED_BUTTON, selectedButton);
         detailIntent.putExtras(extras);
         startActivity(detailIntent);
     }
 
     @Override
-    public void onTvShowClicked(TvShow tvShow, ArrayList<String> singleGenreNamesList, int selectedButton) {
+    public void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
         Bundle extras = new Bundle();
         extras.putParcelable(Constants.KEY_TV_SHOW, tvShow);
-        extras.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW, singleGenreNamesList);
+        extras.putString(Constants.KEY_SINGLE_TV_SHOW_GENRES, singleTvShowGenres);
         extras.putInt(Constants.SELECTED_BUTTON, selectedButton);
         detailIntent.putExtras(extras);
         startActivity(detailIntent);
@@ -73,6 +74,14 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 }

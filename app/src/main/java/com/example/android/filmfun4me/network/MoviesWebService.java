@@ -38,7 +38,6 @@ public interface MoviesWebService {
     Observable<ReviewWrapper> getReviewsFromService(@Path("movieId") String movieId);
 
     @GET("3/genre/movie/list")
-    Observable<GenreWrapper> getListOfAllGenres();
-
+    Observable<GenreWrapper> getListOfAllMovieGenres();
 
 }

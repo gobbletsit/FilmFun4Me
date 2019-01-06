@@ -33,6 +33,8 @@ public interface ListPresenter {
     int getMovieListItemRowsCount();
     void onMovieListItemInteraction(int itemPosition);
 
+    void getMovieGenres();
+
     // TV show
     void setTvShowView(ListView listView, int pagerPosition);
 
@@ -44,9 +46,9 @@ public interface ListPresenter {
     int getTvShowListItemRowCount();
     void onTvShowListItemInteraction(int itemPosition);
 
-    // Both
-    void getGenres();
+    void getTvGenres();
 
+    // both
     void destroy();
 
 }

@@ -51,10 +51,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
     @BindView(R.id.recycler_season_list) RecyclerView recyclerViewSeasons;
 
-    private LinearLayoutManager episodeListLayoutManager;
-
     // genre list
     ArrayList<String> listNames;
+    private String genres;
 
     private ListEpisodeRecyclerAdapter customEpisodeAdapter;
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
@@ -66,11 +65,11 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         // required empty public constructor
     }
 
-    public static DetailTvShowFragment newInstance(TvShow tvShow, ArrayList<String> genreNamesList) {
+    public static DetailTvShowFragment newInstance(TvShow tvShow, String singleTvShowGenres) {
         DetailTvShowFragment fragment = new DetailTvShowFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_TV_SHOW, tvShow);
-        args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW, genreNamesList);
+        args.putString(Constants.KEY_SINGLE_TV_SHOW_GENRES, singleTvShowGenres);
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,14 +94,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
         ButterKnife.bind(this, view);
 
-        episodeListLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewEpisodes.setLayoutManager(episodeListLayoutManager);
-
-        LinearLayoutManager videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
-
-        LinearLayoutManager seasonListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewSeasons.setLayoutManager(seasonListLayoutManager);
+        setRecyclersLayouts();
 
         return view;
     }
@@ -113,6 +105,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
         if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
             TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
+            genres = getArguments().getString(Constants.KEY_SINGLE_TV_SHOW_GENRES);
             if (tvShow != null) {
                 detailPresenter.setDetailView(this);
                 detailPresenter.showTvShowDetails(tvShow);
@@ -127,39 +120,24 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showTvDetails(TvShow tvShow) {
-        String releaseDate = " " + DateUtils.formatDate(tvShow.getReleaseDate(),TAG);
+
+        if (tvShow.getBackdropPath() != null){
+            Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(tvShow.getBackdropPath())).into(ivTvShowPoster);
+        } else {
+            Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(ivTvShowPoster);
+        }
 
         tvDetailTvShowTitle.setText(tvShow.getTitle());
-        tvDetailTvShowReleaseDate.setText(releaseDate);
+        tvDetailTvShowReleaseDate.setText(DateUtils.formatDate(tvShow.getReleaseDate(), TAG));
         tvDetailTvShowOverview.setText(tvShow.getOverview());
         tvDetailTvShowRating.setText(String.valueOf(tvShow.getVoteAverage()) + "/10");
         tvDetailTvShowLang.setText(tvShow.getLanguage());
 
-        Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(tvShow.getBackdropPath())).into(ivTvShowPoster);
-
-        listNames = getArguments().getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_TV_SHOW);
-        if (listNames != null){
-            tvTvShowGenre.setText(getAppendedGenreNames(listNames));
+        if(getArguments() != null && getArguments().containsKey(Constants.KEY_SINGLE_TV_SHOW_GENRES)){
+            tvTvShowGenre.setText(getArguments().getString(Constants.KEY_SINGLE_TV_SHOW_GENRES));
         }
 
-        customEpisodeAdapter = new ListEpisodeRecyclerAdapter(detailPresenter);
-        recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
-
-        listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
-        recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
-
-        listSeasonButtonRecyclerAdapter = new ListSeasonButtonRecyclerAdapter(detailPresenter, tvShow.getId());
-        recyclerViewSeasons.setAdapter(listSeasonButtonRecyclerAdapter);
-
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(
-                recyclerViewEpisodes.getContext(),
-                episodeListLayoutManager.getOrientation()
-        );
-
-        itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
-        recyclerViewEpisodes.addItemDecoration(itemDecoration);
-
-        detailPresenter.showTvVideos(tvShow);
+        setAdapters(tvShow.getId());
     }
 
     @Override
@@ -172,7 +150,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         // DO NOTHING
     }
 
-    // NEEDS REFACTORING
     @Override
     public void showSeasonList() {
         listSeasonButtonRecyclerAdapter.notifyDataSetChanged();
@@ -184,6 +161,35 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         recyclerViewEpisodes.setVisibility(View.VISIBLE);
     }
 
+    private void setRecyclersLayouts(){
+
+        LinearLayoutManager videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
+
+        LinearLayoutManager seasonListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewSeasons.setLayoutManager(seasonListLayoutManager);
+
+        LinearLayoutManager episodeListLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewEpisodes.setLayoutManager(episodeListLayoutManager);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(
+                recyclerViewEpisodes.getContext(),
+                episodeListLayoutManager.getOrientation()
+        );
+        itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
+        recyclerViewEpisodes.addItemDecoration(itemDecoration);
+    }
+
+    private void setAdapters(String tvShowId){
+        listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
+        recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
+
+        listSeasonButtonRecyclerAdapter = new ListSeasonButtonRecyclerAdapter(detailPresenter, tvShowId);
+        recyclerViewSeasons.setAdapter(listSeasonButtonRecyclerAdapter);
+
+        customEpisodeAdapter = new ListEpisodeRecyclerAdapter(detailPresenter);
+        recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
+    }
+
     @Override
     public void onTrailerClicked(String videoUrl) {
         callback.onTrailerClick(videoUrl);
@@ -192,7 +198,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        listNames.clear();
         getArguments().clear();
         detailPresenter.destroy();
     }
@@ -201,18 +206,5 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void onDestroy() {
         super.onDestroy();
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
-    }
-
-    private String getAppendedGenreNames (ArrayList<String> genreNamesList){
-        String genreName = "";
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < genreNamesList.size(); i++) {
-            if (i != genreNamesList.size() -1){
-                genreName = builder.append(genreNamesList.get(i)).append(", ").toString();
-            } else {
-                genreName = builder.append(genreNamesList.get(i)).toString();
-            }
-        }
-        return genreName;
     }
 }

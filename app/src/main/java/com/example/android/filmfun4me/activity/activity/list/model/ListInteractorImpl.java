@@ -1,8 +1,5 @@
 package com.example.android.filmfun4me.activity.activity.list.model;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.GenreWrapper;
 import com.example.android.filmfun4me.data.Movie;
@@ -50,7 +47,7 @@ public class ListInteractorImpl implements ListInteractor {
 
     @Override
     public Observable<List<Genre>> getListOfAllMovieGenres() {
-        return moviesWebService.getListOfAllGenres().map(GenreWrapper::getGenreList);
+        return moviesWebService.getListOfAllMovieGenres().map(GenreWrapper::getGenreList);
     }
 
     @Override
@@ -61,6 +58,11 @@ public class ListInteractorImpl implements ListInteractor {
     @Override
     public Observable<List<TvShow>> getListOfHighestRatedTvShows() {
         return tvShowsWebService.getHighestRatedTvShows().map(TvShowWrapper::getTvShowList);
+    }
+
+    @Override
+    public Observable<List<Genre>> getListOfAllTvGenres() {
+        return tvShowsWebService.getListOfAllTvGenres().map(GenreWrapper::getGenreList);
     }
 
 }

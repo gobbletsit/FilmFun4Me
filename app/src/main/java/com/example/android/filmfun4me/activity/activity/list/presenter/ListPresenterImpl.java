@@ -32,6 +32,8 @@ public class ListPresenterImpl implements ListPresenter {
     private List<TvShow> tvShowList = new ArrayList<>(40);
     private List<Genre> genreList = new ArrayList<>(40);
 
+    private String movieGenres;
+    private String tvShowGenres;
 
     public ListPresenterImpl(ListInteractor listInteractor) {
         this.listInteractor = listInteractor;
@@ -40,7 +42,7 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void setMovieView(ListView listView, int pagerPosition) {
         this.view = listView;
-        getGenres();
+        getMovieGenres();
         if (pagerPosition == 0) {
             showMostPopularMovies();
         } else if (pagerPosition == 1) {
@@ -79,10 +81,9 @@ public class ListPresenterImpl implements ListPresenter {
 
     public void onBindMovieListItemAtPosition(int position, ListItemView listItemView) {
         Movie movie = movieList.get(position);
-        String genreName = getSingleGenreName(movie.getGenreIds());
         listItemView.setItemTitle(movie.getTitle());
         listItemView.setItemPoster(movie.getPosterPath());
-        listItemView.setGenreName(genreName);
+        listItemView.setGenreName(getSingleItemAppendedGenres(movie.getGenreIds()));
     }
 
     public int getMovieListItemRowsCount() {
@@ -92,8 +93,7 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void onMovieListItemInteraction(int itemPosition) {
         Movie movie = movieList.get(itemPosition);
-        int[] currentGenreIds = movie.getGenreIds();
-        view.onMovieClicked(movie, getSingleItemGenreList(currentGenreIds, genreList));
+        view.onMovieClicked(movie, getSingleItemAppendedGenres(movie.getGenreIds()));
     }
 
     private void onMovieFetchSuccess(List<Movie> movieList) {
@@ -111,7 +111,7 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void setTvShowView(ListView listView, int pagerPosition) {
         this.view = listView;
-        getGenres();
+        getTvGenres();
         if (pagerPosition == 0) {
             showMostPopularTvShows();
         } else {
@@ -140,10 +140,9 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void onBindTvShowListItemAtPosition(int position, ListItemView listItemView) {
         TvShow tvShow = tvShowList.get(position);
-        String genreName = getSingleGenreName(tvShow.getGenreIds());
         listItemView.setItemTitle(tvShow.getTitle());
         listItemView.setItemPoster(tvShow.getPosterPath());
-        listItemView.setGenreName(genreName);
+        listItemView.setGenreName(getSingleItemAppendedGenres(tvShow.getGenreIds()));
     }
 
     @Override
@@ -154,9 +153,7 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void onTvShowListItemInteraction(int itemPosition) {
         TvShow tvShow = tvShowList.get(itemPosition);
-        int[] currentGenreIds = tvShow.getGenreIds();
-
-        view.onTvShowClicked(tvShow, getSingleItemGenreList(currentGenreIds, genreList));
+        view.onTvShowClicked(tvShow, getSingleItemAppendedGenres(tvShow.getGenreIds()));
     }
 
     private void onTvShowFetchSuccess(List<TvShow> tvShowList) {
@@ -173,8 +170,16 @@ public class ListPresenterImpl implements ListPresenter {
 
     // GENRE
     @Override
-    public void getGenres() {
+    public void getMovieGenres() {
         disposableGenres = listInteractor.getListOfAllMovieGenres()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGenreListFetchSuccess, this::onGenreListFetchFailed);
+    }
+
+    @Override
+    public void getTvGenres() {
+        disposableGenres = listInteractor.getListOfAllTvGenres()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGenreListFetchSuccess, this::onGenreListFetchFailed);
@@ -189,48 +194,22 @@ public class ListPresenterImpl implements ListPresenter {
         view.loadingErrorMessage(e.getMessage());
     }
 
-    private void compareGenreIdsAndLoadGenreList(List<Genre> genreList, ArrayList<String> singleGenreNamesList, int singleGenreId) {
-        // Going through list of all possible genres
-        for (int a = 0; a < genreList.size(); a++) {
-            int preciseGenreId = genreList.get(a).getGenreId();
-            // Comparing results
-            if (preciseGenreId == singleGenreId) {
-                // If the match is found, add to single genre list
-                singleGenreNamesList.add(genreList.get(a).getGenreName());
-                break;
-            }
-        }
-    }
-
-    // To compare to all the genres and get the match when found
-    private ArrayList<String> getSingleItemGenreList(int[] currentGenreIds, List<Genre> genreList) {
-
-        ArrayList<String> singleGenreNamesList = new ArrayList<>(10);
-        // Going through the single item genre list ids
-        for (int singleGenreId : currentGenreIds) {
-            compareGenreIdsAndLoadGenreList(genreList, singleGenreNamesList, singleGenreId);
-        }
-        return singleGenreNamesList;
-    }
-
-    private String getSingleGenreName(int[] currentGenreIds) {
-
-        int singleGenreId;
-
-        String genreName = "";
-
-        for (int currentGenreId : currentGenreIds) {
-            singleGenreId = currentGenreId;
-
-            for (int a = 0; a < genreList.size(); a++) {
-                int preciseGenreId = genreList.get(a).getGenreId();
-
-                if (preciseGenreId == singleGenreId) {
-                    genreName = genreList.get(a).getGenreName();
+    private String getSingleItemAppendedGenres(int[] currentGenreIds) {
+        String appendedGenres = "";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < currentGenreIds.length; i++){
+            int genreId = currentGenreIds[i];
+            for (int a = 0; a < genreList.size(); a++){
+                if (genreId == genreList.get(a).getGenreId()){
+                    if (i != currentGenreIds.length -1){
+                        appendedGenres = stringBuilder.append(genreList.get(a).getGenreName()).append(", ").toString();
+                    } else {
+                        appendedGenres = stringBuilder.append(genreList.get(a).getGenreName()).toString();
+                    }
                 }
             }
         }
-        return genreName;
+        return appendedGenres;
     }
 
     private boolean isViewAttached() {

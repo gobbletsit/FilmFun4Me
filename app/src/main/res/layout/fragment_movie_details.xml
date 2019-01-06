@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.activity.detail.view.DetailMovieFragment">
 
@@ -15,7 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/poster_not_available"
+            android:src="@color/colorPrimaryDark"
             app:layout_constraintBottom_toTopOf="@id/tv_detail_movie_title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -225,6 +226,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:background="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

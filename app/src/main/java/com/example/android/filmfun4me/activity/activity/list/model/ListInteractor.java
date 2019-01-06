@@ -28,6 +28,8 @@ public interface ListInteractor {
 
     Observable<List<TvShow>> getListOfHighestRatedTvShows();
 
+    Observable<List<Genre>> getListOfAllTvGenres();
+
 
 
 }

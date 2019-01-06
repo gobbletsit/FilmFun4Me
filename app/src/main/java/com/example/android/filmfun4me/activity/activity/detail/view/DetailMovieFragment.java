@@ -58,13 +58,12 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @BindView(R.id.recycler_movie_videos) RecyclerView recyclerViewVideos;
     @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
 
-    private LinearLayoutManager videoListLayoutManager;
-    private LinearLayoutManager reviewListLayoutManager;
-
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
+    private ListReviewRecyclerAdapter listReviewsRecyclerAdapter;
 
     // genre list
     ArrayList<String> listNames;
+    private String genres;
 
     private Callback callback;
 
@@ -73,11 +72,11 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
 
-    public static DetailMovieFragment newInstance(Movie movie, ArrayList<String> genreNamesList) {
+    public static DetailMovieFragment newInstance(Movie movie, String singleMovieGenres) {
         DetailMovieFragment fragment = new DetailMovieFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_MOVIE, movie);
-        args.putStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE, genreNamesList);
+        args.putString(Constants.KEY_SINGLE_MOVIE_GENRES, singleMovieGenres);
         fragment.setArguments(args);
         return fragment;
     }
@@ -102,29 +101,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
         ButterKnife.bind(this, view);
 
-        reviewListLayoutManager = new LinearLayoutManager(getActivity());
-        videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
-        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
-
-        ListReviewRecyclerAdapter customReviewAdapter = new ListReviewRecyclerAdapter(detailPresenter);
-        // recycler view
-        reviewListLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
-        recyclerViewReviews.setAdapter(customReviewAdapter);
-
-        listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
-        videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
-        recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
-
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(
-                recyclerViewReviews.getContext(),
-                reviewListLayoutManager.getOrientation()
-        );
-
-        itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
-        recyclerViewReviews.addItemDecoration(itemDecoration);
+        setRecyclersLayouts();
+        setAdapters();
 
         reviewButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +126,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
         if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
             Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
+            genres = getArguments().getString(Constants.KEY_SINGLE_MOVIE_GENRES);
             if (movie != null) {
                 detailPresenter.setDetailView(this);
                 detailPresenter.showMovieDetails(movie);
@@ -158,38 +137,21 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @Override
     public void showMovieDetails(Movie movie) {
 
-        String releaseDate = " " + DateUtils.formatDate(movie.getReleaseDate(), TAG);
+        if (movie.getBackdropPath() != null){
+            Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(movie.getBackdropPath())).into(ivPoster);
+        } else {
+            Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(ivPoster);
+        }
 
         tvDetailMovieTitle.setText(movie.getTitle());
-        tvDetailReleaseDate.setText(releaseDate);
+        tvDetailReleaseDate.setText(DateUtils.formatDate(movie.getReleaseDate(), TAG));
         tvDetailOverview.setText(movie.getOverview());
-        Log.i(TAG, "OVERVIEW = " + movie.getOverview());
         tvDetailRating.setText(String.valueOf(movie.getVoteAverage()) + "/10");
         tvDetailLang.setText(movie.getLanguage());
 
-
-        if (movie.getMovieDetailGenreList() != null){
-            List<Genre> genres = movie.getMovieDetailGenreList();
-            Genre genre = genres.get(0);
-            Log.i(TAG, "DETAIL GENRE IN POSITION 1 = " + genre.getGenreName());
-        } else {
-            Log.e(TAG, "NESTO NE VALJA SA ZANROVIMA");
+        if (getArguments() != null && getArguments().containsKey(Constants.KEY_SINGLE_MOVIE_GENRES)){
+            tvGenre.setText(getArguments().getString(Constants.KEY_SINGLE_MOVIE_GENRES));
         }
-
-
-        String testBackdropPath = BaseUtils.getBackdropPath(movie.getBackdropPath());
-        Log.i(TAG, "TEST BACKDROP PATH IS = " + testBackdropPath);
-        Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(movie.getBackdropPath())).into(ivPoster);
-
-        listNames = getArguments().getStringArrayList(Constants.KEY_GENRE_NAMES_LIST_MOVIE);
-        if (listNames != null){
-            tvGenre.setText(getAppendedGenreNames(listNames));
-        }
-
-
-
-        //detailPresenter.showMovieVideos(movie);
-        //detailPresenter.showMovieReviews(movie);
     }
 
     @Override
@@ -220,8 +182,32 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
     @Override
     public void showReviews() {
+        listReviewsRecyclerAdapter.notifyDataSetChanged();
         tvReviewLabel.setVisibility(View.VISIBLE);
         reviewButtonTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void setRecyclersLayouts(){
+        LinearLayoutManager videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewVideos.setLayoutManager(videoListLayoutManager);
+
+        LinearLayoutManager reviewListLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewReviews.setLayoutManager(reviewListLayoutManager);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(
+                recyclerViewReviews.getContext(),
+                reviewListLayoutManager.getOrientation()
+        );
+
+        itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider_reviews_episodes));
+        recyclerViewReviews.addItemDecoration(itemDecoration);
+    }
+
+    private void setAdapters(){
+        listReviewsRecyclerAdapter = new ListReviewRecyclerAdapter(detailPresenter);
+        recyclerViewReviews.setAdapter(listReviewsRecyclerAdapter);
+
+        listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
+        recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
     }
 
     @Override
@@ -233,22 +219,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //listNames.clear();
         getArguments().clear();
         detailPresenter.destroy();
-    }
-
-    private String getAppendedGenreNames (ArrayList<String> genreNamesList){
-        String genreName = "";
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < genreNamesList.size(); i++) {
-            if (i != genreNamesList.size() -1){
-                genreName = builder.append(genreNamesList.get(i)).append(", ").toString();
-            } else {
-                genreName = builder.append(genreNamesList.get(i)).toString();
-            }
-
-        }
-        return genreName;
     }
 }

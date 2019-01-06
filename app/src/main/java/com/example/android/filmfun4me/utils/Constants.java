@@ -8,6 +8,6 @@ public final class Constants {
 
     public static final String KEY_MOVIE = "movie";
     public static final String KEY_TV_SHOW = "tv_show";
-    public static final String KEY_GENRE_NAMES_LIST_MOVIE = "genreNames";
-    public static final String KEY_GENRE_NAMES_LIST_TV_SHOW = "showGenreNames";
+    public static final String KEY_SINGLE_MOVIE_GENRES = "movie_genres";
+    public static final String KEY_SINGLE_TV_SHOW_GENRES = "show_genres";
 }

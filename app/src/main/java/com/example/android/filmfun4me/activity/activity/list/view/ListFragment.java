@@ -28,6 +28,7 @@ import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.BaseUtils;
+import com.example.android.filmfun4me.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,11 +45,6 @@ public class ListFragment extends Fragment implements ListView {
 
     @Inject
     ListPresenter listPresenter;
-
-    private static final String PAGER_POSITION = "pager_position";
-    private static final String SELECTED_BUTTON = "selectedButton";
-    private static final int BUTTON_MOVIES = 0;
-    private static final int BUTTON_TV_SHOWS = 1;
 
     private int selectedButton;
     private int pagerPosition;
@@ -67,8 +63,8 @@ public class ListFragment extends Fragment implements ListView {
     public static ListFragment newInstance(int position, int selectedButton) {
         ListFragment listFragment = new ListFragment();
         Bundle args = new Bundle();
-        args.putInt(PAGER_POSITION, position);
-        args.putInt(SELECTED_BUTTON, selectedButton);
+        args.putInt(Constants.PAGER_POSITION, position);
+        args.putInt(Constants.SELECTED_BUTTON, selectedButton);
         listFragment.setArguments(args);
         return listFragment;
     }
@@ -77,7 +73,7 @@ public class ListFragment extends Fragment implements ListView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null){
-            pagerPosition = (int) savedInstanceState.get(PAGER_POSITION);
+            pagerPosition = (int) savedInstanceState.get(Constants.PAGER_POSITION);
         }
     }
 
@@ -119,13 +115,13 @@ public class ListFragment extends Fragment implements ListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(PAGER_POSITION) && getArguments().containsKey(SELECTED_BUTTON)){
-            pagerPosition = (int) getArguments().get(PAGER_POSITION);
-            selectedButton = (int) getArguments().get(SELECTED_BUTTON);
+        if (getArguments() != null && getArguments().containsKey(Constants.PAGER_POSITION) && getArguments().containsKey(Constants.SELECTED_BUTTON)){
+            pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
+            selectedButton = (int) getArguments().get(Constants.SELECTED_BUTTON);
 
-            if (isNetworkAvailable()&& selectedButton == BUTTON_MOVIES) {
+            if (isNetworkAvailable()&& selectedButton == Constants.BUTTON_MOVIES) {
                 listPresenter.setMovieView(this, pagerPosition);
-            } else if (isNetworkAvailable() && selectedButton == BUTTON_TV_SHOWS){
+            } else if (isNetworkAvailable() && selectedButton == Constants.BUTTON_TV_SHOWS){
                 listPresenter.setTvShowView(this, pagerPosition);
             }
         }
@@ -163,16 +159,14 @@ public class ListFragment extends Fragment implements ListView {
         recyclerView.setAdapter(scaleInAnimationAdapter);
     }
 
-
-    // ovo dvoje treba mijenjat, samo si ovako napravio kako bi radilo
     @Override
-    public void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList) {
-        callback.onMovieClicked(movie, singleGenreNamesList, selectedButton);
+    public void onMovieClicked(Movie movie, String singleMovieGenres) {
+        callback.onMovieClicked(movie, singleMovieGenres, selectedButton);
     }
 
     @Override
-    public void onTvShowClicked(TvShow tvShow, ArrayList<String> singleGenreNamesList) {
-        callback.onTvShowClicked(tvShow, singleGenreNamesList, selectedButton);
+    public void onTvShowClicked(TvShow tvShow, String singleTvShowGenres) {
+        callback.onTvShowClicked(tvShow, singleTvShowGenres, selectedButton);
     }
 
 
@@ -203,12 +197,11 @@ public class ListFragment extends Fragment implements ListView {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(PAGER_POSITION,pagerPosition);
+        outState.putInt(Constants.PAGER_POSITION,pagerPosition);
     }
 
     public interface Callback {
-        void onMovieClicked(Movie movie, ArrayList<String> singleGenreNamesList, int selectedButton);
-        void onTvShowClicked(TvShow tvShow, ArrayList<String> singleGenreNamesList, int selectedButton);
+        void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
+        void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
     }
-
 }
