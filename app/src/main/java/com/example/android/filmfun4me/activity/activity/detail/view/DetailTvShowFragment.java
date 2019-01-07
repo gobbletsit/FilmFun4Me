@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
@@ -141,7 +142,12 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     }
 
     @Override
-    public void showReviews() {
+    public void showReviewLabel() {
+        // nothing for now
+    }
+
+    @Override
+    public void showReviews(ArrayList<ParentObject> parentObjects) {
         // DO NOTHING
     }
 

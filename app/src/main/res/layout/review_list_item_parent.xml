@@ -8,8 +8,10 @@
         android:id="@+id/parent_review_item_title_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="@color/colorPrimaryMain"
+        android:textSize="16sp"
+        android:padding="22dp"
         android:text="Crime Title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,12 +21,12 @@
     <ImageButton
         android:id="@+id/parent_review_item_expand_arrow"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_height="0dp"
         app:layout_constraintLeft_toRightOf="@+id/parent_review_item_title_text_view"
         app:layout_constraintBottom_toBottomOf="@+id/parent_review_item_title_text_view"
         app:layout_constraintTop_toTopOf="@+id/parent_review_item_title_text_view"
         app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/colorPrimaryMain"
         android:src="@android:drawable/arrow_down_float" />
 
 </android.support.constraint.ConstraintLayout>

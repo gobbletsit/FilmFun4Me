@@ -53,4 +53,6 @@ public interface DetailPresenter {
     void whenTrailerClicked(View view);
 
     void destroy();
+
+    void generateReviews();
 }

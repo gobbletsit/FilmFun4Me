@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
@@ -25,6 +26,8 @@ import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.Constants;
 import com.example.android.filmfun4me.utils.DateUtils;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -104,6 +107,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
                     recyclerViewReviews.setVisibility(View.GONE);
                 } else if (recyclerViewReviews.getVisibility() == View.GONE){
                     btn_drop_review.setText("-");
+                    detailPresenter.generateReviews();
                     recyclerViewReviews.setVisibility(View.VISIBLE);
                 }
             }
@@ -170,12 +174,23 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         listVideosRecyclerAdapter.notifyDataSetChanged();
     }
 
-
     @Override
-    public void showReviews() {
-        listReviewsRecyclerAdapter.notifyDataSetChanged();
+    public void showReviewLabel() {
         tvReviewLabel.setVisibility(View.VISIBLE);
         btn_drop_review.setVisibility(View.VISIBLE);
+    }
+
+
+    @Override
+    public void showReviews(ArrayList<ParentObject> parentObjects) {
+        ListReviewExpandableAdapter mCrimeExpandableAdapter = new ListReviewExpandableAdapter(getActivity(), parentObjects);
+        mCrimeExpandableAdapter.setCustomParentAnimationViewId(R.id.parent_review_item_expand_arrow);
+        mCrimeExpandableAdapter.setParentClickableViewAnimationDefaultDuration();
+        mCrimeExpandableAdapter.setParentAndIconExpandOnClick(true);
+        recyclerViewReviews.setAdapter(mCrimeExpandableAdapter);
+        //listReviewsRecyclerAdapter.notifyDataSetChanged();
+        //tvReviewLabel.setVisibility(View.VISIBLE);
+        //btn_drop_review.setVisibility(View.VISIBLE);
     }
 
     private void setRecyclersLayouts(){
@@ -194,8 +209,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
     private void setAdapters(){
-        listReviewsRecyclerAdapter = new ListReviewRecyclerAdapter(detailPresenter);
-        recyclerViewReviews.setAdapter(listReviewsRecyclerAdapter);
+        //listReviewsRecyclerAdapter = new ListReviewRecyclerAdapter(detailPresenter);
+        //recyclerViewReviews.setAdapter(listReviewsRecyclerAdapter);
 
         listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
         recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);

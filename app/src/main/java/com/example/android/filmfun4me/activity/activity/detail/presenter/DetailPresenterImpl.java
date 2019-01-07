@@ -2,6 +2,7 @@ package com.example.android.filmfun4me.activity.activity.detail.presenter;
 
 import android.view.View;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.example.android.filmfun4me.activity.activity.detail.model.DetailInteractor;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailEpisodeItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailReviewItemView;
@@ -11,6 +12,8 @@ import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.Review;
+import com.example.android.filmfun4me.data.ReviewChild;
+import com.example.android.filmfun4me.data.ReviewParent;
 import com.example.android.filmfun4me.data.Season;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.data.Video;
@@ -89,7 +92,7 @@ public class DetailPresenterImpl implements DetailPresenter {
         this.reviewList.clear();
         this.reviewList.addAll(reviewList);
         if (isViewAttached() && reviewList.size() != 0) {
-            detailView.showReviews();
+            detailView.showReviewLabel();
         }
     }
 
@@ -218,6 +221,24 @@ public class DetailPresenterImpl implements DetailPresenter {
         if (video.getTitle()!= null){
             detailVideoItemView.setVideoTitle(video.getTitle());
         }
+    }
+
+    @Override
+    public void generateReviews() {
+        List<ReviewParent> reviewParentList = new ArrayList<>(100);
+        for (Review review: reviewList){
+            reviewParentList.add(new ReviewParent(review.getReviewAuthor(), review.getReviewContent()));
+        }
+
+        ArrayList<ParentObject> parentObjectArrayList = new ArrayList<>(100);
+        for (ReviewParent reviewParent: reviewParentList){
+            ArrayList<Object> childList = new ArrayList<>();
+            childList.add(new ReviewChild(reviewParent.getReviewContent()));
+            reviewParent.setChildObjectList(childList);
+            parentObjectArrayList.add(reviewParent);
+        }
+
+        detailView.showReviews(parentObjectArrayList);
     }
 
     private boolean isViewAttached() {
