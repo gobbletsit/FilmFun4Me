@@ -51,7 +51,6 @@ public class ListFragment extends Fragment implements ListView {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter customAdapter;
-    private ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     private Callback callback;
 
@@ -182,7 +181,7 @@ public class ListFragment extends Fragment implements ListView {
     }
 
     private void setAnimationAdapter(){
-        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
         // disable the first scroll mode

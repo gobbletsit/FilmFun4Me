@@ -61,10 +61,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
     private ListReviewRecyclerAdapter listReviewsRecyclerAdapter;
 
-    // genre list
-    ArrayList<String> listNames;
-    private String genres;
-
     private Callback callback;
 
     public DetailMovieFragment() {
@@ -126,7 +122,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
 
         if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
             Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
-            genres = getArguments().getString(Constants.KEY_SINGLE_MOVIE_GENRES);
             if (movie != null) {
                 detailPresenter.setDetailView(this);
                 detailPresenter.showMovieDetails(movie);

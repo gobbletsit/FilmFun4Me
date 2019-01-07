@@ -51,10 +51,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
     @BindView(R.id.recycler_season_list) RecyclerView recyclerViewSeasons;
 
-    // genre list
-    ArrayList<String> listNames;
-    private String genres;
-
     private ListEpisodeRecyclerAdapter customEpisodeAdapter;
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
     private ListSeasonButtonRecyclerAdapter listSeasonButtonRecyclerAdapter;
@@ -105,7 +101,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
         if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
             TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
-            genres = getArguments().getString(Constants.KEY_SINGLE_TV_SHOW_GENRES);
             if (tvShow != null) {
                 detailPresenter.setDetailView(this);
                 detailPresenter.showTvShowDetails(tvShow);
