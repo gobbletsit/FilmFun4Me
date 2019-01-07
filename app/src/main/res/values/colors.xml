@@ -5,9 +5,15 @@
     <color name="colorAccent">#C0C0C0</color>
     <color name="colorPrimaryMain">#202020</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBlue">#000545</color>
+    <color name="colorBlue">#29144a</color>
+    <color name="colorBlue2">#34195e</color>
+    <color name="colorReviewItem">#3d3d3d</color>
+    #3d3d3d
 
-    <color name="colorSeasonsAndReviews">#303F9F</color>
+    #1e0f36
+    <color name="colorDarkBlueReviewItem">#1e0f36</color>
+
+    <color name="colorSeasonsAndReviews">#031D44</color>
 
     <color name="colorPopular">#818181</color>
     <color name="colorHighestRated">#927F79</color>

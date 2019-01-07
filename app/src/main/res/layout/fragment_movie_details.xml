@@ -192,7 +192,7 @@
         <TextView
             android:id="@+id/tv_review_label"
             android:layout_width="0dp"
-            android:background="@color/colorPrimaryMain"
+            android:background="@color/colorBlue"
             android:textColor="@color/colorAccent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -213,7 +213,7 @@
             android:padding="6dp"
             android:layout_margin="4dp"
             android:text="@string/detail_reviews_plus"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorBlue"
             android:textColor="@color/colorAccent"
             android:visibility="gone"
             android:textSize="22sp"
