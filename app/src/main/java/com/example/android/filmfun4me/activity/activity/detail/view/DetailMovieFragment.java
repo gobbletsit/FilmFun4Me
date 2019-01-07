@@ -9,26 +9,22 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailPresenter;
-import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.Constants;
 import com.example.android.filmfun4me.utils.DateUtils;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -51,7 +47,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     @BindView(R.id.tv_review_label) TextView tvReviewLabel;
     @BindView(R.id.tv_detail_genre) TextView tvGenre;
 
-    @BindView(R.id.tv_drop_rev_button) TextView reviewButtonTextView;
+    @BindView(R.id.button_drop_rev) Button btn_drop_review;
 
     @BindView(R.id.image_view_poster) ImageView ivPoster;
 
@@ -100,14 +96,14 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         setRecyclersLayouts();
         setAdapters();
 
-        reviewButtonTextView.setOnClickListener(new View.OnClickListener() {
+        btn_drop_review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (recyclerViewReviews.getVisibility() == View.VISIBLE) {
-                    reviewButtonTextView.setText("+");
+                    btn_drop_review.setText("+");
                     recyclerViewReviews.setVisibility(View.GONE);
                 } else if (recyclerViewReviews.getVisibility() == View.GONE){
-                    reviewButtonTextView.setText("-");
+                    btn_drop_review.setText("-");
                     recyclerViewReviews.setVisibility(View.VISIBLE);
                 }
             }
@@ -179,7 +175,7 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     public void showReviews() {
         listReviewsRecyclerAdapter.notifyDataSetChanged();
         tvReviewLabel.setVisibility(View.VISIBLE);
-        reviewButtonTextView.setVisibility(View.VISIBLE);
+        btn_drop_review.setVisibility(View.VISIBLE);
     }
 
     private void setRecyclersLayouts(){
