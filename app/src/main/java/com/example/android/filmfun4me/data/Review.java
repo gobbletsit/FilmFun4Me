@@ -3,13 +3,16 @@ package com.example.android.filmfun4me.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
  * Created by gobov on 1/5/2018.
  */
 
-public class Review implements Parcelable {
+public class Review implements Parcelable, ParentObject {
 
     @SerializedName("id")
     private String reviewId;
@@ -22,6 +25,8 @@ public class Review implements Parcelable {
 
     @SerializedName("media_title")
     private String reviewTitle;
+
+    private List<Object> childrenList;
 
 
     // Has to be read in the same order as it is written in "writeToParcel" method
@@ -87,5 +92,15 @@ public class Review implements Parcelable {
 
     public void setReviewTitle(String reviewTitle) {
         this.reviewTitle = reviewTitle;
+    }
+
+    @Override
+    public List<Object> getChildObjectList() {
+        return childrenList;
+    }
+
+    @Override
+    public void setChildObjectList(List<Object> list) {
+        this.childrenList = list;
     }
 }
