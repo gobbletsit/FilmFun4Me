@@ -160,6 +160,11 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
     @Override
+    public void showEpisodes(ArrayList<ParentObject> parentObjects) {
+        // nothing here
+    }
+
+    @Override
     public void onTrailerClicked(String videoUrl) {
         callback.onTrailerClick(videoUrl);
     }

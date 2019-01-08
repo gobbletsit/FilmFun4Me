@@ -64,7 +64,12 @@ public class ListEpisodeRecyclerAdapter extends RecyclerView.Adapter<ListEpisode
 
         @Override
         public void setEpisodePoster(String episodePosterPath) {
-            Picasso.with(context).load(BaseUtils.getPosterPath(episodePosterPath)).into(iv_episode_poster);
+            if (episodePosterPath != null){
+                Picasso.with(context).load(BaseUtils.getPosterPath(episodePosterPath)).into(iv_episode_poster);
+            } else {
+                Picasso.with(context).load(R.drawable.poster_not_available).into(iv_episode_poster);
+            }
+
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.android.filmfun4me.activity.activity.detail.presenter;
 
+import android.util.Log;
 import android.view.View;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
@@ -10,6 +11,7 @@ import com.example.android.filmfun4me.activity.activity.detail.view.DetailSeason
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailVIdeoItemView;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailView;
 import com.example.android.filmfun4me.data.Episode;
+import com.example.android.filmfun4me.data.EpisodeChild;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.Review;
 import com.example.android.filmfun4me.data.ReviewChild;
@@ -152,6 +154,7 @@ public class DetailPresenterImpl implements DetailPresenter {
         this.episodeList.clear();
         this.episodeList.addAll(episodeList);
         if (isViewAttached()) {
+            generateEpisodes();
             detailView.showEpisodeList();
         }
     }
@@ -239,6 +242,20 @@ public class DetailPresenterImpl implements DetailPresenter {
         }
 
         detailView.showReviews(parentObjectArrayList);
+    }
+
+    @Override
+    public void generateEpisodes() {
+        ArrayList<ParentObject> parentObjectArrayList = new ArrayList<>(100);
+        for (Episode episode: episodeList){
+            ArrayList<Object> childList = new ArrayList<>();
+            childList.add(new EpisodeChild(episode.getOverview()));
+            episode.setChildObjectList(childList);
+            parentObjectArrayList.add(episode);
+        }
+        Log.i(DetailPresenterImpl.class.getSimpleName(), "generateEpisodes: parent object aray list size = " + parentObjectArrayList.size());
+
+        detailView.showEpisodes(parentObjectArrayList);
     }
 
     private boolean isViewAttached() {

@@ -3,13 +3,17 @@ package com.example.android.filmfun4me.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gobov on 1/27/2018.
  */
 
-public class Episode implements Parcelable {
+public class Episode implements Parcelable, ParentObject {
 
     @SerializedName("name")
     private String name;
@@ -26,6 +30,13 @@ public class Episode implements Parcelable {
     @SerializedName("still_path")
     private String posterPath;
 
+    @SerializedName("episode_number")
+    private int episodeNumber;
+
+    @SerializedName("season_number")
+    private int seasonNumber;
+
+    private List<Object> childrenList;
 
     public Episode() {
     }
@@ -91,6 +102,22 @@ public class Episode implements Parcelable {
         this.posterPath = posterPath;
     }
 
+    public int getEpisodeNumber() {
+        return episodeNumber;
+    }
+
+    public void setEpisodeNumber(int episodeNumber) {
+        this.episodeNumber = episodeNumber;
+    }
+
+    public int getSeasonNumber() {
+        return seasonNumber;
+    }
+
+    public void setSeasonNumber(int seasonNumber) {
+        this.seasonNumber = seasonNumber;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -105,5 +132,17 @@ public class Episode implements Parcelable {
         dest.writeString(airDate);
         dest.writeDouble(voteAverage);
         dest.writeString(posterPath);
+    }
+
+    // expandable recycler adapter
+    @Override
+    public List<Object> getChildObjectList() {
+        return childrenList;
+    }
+
+    // expandable recycler adapter
+    @Override
+    public void setChildObjectList(List<Object> list) {
+        this.childrenList = list;
     }
 }

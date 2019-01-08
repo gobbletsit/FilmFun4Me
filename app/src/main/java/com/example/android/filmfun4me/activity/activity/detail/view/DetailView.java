@@ -34,6 +34,8 @@ public interface DetailView {
 
     void showEpisodeList();
 
+    void showEpisodes(ArrayList<ParentObject> parentObjects);
+
     void onTrailerClicked(String videoUrl);
 
 }

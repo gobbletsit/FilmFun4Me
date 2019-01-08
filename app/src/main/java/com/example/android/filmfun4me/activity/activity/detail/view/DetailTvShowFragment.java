@@ -158,8 +158,17 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showEpisodeList() {
-        customEpisodeAdapter.notifyDataSetChanged();
+        //customEpisodeAdapter.notifyDataSetChanged();
         recyclerViewEpisodes.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showEpisodes(ArrayList<ParentObject> parentObjects) {
+        ListEpisodeExpandableAdapter listEpisodeExpandableAdapter = new ListEpisodeExpandableAdapter(getActivity(), parentObjects);
+        listEpisodeExpandableAdapter.setCustomParentAnimationViewId(R.id.ib_expand_arrow);
+        listEpisodeExpandableAdapter.setParentClickableViewAnimationDefaultDuration();
+        listEpisodeExpandableAdapter.setParentAndIconExpandOnClick(true);
+        recyclerViewEpisodes.setAdapter(listEpisodeExpandableAdapter);
     }
 
     private void setRecyclersLayouts(){
@@ -187,8 +196,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         listSeasonButtonRecyclerAdapter = new ListSeasonButtonRecyclerAdapter(detailPresenter, tvShowId);
         recyclerViewSeasons.setAdapter(listSeasonButtonRecyclerAdapter);
 
-        customEpisodeAdapter = new ListEpisodeRecyclerAdapter(detailPresenter);
-        recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
+        //customEpisodeAdapter = new ListEpisodeRecyclerAdapter(detailPresenter);
+        //recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
     }
 
     @Override
