@@ -26,9 +26,7 @@ public interface DetailView {
 
     void showVideos();
 
-    void showReviewLabel();
-
-    void showReviews(ArrayList<ParentObject> parentObjects);
+    void showReviews();
 
     void showSeasonList();
 

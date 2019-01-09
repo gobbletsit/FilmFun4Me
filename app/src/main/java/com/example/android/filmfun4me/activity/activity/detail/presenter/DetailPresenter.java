@@ -54,7 +54,5 @@ public interface DetailPresenter {
 
     void destroy();
 
-    void generateReviews();
-
     void generateEpisodes();
 }

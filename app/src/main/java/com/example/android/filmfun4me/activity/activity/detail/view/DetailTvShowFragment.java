@@ -142,12 +142,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     }
 
     @Override
-    public void showReviewLabel() {
-        // nothing for now
-    }
-
-    @Override
-    public void showReviews(ArrayList<ParentObject> parentObjects) {
+    public void showReviews() {
         // DO NOTHING
     }
 

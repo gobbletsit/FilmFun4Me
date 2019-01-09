@@ -107,7 +107,6 @@ public class DetailMovieFragment extends Fragment implements DetailView {
                     recyclerViewReviews.setVisibility(View.GONE);
                 } else if (recyclerViewReviews.getVisibility() == View.GONE){
                     btn_drop_review.setText("-");
-                    detailPresenter.generateReviews();
                     recyclerViewReviews.setVisibility(View.VISIBLE);
                 }
             }
@@ -180,22 +179,10 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
     @Override
-    public void showReviewLabel() {
+    public void showReviews() {
+        listReviewsRecyclerAdapter.notifyDataSetChanged();
         tvReviewLabel.setVisibility(View.VISIBLE);
         btn_drop_review.setVisibility(View.VISIBLE);
-    }
-
-
-    @Override
-    public void showReviews(ArrayList<ParentObject> parentObjects) {
-        ListReviewExpandableAdapter mCrimeExpandableAdapter = new ListReviewExpandableAdapter(getActivity(), parentObjects);
-        mCrimeExpandableAdapter.setCustomParentAnimationViewId(R.id.parent_review_item_expand_arrow);
-        mCrimeExpandableAdapter.setParentClickableViewAnimationDefaultDuration();
-        mCrimeExpandableAdapter.setParentAndIconExpandOnClick(true);
-        recyclerViewReviews.setAdapter(mCrimeExpandableAdapter);
-        //listReviewsRecyclerAdapter.notifyDataSetChanged();
-        //tvReviewLabel.setVisibility(View.VISIBLE);
-        //btn_drop_review.setVisibility(View.VISIBLE);
     }
 
     private void setRecyclersLayouts(){
@@ -214,8 +201,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
     }
 
     private void setAdapters(){
-        //listReviewsRecyclerAdapter = new ListReviewRecyclerAdapter(detailPresenter);
-        //recyclerViewReviews.setAdapter(listReviewsRecyclerAdapter);
+        listReviewsRecyclerAdapter = new ListReviewRecyclerAdapter(detailPresenter);
+        recyclerViewReviews.setAdapter(listReviewsRecyclerAdapter);
 
         listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
         recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
