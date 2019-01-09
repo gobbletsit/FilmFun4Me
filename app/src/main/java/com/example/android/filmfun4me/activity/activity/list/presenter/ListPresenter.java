@@ -3,6 +3,7 @@ package com.example.android.filmfun4me.activity.activity.list.presenter;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.android.filmfun4me.activity.activity.list.view.ListItemView;
@@ -50,6 +51,8 @@ public interface ListPresenter {
 
     // both
     void destroy();
+
+    void showSearchResults(String searchQuery);
 
 }
 

@@ -46,6 +46,11 @@ public class ListInteractorImpl implements ListInteractor {
     }
 
     @Override
+    public Observable<List<Movie>> getListOfSearchedMovies(String searchQuery) {
+        return moviesWebService.getListOfMoviesBySearch(searchQuery).map(MoviesWrapper::getMovieList);
+    }
+
+    @Override
     public Observable<List<Genre>> getListOfAllMovieGenres() {
         return moviesWebService.getListOfAllMovieGenres().map(GenreWrapper::getGenreList);
     }

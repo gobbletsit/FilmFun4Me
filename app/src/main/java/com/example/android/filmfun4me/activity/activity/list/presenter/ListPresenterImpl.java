@@ -1,5 +1,8 @@
 package com.example.android.filmfun4me.activity.activity.list.presenter;
 
+import android.util.Log;
+import android.widget.SearchView;
+
 import com.example.android.filmfun4me.activity.activity.list.model.ListInteractor;
 import com.example.android.filmfun4me.activity.activity.list.view.ListItemView;
 import com.example.android.filmfun4me.activity.activity.list.view.ListView;
@@ -10,10 +13,13 @@ import com.example.android.filmfun4me.utils.RxUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by gobov on 12/21/2017.
@@ -34,6 +40,8 @@ public class ListPresenterImpl implements ListPresenter {
 
     private String movieGenres;
     private String tvShowGenres;
+
+    private PublishSubject publishSubject;
 
     public ListPresenterImpl(ListInteractor listInteractor) {
         this.listInteractor = listInteractor;
@@ -105,6 +113,7 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     private void onMovieFetchFailed(Throwable e) {
+        Log.e(ListPresenterImpl.class.getSimpleName(), "onMovieFetchFailed: = " + e);
         view.loadingErrorMessage(e.getMessage());
     }
 
@@ -227,5 +236,33 @@ public class ListPresenterImpl implements ListPresenter {
         view = null;
         RxUtils.unsubscribe(disposableSubscription);
         RxUtils.unsubscribe(disposableGenres);
+    }
+
+    @Override
+    public void showSearchResults(String searchQuery) {
+        if (publishSubject == null){
+            publishSubject = PublishSubject.create();
+            publishSubject
+                    .debounce(300, TimeUnit.MILLISECONDS)
+                    .distinctUntilChanged()
+                    .switchMap(searchValue -> listInteractor.getListOfSearchedMovies(searchQuery)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()))
+                    .subscribeWith(new DisposableObserver<List<Movie>>() {
+                        @Override
+                        public void onNext(List<Movie> movieList) {
+                            onMovieFetchSuccess(movieList);
+                        }
+                        @Override
+                        public void onError(Throwable e) {
+                            onMovieFetchFailed(e);
+                        }
+                        @Override
+                        public void onComplete() {
+                            onMovieFetchSuccess(movieList);
+                        }
+                    });
+        }
+        publishSubject.onNext(searchQuery);
     }
 }

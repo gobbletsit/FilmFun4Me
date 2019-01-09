@@ -1,6 +1,7 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,10 +10,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -24,6 +30,7 @@ import android.widget.Toast;
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.list.presenter.ListPresenter;
+import com.example.android.filmfun4me.activity.activity.main.view.MainActivity;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
@@ -87,6 +94,7 @@ public class ListFragment extends Fragment implements ListView {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
+        setHasOptionsMenu(true);
 
         ((BaseApplication) getActivity().getApplication()).createListComponent().inject(this);
 
@@ -194,6 +202,34 @@ public class ListFragment extends Fragment implements ListView {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(Constants.PAGER_POSITION,pagerPosition);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.options_menu, menu);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        if (searchView != null){
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if (!query.isEmpty()){
+                        listPresenter.showSearchResults(query);
+                    }
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    listPresenter.showSearchResults(newText);
+                    return false;
+                }
+            });
+        }
+
     }
 
     public interface Callback {

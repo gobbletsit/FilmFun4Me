@@ -21,6 +21,8 @@ public interface ListInteractor {
 
     Observable<List<Movie>> getListOfUpcomingMovies();
 
+    Observable<List<Movie>> getListOfSearchedMovies(String searchQuery);
+
     // List of all possible genres
     Observable<List<Genre>> getListOfAllMovieGenres();
 
@@ -29,7 +31,5 @@ public interface ListInteractor {
     Observable<List<TvShow>> getListOfHighestRatedTvShows();
 
     Observable<List<Genre>> getListOfAllTvGenres();
-
-
 
 }

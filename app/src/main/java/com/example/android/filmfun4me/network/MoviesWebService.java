@@ -10,6 +10,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 /**
@@ -39,6 +40,7 @@ public interface MoviesWebService {
     @GET("3/genre/movie/list")
     Observable<GenreWrapper> getListOfAllMovieGenres();
 
-    // will implement search by genre
+    @GET("3/search/movie?")
+    Observable<MoviesWrapper> getListOfMoviesBySearch(@Query("query") String searchQuery);
 
 }
