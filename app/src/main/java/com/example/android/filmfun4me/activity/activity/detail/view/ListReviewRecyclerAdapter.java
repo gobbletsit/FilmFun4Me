@@ -1,6 +1,5 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,14 +36,16 @@ public class ListReviewRecyclerAdapter extends RecyclerView.Adapter<ListReviewRe
         return detailPresenter.getReviewListItemRowsCount();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements DetailReviewItemView {
+    class ViewHolder extends RecyclerView.ViewHolder implements DetailReviewItemView, View.OnClickListener {
 
+        @BindView(R.id.review_item_container) ViewGroup reviewItemContainer;
         @BindView(R.id.tv_review_author) TextView tvReviewAuthor;
         @BindView(R.id.tv_review_content) TextView tvReviewContent;
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            reviewItemContainer.setOnClickListener(this);
         }
 
         @Override
@@ -55,6 +56,15 @@ public class ListReviewRecyclerAdapter extends RecyclerView.Adapter<ListReviewRe
         @Override
         public void setReviewContent(String reviewContent) {
             tvReviewContent.setText(reviewContent);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (tvReviewContent.getMaxLines() == 3){
+                tvReviewContent.setMaxLines(100);
+            } else {
+                tvReviewContent.setMaxLines(3);
+            }
         }
     }
 }

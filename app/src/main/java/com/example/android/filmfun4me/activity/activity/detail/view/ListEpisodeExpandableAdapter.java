@@ -10,7 +10,6 @@ import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.data.Episode;
 import com.example.android.filmfun4me.data.EpisodeChild;
-import com.example.android.filmfun4me.data.Review;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -49,7 +48,7 @@ public class ListEpisodeExpandableAdapter extends ExpandableRecyclerAdapter<Epis
         } else {
             Picasso.with(context).load(R.drawable.poster_not_available).into(episodeParentViewHolder.imv_episode_poster);
         }
-        episodeParentViewHolder.tv_season_and_episode_number.setText("SO" + String.valueOf(episode.getSeasonNumber() + " EP" + String.valueOf(episode.getEpisodeNumber())));
+        episodeParentViewHolder.tv_season_and_episode_number.setText(formatSeasonAndEpisodeString(String.valueOf(episode.getSeasonNumber()), String.valueOf(episode.getEpisodeNumber())));
         episodeParentViewHolder.tv_episode_title.setText(episode.getName());
         episodeParentViewHolder.tv_episode_air_date.setText(DateUtils.formatDate(episode.getAirDate(), getClass().getSimpleName()));
 
@@ -59,5 +58,9 @@ public class ListEpisodeExpandableAdapter extends ExpandableRecyclerAdapter<Epis
     public void onBindChildViewHolder(EpisodeChildViewHolder episodeChildViewHolder, int i, Object o) {
         EpisodeChild episodeChild = (EpisodeChild) o;
         episodeChildViewHolder.episodeOverview.setText(episodeChild.getEpisodeOverview());
+    }
+
+    private String formatSeasonAndEpisodeString(String seasonNumber, String episodeNumber){
+        return "SO" + seasonNumber + " EP" + episodeNumber;
     }
 }
