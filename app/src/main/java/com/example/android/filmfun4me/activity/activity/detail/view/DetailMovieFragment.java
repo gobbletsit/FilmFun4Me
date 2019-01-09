@@ -34,7 +34,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailMovieFragment extends Fragment implements DetailView {
+public class DetailMovieFragment extends Fragment implements DetailView,View.OnClickListener {
 
     private static final String TAG = DetailMovieFragment.class.getSimpleName();
 
@@ -99,18 +99,8 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         setRecyclersLayouts();
         setAdapters();
 
-        btn_drop_review.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (recyclerViewReviews.getVisibility() == View.VISIBLE) {
-                    btn_drop_review.setText("+");
-                    recyclerViewReviews.setVisibility(View.GONE);
-                } else if (recyclerViewReviews.getVisibility() == View.GONE){
-                    btn_drop_review.setText("-");
-                    recyclerViewReviews.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        btn_drop_review.setOnClickListener(this);
+        tvReviewLabel.setOnClickListener(this);
 
         return view;
     }
@@ -219,5 +209,17 @@ public class DetailMovieFragment extends Fragment implements DetailView {
         super.onDestroyView();
         getArguments().clear();
         detailPresenter.destroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (recyclerViewReviews.getVisibility() == View.VISIBLE) {
+            btn_drop_review.setText("+");
+            recyclerViewReviews.setVisibility(View.GONE);
+        } else if (recyclerViewReviews.getVisibility() == View.GONE){
+            btn_drop_review.setText("-");
+            recyclerViewReviews.setVisibility(View.VISIBLE);
+            recyclerViewReviews.requestFocus();
+        }
     }
 }

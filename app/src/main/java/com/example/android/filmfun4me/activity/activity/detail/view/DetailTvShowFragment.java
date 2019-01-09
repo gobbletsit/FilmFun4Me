@@ -155,6 +155,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void showEpisodeList() {
         //customEpisodeAdapter.notifyDataSetChanged();
         recyclerViewEpisodes.setVisibility(View.VISIBLE);
+        recyclerViewEpisodes.requestFocus();
     }
 
     @Override

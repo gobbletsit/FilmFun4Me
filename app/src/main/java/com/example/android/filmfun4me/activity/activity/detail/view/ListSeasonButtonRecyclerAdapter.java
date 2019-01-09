@@ -57,7 +57,6 @@ public class ListSeasonButtonRecyclerAdapter extends RecyclerView.Adapter<ListSe
         @Override
         public void onClick(View v) {
             detailPresenter.onSeasonListItemInteraction(tvShowId, getAdapterPosition());
-            seasonButton.setSelected(true);
         }
     }
 }

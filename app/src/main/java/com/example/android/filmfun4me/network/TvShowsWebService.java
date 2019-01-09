@@ -16,10 +16,10 @@ import retrofit2.http.Path;
 
 public interface TvShowsWebService {
 
-    @GET("3/discover/tv?sort_by=popularity.desc")
+    @GET("3/tv/popular")
     io.reactivex.Observable<TvShowWrapper> getPopularTvShows();
 
-    @GET("3/discover/tv?sort_by=vote_average.desc")
+    @GET("3/tv/top_rated")
     io.reactivex.Observable<TvShowWrapper> getHighestRatedTvShows();
 
     @GET("3/tv/{tv_id}")
@@ -37,5 +37,6 @@ public interface TvShowsWebService {
     @GET("3/tv/{tv_id}/season/{season_number}")
     io.reactivex.Observable<EpisodeWrapper> getEpisodesFromService(@Path("tv_id") String tvId, @Path("season_number") int seasonNumber);
 
+    // will implement search by genre
 
 }

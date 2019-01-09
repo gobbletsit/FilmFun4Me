@@ -48,13 +48,15 @@ public class ListReviewRecyclerAdapter extends RecyclerView.Adapter<ListReviewRe
         @BindView(R.id.review_item_container) ViewGroup reviewItemContainer;
         @BindView(R.id.tv_review_author) TextView tvReviewAuthor;
         @BindView(R.id.tv_review_content) TextView tvReviewContent;
-        @BindView(R.id.ib_expand_review) ImageButton ibExpandReview;
+        @BindView(R.id.ib_expand_content) ImageButton ibExpandReview;
+        @BindView(R.id.ib_contract_content) ImageButton ibContractReview;
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             reviewItemContainer.setOnClickListener(this);
             ibExpandReview.setOnClickListener(this);
+            ibContractReview.setOnClickListener(this);
         }
 
         @Override
@@ -73,9 +75,11 @@ public class ListReviewRecyclerAdapter extends RecyclerView.Adapter<ListReviewRe
             if (tvReviewContent.getMaxLines() == 3){
                 tvReviewContent.setMaxLines(100);
                 Picasso.with(context).load(android.R.drawable.arrow_up_float).into(ibExpandReview);
+                ibContractReview.setVisibility(View.VISIBLE);
             } else {
                 tvReviewContent.setMaxLines(3);
                 Picasso.with(context).load(android.R.drawable.arrow_down_float).into(ibExpandReview);
+                ibContractReview.setVisibility(View.GONE);
             }
         }
 

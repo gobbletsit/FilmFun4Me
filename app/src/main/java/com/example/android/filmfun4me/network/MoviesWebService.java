@@ -18,16 +18,15 @@ import retrofit2.http.Path;
 
 public interface MoviesWebService {
 
-    @GET("3/discover/movie?sort_by=popularity.desc")
+    @GET("3/movie/popular?")
     io.reactivex.Observable<MoviesWrapper> popularMovies();
 
-    @GET("3/discover/movie/?certification_country=US&certification=R&sort_by=vote_average.desc")
+    @GET("3/movie/top_rated?")
     io.reactivex.Observable<MoviesWrapper> highestRatedMovies();
 
-    @GET("3/discover/movie?primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22")
+    @GET("3/movie/upcoming?")
     io.reactivex.Observable<MoviesWrapper> upcomingMovies();
 
-    // need to implement this, and pass on movieId instead of Movie parcelable(refactor)
     @GET("3/movie/{movieId}")
     Observable<Movie> getMovieDetails(@Path("movieId")String movieId);
 
@@ -39,5 +38,7 @@ public interface MoviesWebService {
 
     @GET("3/genre/movie/list")
     Observable<GenreWrapper> getListOfAllMovieGenres();
+
+    // will implement search by genre
 
 }
