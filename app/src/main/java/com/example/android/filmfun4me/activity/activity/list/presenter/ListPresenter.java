@@ -49,6 +49,9 @@ public interface ListPresenter {
 
     void getTvGenres();
 
+
+    void setMovieSearchView(ListView listView);
+
     // both
     void destroy();
 

@@ -22,6 +22,7 @@ public interface ListView {
 
     void setUpTvShowView();
 
+    void setUpMovieSearchView();
 
     // Click methods
     void onMovieClicked(Movie movie, String singleMovieGenres);

@@ -41,7 +41,7 @@ public class ListFragmentPagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // you will set which names to retrieve based on SELECTED BUTTON
+        // you will set which titles to retrieve based on SELECTED BUTTON
         if (selectedButton == 0){
             if (position == 0){
                 return "Most Popular";

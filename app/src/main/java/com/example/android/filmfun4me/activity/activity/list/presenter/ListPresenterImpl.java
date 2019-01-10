@@ -1,7 +1,6 @@
 package com.example.android.filmfun4me.activity.activity.list.presenter;
 
 import android.util.Log;
-import android.widget.SearchView;
 
 import com.example.android.filmfun4me.activity.activity.list.model.ListInteractor;
 import com.example.android.filmfun4me.activity.activity.list.view.ListItemView;
@@ -239,30 +238,52 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     @Override
-    public void showSearchResults(String searchQuery) {
-        if (publishSubject == null){
-            publishSubject = PublishSubject.create();
-            publishSubject
-                    .debounce(300, TimeUnit.MILLISECONDS)
-                    .distinctUntilChanged()
-                    .switchMap(searchValue -> listInteractor.getListOfSearchedMovies(searchQuery)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread()))
-                    .subscribeWith(new DisposableObserver<List<Movie>>() {
-                        @Override
-                        public void onNext(List<Movie> movieList) {
-                            onMovieFetchSuccess(movieList);
-                        }
-                        @Override
-                        public void onError(Throwable e) {
-                            onMovieFetchFailed(e);
-                        }
-                        @Override
-                        public void onComplete() {
-                            onMovieFetchSuccess(movieList);
-                        }
-                    });
+    public void showSearchResults(String query) {
+        if (!query.contentEquals("")){
+            //if (publishSubject == null) {
+                publishSubject = PublishSubject.create();
+                publishSubject
+                        .debounce(300, TimeUnit.MILLISECONDS)
+                        .distinctUntilChanged()
+                        .switchMap(searchValue -> listInteractor.getListOfSearchedMovies(query)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread()))
+                        .subscribeWith(new DisposableObserver<List<Movie>>() {
+                            @Override
+                            public void onNext(List<Movie> response) {
+                                movieList.clear();
+                                movieList = response;
+                                view.setUpMovieSearchView();
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                onSearchFetchFailed(e);
+                            }
+                            @Override
+                            public void onComplete() {
+                                //On complete
+                            }
+                        });
+            //}
+            publishSubject.onNext(query);
         }
-        publishSubject.onNext(searchQuery);
+
+    }
+
+    @Override
+    public void setMovieSearchView(ListView listView) {
+        this.view = listView;
+        view.setUpMovieView();
+
+    }
+
+    private void onSearchFetchSuccess(List<Movie> movieList){
+        this.movieList.addAll(movieList);
+
+    }
+
+    private void onSearchFetchFailed(Throwable e){
+        view.loadingErrorMessage(e.toString());
+        Log.e(ListPresenterImpl.class.getSimpleName(), "SEARCH FAILED =" + e.toString());
     }
 }

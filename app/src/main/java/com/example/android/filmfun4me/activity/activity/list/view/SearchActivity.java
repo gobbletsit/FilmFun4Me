@@ -1,25 +1,20 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
 
-import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
-import com.example.android.filmfun4me.activity.activity.detail.view.DetailTvShowFragment;
 import com.example.android.filmfun4me.activity.activity.list.presenter.ListPresenter;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
@@ -27,43 +22,29 @@ import com.example.android.filmfun4me.utils.Constants;
 
 import javax.inject.Inject;
 
-import static com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity.DETAIL_TV_SHOW_FRAG;
 
-public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
-
-    private static final String LIST_FRAG = "list_frag";
+public class SearchActivity extends AppCompatActivity implements ListFragment.Callback {
 
     @Inject
     ListPresenter listPresenter;
 
-    private FrameLayout searchFragmentLayout;
-    private TabLayout tabLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_search);
 
-        ((BaseApplication) this.getApplication()).createListComponent().inject(this);
-
-        searchFragmentLayout = findViewById(R.id.root_list_search_results_container);
-        tabLayout = findViewById(R.id.tab_layout_list);
-        ViewPager viewPager = this.findViewById(R.id.view_pager_list);
-
-        int selectedButton;
-        //Intent intent = getIntent();
-
-        if (getIntent() != null){
-            Bundle extras = getIntent().getExtras();
-            if (extras != null){
-                selectedButton = extras.getInt(Constants.SELECTED_BUTTON);
-                setTitle(getStringTitle(selectedButton));
-                ListFragmentPagerAdapter listFragmentPagerAdapter = new ListFragmentPagerAdapter(this, getSupportFragmentManager(), selectedButton);
-                /*tabLayout.setVisibility(View.VISIBLE);
-                searchFragmentLayout.setVisibility(View.INVISIBLE);*/
-                viewPager.setAdapter(listFragmentPagerAdapter);
-                tabLayout.setupWithViewPager(viewPager);
-            }
+        // Get the intent, verify the action and get the query
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            onSearchRequested();
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            ListFragment fragment = ListFragment.newSearchInstance();
+            transaction.replace(R.id.root_activity_search, fragment);
+            transaction.commit();
+            listPresenter.showSearchResults(query);
         }
     }
 
@@ -91,16 +72,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     @Override
     public void onSearchItemClick() {
-        /*Intent startSearchActivity = new Intent(this, SearchActivity.class);
-        startActivity(startSearchActivity);*/
-    }
-
-    private String getStringTitle(int selectedButton){
-        if (selectedButton == 0){
-            return "Movies";
-        } else {
-            return "TV shows";
-        }
+        // nothing here
     }
 
     /*@Override
@@ -129,22 +101,15 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         });
 
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search:
-                android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
-                ListFragment fragment = ListFragment.newSearchInstance();
-                android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.root_list_search_results_container, fragment);
-                tabLayout.setVisibility(View.GONE);
-                searchFragmentLayout.setVisibility(View.VISIBLE);
-                transaction.commit();
-
+            case android.R.id.home:
+                this.onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 }

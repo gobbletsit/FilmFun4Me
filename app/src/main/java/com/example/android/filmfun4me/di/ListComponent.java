@@ -1,5 +1,6 @@
 package com.example.android.filmfun4me.di;
 
+import com.example.android.filmfun4me.activity.activity.list.view.ListActivity;
 import com.example.android.filmfun4me.activity.activity.list.view.ListFragment;
 
 import javax.inject.Inject;
@@ -16,5 +17,7 @@ import dagger.Subcomponent;
 public interface ListComponent {
 
     ListFragment inject(ListFragment fragment);
+
+    ListActivity inject(ListActivity listActivity);
 
 }

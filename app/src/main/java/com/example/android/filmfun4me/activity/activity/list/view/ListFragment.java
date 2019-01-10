@@ -58,6 +58,7 @@ public class ListFragment extends Fragment implements ListView {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter customAdapter;
+    private ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     private Callback callback;
 
@@ -72,6 +73,14 @@ public class ListFragment extends Fragment implements ListView {
         args.putInt(Constants.PAGER_POSITION, position);
         args.putInt(Constants.SELECTED_BUTTON, selectedButton);
         listFragment.setArguments(args);
+        return listFragment;
+    }
+
+    public static ListFragment newSearchInstance() {
+        ListFragment listFragment = new ListFragment();
+        /*Bundle args = new Bundle();
+        args.putString(SearchManager.QUERY, query);
+        listFragment.setArguments(args);*/
         return listFragment;
     }
 
@@ -130,8 +139,12 @@ public class ListFragment extends Fragment implements ListView {
                 listPresenter.setMovieView(this, pagerPosition);
             } else if (isNetworkAvailable() && selectedButton == Constants.BUTTON_TV_SHOWS){
                 listPresenter.setTvShowView(this, pagerPosition);
+            } else {
+                listPresenter.setMovieSearchView(this);
             }
-        }
+        } /*else if (isNetworkAvailable()){
+            listPresenter.setMovieSearchView(this);
+        }*/
     }
 
 
@@ -151,6 +164,12 @@ public class ListFragment extends Fragment implements ListView {
     public void setUpTvShowView() {
         customAdapter = new ListTvShowRecyclerAdapter(listPresenter);
         setAnimationAdapter();
+    }
+
+    @Override
+    public void setUpMovieSearchView() {
+        customAdapter.notifyDataSetChanged();
+        scaleInAnimationAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -189,7 +208,7 @@ public class ListFragment extends Fragment implements ListView {
     }
 
     private void setAnimationAdapter(){
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
+        scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
         // disable the first scroll mode
@@ -209,31 +228,51 @@ public class ListFragment extends Fragment implements ListView {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.options_menu, menu);
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        if (searchView != null){
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    if (!query.isEmpty()){
-                        listPresenter.showSearchResults(query);
-                    }
-                    return false;
-                }
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    listPresenter.showSearchResults(newText);
-                    return false;
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                if (pagerPosition == 0){
+                    listPresenter.showMostPopularMovies();
+                } else if (pagerPosition == 1){
+                    listPresenter.showHighestRatedMovies();
+                } else {
+                    listPresenter.showUpcomingMovies();
                 }
-            });
+                return false;
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                listPresenter.showSearchResults(newText);
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                callback.onSearchItemClick();
+                return true;
         }
-
+        return super.onOptionsItemSelected(item);
     }
 
     public interface Callback {
         void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
         void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
+        void onSearchItemClick();
     }
 }
