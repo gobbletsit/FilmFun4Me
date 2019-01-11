@@ -131,20 +131,23 @@ public class ListFragment extends Fragment implements ListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(Constants.PAGER_POSITION) && getArguments().containsKey(Constants.SELECTED_BUTTON)){
-            pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
-            selectedButton = (int) getArguments().get(Constants.SELECTED_BUTTON);
+        if (isNetworkAvailable()){
+            if (getArguments() != null && getArguments().containsKey(Constants.PAGER_POSITION) && getArguments().containsKey(Constants.SELECTED_BUTTON)){
+                pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
+                selectedButton = (int) getArguments().get(Constants.SELECTED_BUTTON);
 
-            if (isNetworkAvailable()&& selectedButton == Constants.BUTTON_MOVIES) {
-                listPresenter.setMovieView(this, pagerPosition);
-            } else if (isNetworkAvailable() && selectedButton == Constants.BUTTON_TV_SHOWS){
-                listPresenter.setTvShowView(this, pagerPosition);
+
+                if (selectedButton == Constants.BUTTON_MOVIES){
+                    listPresenter.setMovieView(this, pagerPosition);
+                } else if (selectedButton == Constants.BUTTON_TV_SHOWS){
+                    listPresenter.setTvShowView(this, pagerPosition);
+                }
             } else {
                 listPresenter.setMovieSearchView(this);
             }
-        } /*else if (isNetworkAvailable()){
-            listPresenter.setMovieSearchView(this);
-        }*/
+        } else {
+            Toast.makeText(getActivity(), "No network connection! Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -168,6 +171,12 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void setUpMovieSearchView() {
+        if (customAdapter == null){
+            customAdapter = new ListMovieRecyclerAdapter(listPresenter);
+        }
+        if (scaleInAnimationAdapter == null){
+            setAnimationAdapter();
+        }
         customAdapter.notifyDataSetChanged();
         scaleInAnimationAdapter.notifyDataSetChanged();
     }
@@ -218,12 +227,6 @@ public class ListFragment extends Fragment implements ListView {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(Constants.PAGER_POSITION,pagerPosition);
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
@@ -232,17 +235,18 @@ public class ListFragment extends Fragment implements ListView {
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        MenuItem menuItem = menu.findItem(R.id.search);
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
-            public boolean onClose() {
-                if (pagerPosition == 0){
-                    listPresenter.showMostPopularMovies();
-                } else if (pagerPosition == 1){
-                    listPresenter.showHighestRatedMovies();
-                } else {
-                    listPresenter.showUpcomingMovies();
-                }
-                return false;
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            // setOnCloseListener doesn't work so implemented this
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                callback.onSearchDialogClosed();
+                return true;
             }
         });
 
@@ -270,9 +274,16 @@ public class ListFragment extends Fragment implements ListView {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Constants.PAGER_POSITION,pagerPosition);
+    }
+
     public interface Callback {
         void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
         void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
         void onSearchItemClick();
+        void onSearchDialogClosed();
     }
 }

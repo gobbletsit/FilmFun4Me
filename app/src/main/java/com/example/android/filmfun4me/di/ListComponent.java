@@ -18,6 +18,4 @@ public interface ListComponent {
 
     ListFragment inject(ListFragment fragment);
 
-    ListActivity inject(ListActivity listActivity);
-
 }

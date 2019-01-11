@@ -39,19 +39,16 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     private FrameLayout searchFragmentLayout;
     private TabLayout tabLayout;
 
+    int selectedButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        ((BaseApplication) this.getApplication()).createListComponent().inject(this);
-
         searchFragmentLayout = findViewById(R.id.root_list_search_results_container);
         tabLayout = findViewById(R.id.tab_layout_list);
-        ViewPager viewPager = this.findViewById(R.id.view_pager_list);
-
-        int selectedButton;
-        //Intent intent = getIntent();
+        ViewPager viewPager = findViewById(R.id.view_pager_list);
 
         if (getIntent() != null){
             Bundle extras = getIntent().getExtras();
@@ -59,8 +56,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
                 selectedButton = extras.getInt(Constants.SELECTED_BUTTON);
                 setTitle(getStringTitle(selectedButton));
                 ListFragmentPagerAdapter listFragmentPagerAdapter = new ListFragmentPagerAdapter(this, getSupportFragmentManager(), selectedButton);
-                /*tabLayout.setVisibility(View.VISIBLE);
-                searchFragmentLayout.setVisibility(View.INVISIBLE);*/
                 viewPager.setAdapter(listFragmentPagerAdapter);
                 tabLayout.setupWithViewPager(viewPager);
             }
@@ -91,8 +86,19 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     @Override
     public void onSearchItemClick() {
-        /*Intent startSearchActivity = new Intent(this, SearchActivity.class);
-        startActivity(startSearchActivity);*/
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        ListFragment searchFragment = ListFragment.newSearchInstance();
+        transaction.replace(R.id.root_list_search_results_container, searchFragment);
+        transaction.commit();
+        tabLayout.setVisibility(View.GONE);
+        searchFragmentLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onSearchDialogClosed() {
+        searchFragmentLayout.setVisibility(View.GONE);
+        tabLayout.setVisibility(View.VISIBLE);
     }
 
     private String getStringTitle(int selectedButton){
@@ -102,49 +108,4 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             return "TV shows";
         }
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                listPresenter.showSearchResults(newText);
-                return false;
-            }
-        });
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-                android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
-                ListFragment fragment = ListFragment.newSearchInstance();
-                android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.root_list_search_results_container, fragment);
-                tabLayout.setVisibility(View.GONE);
-                searchFragmentLayout.setVisibility(View.VISIBLE);
-                transaction.commit();
-
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 }

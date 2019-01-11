@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class ListFragmentPagerAdapter extends FragmentPagerAdapter{
 
+    // for resource string titles
     private Context mContext;
 
     private int selectedButton;

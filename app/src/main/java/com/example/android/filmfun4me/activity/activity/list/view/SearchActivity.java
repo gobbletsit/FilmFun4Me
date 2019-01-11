@@ -75,6 +75,11 @@ public class SearchActivity extends AppCompatActivity implements ListFragment.Ca
         // nothing here
     }
 
+    @Override
+    public void onSearchDialogClosed() {
+
+    }
+
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

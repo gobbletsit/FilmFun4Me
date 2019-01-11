@@ -253,7 +253,9 @@ public class ListPresenterImpl implements ListPresenter {
                             public void onNext(List<Movie> response) {
                                 movieList.clear();
                                 movieList = response;
-                                view.setUpMovieSearchView();
+                                if (isViewAttached()){
+                                    view.setUpMovieSearchView();
+                                }
                             }
                             @Override
                             public void onError(Throwable e) {
@@ -273,7 +275,7 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void setMovieSearchView(ListView listView) {
         this.view = listView;
-        view.setUpMovieView();
+        //view.setUpMovieView();
 
     }
 

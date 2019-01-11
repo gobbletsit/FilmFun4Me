@@ -37,18 +37,18 @@ public class DetailActivity extends AppCompatActivity implements Callback {
         } else if (savedInstanceState != null){
             selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
         } else {
-            selectedButton = 0;
+            selectedButton = Constants.BUTTON_MOVIES;
         }
 
         // need to make this cleaner!
-        if (selectedButton == 0 && extras != null) {
+        if (selectedButton == Constants.BUTTON_MOVIES && extras != null) {
             Movie movie = extras.getParcelable(Constants.KEY_MOVIE);
             String singleMovieGenres = extras.getString(Constants.KEY_SINGLE_MOVIE_GENRES);
             if (movie != null) {
                 switchToMovieDetailFragment(movie, singleMovieGenres);
                 setTitle("Movie details");
             }
-        } else {
+        } else if (selectedButton == Constants.BUTTON_TV_SHOWS && extras != null ){
             TvShow tvShow = extras.getParcelable(Constants.KEY_TV_SHOW);
             String singleTvShowGenres = extras.getString(Constants.KEY_SINGLE_TV_SHOW_GENRES);
             if (tvShow != null) {
@@ -56,11 +56,6 @@ public class DetailActivity extends AppCompatActivity implements Callback {
                 setTitle("TV show details");
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     private void switchToMovieDetailFragment(Movie movie, String singleMovieGenres){
@@ -80,6 +75,12 @@ public class DetailActivity extends AppCompatActivity implements Callback {
     }
 
     @Override
+    public void onTrailerClick(String videoUrl) {
+        Intent playVideoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
+        startActivity(playVideoIntent);
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
@@ -96,8 +97,7 @@ public class DetailActivity extends AppCompatActivity implements Callback {
     }
 
     @Override
-    public void onTrailerClick(String videoUrl) {
-        Intent playVideoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
-        startActivity(playVideoIntent);
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
