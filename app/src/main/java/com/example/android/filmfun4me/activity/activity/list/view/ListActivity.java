@@ -1,39 +1,26 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
-import com.example.android.filmfun4me.activity.activity.detail.view.DetailTvShowFragment;
-import com.example.android.filmfun4me.activity.activity.list.presenter.ListPresenter;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.Constants;
-
-import javax.inject.Inject;
-
-import static com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity.DETAIL_TV_SHOW_FRAG;
 
 public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
     private FrameLayout searchFragmentLayout;
     private TabLayout tabLayout;
+    private ConstraintLayout footer;
 
     private ImageButton ibMovies;
     private ImageButton ibTv;
@@ -48,6 +35,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         searchFragmentLayout = findViewById(R.id.root_list_search_results_container);
         tabLayout = findViewById(R.id.tab_layout_list);
         ViewPager viewPager = findViewById(R.id.view_pager_list);
+        footer = findViewById(R.id.list_activity_footer);
         ibMovies = findViewById(R.id.ib_movies);
         ibTv = findViewById(R.id.ib_tv);
 
@@ -116,12 +104,14 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         transaction.commit();
         tabLayout.setVisibility(View.GONE);
         searchFragmentLayout.setVisibility(View.VISIBLE);
+        footer.setVisibility(View.GONE);
     }
 
     @Override
     public void onSearchDialogClosed() {
         searchFragmentLayout.setVisibility(View.GONE);
         tabLayout.setVisibility(View.VISIBLE);
+        footer.setVisibility(View.VISIBLE);
     }
 
     private String getStringTitle(int selectedButton){

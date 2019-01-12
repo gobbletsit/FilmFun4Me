@@ -235,8 +235,6 @@ public class DetailPresenterImpl implements DetailPresenter {
             episode.setChildObjectList(childList);
             parentObjectArrayList.add(episode);
         }
-        Log.i(DetailPresenterImpl.class.getSimpleName(), "generateEpisodes: parent object aray list size = " + parentObjectArrayList.size());
-
         detailView.showEpisodes(parentObjectArrayList);
     }
 
