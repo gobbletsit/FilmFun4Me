@@ -32,8 +32,6 @@ import static com.example.android.filmfun4me.activity.activity.detail.view.Detai
 
 public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
-    private static final String LIST_FRAG = "list_frag";
-
     private FrameLayout searchFragmentLayout;
     private TabLayout tabLayout;
 
