@@ -11,15 +11,12 @@ import android.widget.ImageButton;
 
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
-import com.example.android.filmfun4me.activity.activity.main.presenter.MainPresenter;
+
 
 import javax.inject.Inject;
 
 
 public class MainFragment extends Fragment {
-
-    @Inject
-    MainPresenter presenter;
 
     private Callback callback;
 

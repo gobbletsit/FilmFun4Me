@@ -10,8 +10,6 @@ import com.example.android.filmfun4me.di.DetailComponent;
 import com.example.android.filmfun4me.di.DetailModule;
 import com.example.android.filmfun4me.di.ListComponent;
 import com.example.android.filmfun4me.di.ListModule;
-import com.example.android.filmfun4me.di.MainComponent;
-import com.example.android.filmfun4me.di.MainModule;
 import com.example.android.filmfun4me.di.NetworkModule;
 
 /**
