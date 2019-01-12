@@ -24,14 +24,16 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tab_layout_list"
+        android:layout_above="@+id/list_activity_footer">
 
     </android.support.v4.view.ViewPager>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:background="#000000"
         android:visibility="gone"
         android:id="@+id/root_list_search_results_container"
         android:layout_width="match_parent"
@@ -43,14 +45,19 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:id="@+id/list_activity_footer"
+        android:background="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true">
 
         <ImageButton
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/ib_movies"
-            android:src="@drawable/m_ic"
+            android:layout_margin="4dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_movies_pressed_state"
+            android:background="@color/colorPrimaryDark"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -58,9 +65,12 @@
 
         <ImageButton
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/ib_tv"
-            android:src="@drawable/television"
+            android:layout_margin="4dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_tv_pressed_state"
+            android:background="@color/colorPrimaryDark"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"

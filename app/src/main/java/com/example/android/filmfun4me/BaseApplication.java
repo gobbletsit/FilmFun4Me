@@ -20,7 +20,6 @@ public class BaseApplication extends Application {
 
     private AppComponent appComponent;
     private ListComponent listComponent;
-    private MainComponent mainComponent;
     private DetailComponent detailComponent;
 
     @Override
@@ -38,16 +37,9 @@ public class BaseApplication extends Application {
                 .networkModule(new NetworkModule()).build();
     }
 
-
-    // CREATE COMPONENTS
     public ListComponent createListComponent(){
         listComponent = appComponent.plus(new ListModule());
         return listComponent;
-    }
-
-    public MainComponent createMainComponent(){
-        mainComponent = appComponent.plus(new MainModule());
-        return mainComponent;
     }
 
     public DetailComponent createDetailComponent(){
@@ -61,20 +53,12 @@ public class BaseApplication extends Application {
         listComponent = null;
     }
 
-    public void releaseMainComponent(){
-        mainComponent = null;
-    }
-
     public void releaseDetailComponent() {detailComponent = null;}
 
 
     // GET COMPONENTS
     public ListComponent getListComponent() {
         return listComponent;
-    }
-
-    public MainComponent getMainComponent(){
-        return mainComponent;
     }
 
     public DetailComponent getDetailComponent(){ return detailComponent;}

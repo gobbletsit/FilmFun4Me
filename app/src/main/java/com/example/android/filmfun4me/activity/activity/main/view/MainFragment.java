@@ -38,10 +38,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setRetainInstance(true);
-        ((BaseApplication) getActivity().getApplication()).createMainComponent().inject(this);
-
     }
 
     @Override
@@ -77,7 +74,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((BaseApplication) getActivity().getApplication()).releaseMainComponent();
     }
 
     public interface Callback {
