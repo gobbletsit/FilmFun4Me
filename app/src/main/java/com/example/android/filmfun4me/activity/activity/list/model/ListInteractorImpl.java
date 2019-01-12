@@ -66,8 +66,12 @@ public class ListInteractorImpl implements ListInteractor {
     }
 
     @Override
+    public Observable<List<TvShow>> getListOfSearchedTvShows(String searchQuery) {
+        return tvShowsWebService.getListOfTvShowsBySearch(searchQuery).map(TvShowWrapper::getTvShowList);
+    }
+
+    @Override
     public Observable<List<Genre>> getListOfAllTvGenres() {
         return tvShowsWebService.getListOfAllTvGenres().map(GenreWrapper::getGenreList);
     }
-
 }

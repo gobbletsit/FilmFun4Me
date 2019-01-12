@@ -26,6 +26,8 @@ import io.reactivex.subjects.PublishSubject;
 
 public class ListPresenterImpl implements ListPresenter {
 
+    private static final String TAG = ListPresenterImpl.class.getSimpleName();
+
     private ListView view;
 
     private ListInteractor listInteractor;
@@ -37,13 +39,15 @@ public class ListPresenterImpl implements ListPresenter {
     private List<TvShow> tvShowList = new ArrayList<>(40);
     private List<Genre> genreList = new ArrayList<>(40);
 
-    private String movieGenres;
-    private String tvShowGenres;
-
     private PublishSubject publishSubject;
 
     public ListPresenterImpl(ListInteractor listInteractor) {
         this.listInteractor = listInteractor;
+    }
+
+    @Override
+    public void setSearchView(ListView listView) {
+        this.view = listView;
     }
 
     @Override
@@ -86,6 +90,41 @@ public class ListPresenterImpl implements ListPresenter {
                 .subscribe(this::onMovieFetchSuccess, this::onMovieFetchFailed);
     }
 
+    @Override
+    public void showMovieSearchResults(String query) {
+        if (!query.contentEquals("")){
+            //if (publishSubject == null) {
+            publishSubject = PublishSubject.create();
+            publishSubject
+                    .debounce(300, TimeUnit.MILLISECONDS)
+                    .distinctUntilChanged()
+                    .switchMap(searchValue -> listInteractor.getListOfSearchedMovies(query)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()))
+                    .subscribeWith(new DisposableObserver<List<Movie>>() {
+                        @Override
+                        public void onNext(List<Movie> response) {
+                            movieList.clear();
+                            movieList = response;
+                            if (isViewAttached()){
+                                view.setUpMovieSearchView();
+                            }
+                        }
+                        @Override
+                        public void onError(Throwable e) {
+                            onSearchFetchFailed(e);
+                        }
+                        @Override
+                        public void onComplete() {
+                            //On complete
+                        }
+                    });
+            //}
+            publishSubject.onNext(query);
+        }
+
+    }
+
     public void onBindMovieListItemAtPosition(int position, ListItemView listItemView) {
         Movie movie = movieList.get(position);
         listItemView.setItemTitle(movie.getTitle());
@@ -112,7 +151,7 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     private void onMovieFetchFailed(Throwable e) {
-        Log.e(ListPresenterImpl.class.getSimpleName(), "onMovieFetchFailed: = " + e);
+        Log.e(TAG, "onMovieFetchFailed: = " + e);
         view.loadingErrorMessage(e.getMessage());
     }
 
@@ -146,6 +185,37 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     @Override
+    public void showTvSearchResults(String searchQuery) {
+        publishSubject = PublishSubject.create();
+        publishSubject
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .switchMap(searchValue -> listInteractor.getListOfSearchedTvShows(searchQuery)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()))
+                .subscribeWith(new DisposableObserver<List<TvShow>>() {
+                    @Override
+                    public void onNext(List<TvShow> response) {
+                        tvShowList.clear();
+                        tvShowList = response;
+                        if (isViewAttached()){
+                            view.setUpTvSearchView();
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        onSearchFetchFailed(e);
+                    }
+                    @Override
+                    public void onComplete() {
+                        //On complete
+                    }
+                });
+        //}
+        publishSubject.onNext(searchQuery);
+    }
+
+    @Override
     public void onBindTvShowListItemAtPosition(int position, ListItemView listItemView) {
         TvShow tvShow = tvShowList.get(position);
         listItemView.setItemTitle(tvShow.getTitle());
@@ -173,6 +243,7 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     private void onTvShowFetchFailed(Throwable e) {
+        Log.e(TAG, "onTvShowFetchFailed: " + e);
         view.loadingErrorMessage(e.getMessage());
     }
 
@@ -199,7 +270,13 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     private void onGenreListFetchFailed(Throwable e) {
+        Log.e(TAG, "onGenreFetchFailed: " + e);
         view.loadingErrorMessage(e.getMessage());
+    }
+
+    private void onSearchFetchFailed(Throwable e){
+        Log.e(TAG, "onSearchFetchFailed: " + e);
+        view.loadingErrorMessage(e.toString());
     }
 
     private String getSingleItemAppendedGenres(int[] currentGenreIds) {
@@ -235,57 +312,5 @@ public class ListPresenterImpl implements ListPresenter {
         view = null;
         RxUtils.unsubscribe(disposableSubscription);
         RxUtils.unsubscribe(disposableGenres);
-    }
-
-    @Override
-    public void showSearchResults(String query) {
-        if (!query.contentEquals("")){
-            //if (publishSubject == null) {
-                publishSubject = PublishSubject.create();
-                publishSubject
-                        .debounce(300, TimeUnit.MILLISECONDS)
-                        .distinctUntilChanged()
-                        .switchMap(searchValue -> listInteractor.getListOfSearchedMovies(query)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread()))
-                        .subscribeWith(new DisposableObserver<List<Movie>>() {
-                            @Override
-                            public void onNext(List<Movie> response) {
-                                movieList.clear();
-                                movieList = response;
-                                if (isViewAttached()){
-                                    view.setUpMovieSearchView();
-                                }
-                            }
-                            @Override
-                            public void onError(Throwable e) {
-                                onSearchFetchFailed(e);
-                            }
-                            @Override
-                            public void onComplete() {
-                                //On complete
-                            }
-                        });
-            //}
-            publishSubject.onNext(query);
-        }
-
-    }
-
-    @Override
-    public void setMovieSearchView(ListView listView) {
-        this.view = listView;
-        //view.setUpMovieView();
-
-    }
-
-    private void onSearchFetchSuccess(List<Movie> movieList){
-        this.movieList.addAll(movieList);
-
-    }
-
-    private void onSearchFetchFailed(Throwable e){
-        view.loadingErrorMessage(e.toString());
-        Log.e(ListPresenterImpl.class.getSimpleName(), "SEARCH FAILED =" + e.toString());
     }
 }

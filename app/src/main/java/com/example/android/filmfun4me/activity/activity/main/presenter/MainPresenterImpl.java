@@ -21,28 +21,4 @@ public class MainPresenterImpl implements MainPresenter {
         this.mainView = mainView;
     }
 
-    /*@Override
-    public void goToMostPopularMoviesList(int fragmentPosition) {
-        mainView.onPopularButtonClick(fragmentPosition);
-    }
-
-    @Override
-    public void goToHighestRatedMoviesList(int fragmentPosition) {
-        mainView.onHighestRatedButtonClick(fragmentPosition);
-    }
-
-    @Override
-    public void goToUpcomingMoviesList(int fragmentPosition) {
-        mainView.onUpcomingButtonClick(fragmentPosition);
-    }
-
-    @Override
-    public void goToMostPopularTvShowsList(int fragmentPosition) {
-        mainView.onPopularButtonClick(fragmentPosition);
-    }
-
-    @Override
-    public void goToHighestRatedTvShowsList(int fragmentPosition) {
-        mainView.onHighestRatedButtonClick(fragmentPosition);
-    }*/
 }

@@ -88,7 +88,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     public void onSearchItemClick() {
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-        ListFragment searchFragment = ListFragment.newSearchInstance();
+        ListFragment searchFragment = ListFragment.newSearchInstance(selectedButton);
         transaction.replace(R.id.root_list_search_results_container, searchFragment);
         transaction.commit();
         tabLayout.setVisibility(View.GONE);

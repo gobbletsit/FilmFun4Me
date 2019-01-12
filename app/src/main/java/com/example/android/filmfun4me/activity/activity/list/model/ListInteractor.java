@@ -23,13 +23,14 @@ public interface ListInteractor {
 
     Observable<List<Movie>> getListOfSearchedMovies(String searchQuery);
 
-    // List of all possible genres
     Observable<List<Genre>> getListOfAllMovieGenres();
+
 
     Observable<List<TvShow>> getListOfMostPopularTvShows();
 
     Observable<List<TvShow>> getListOfHighestRatedTvShows();
 
-    Observable<List<Genre>> getListOfAllTvGenres();
+    Observable<List<TvShow>> getListOfSearchedTvShows(String searchQuery);
 
+    Observable<List<Genre>> getListOfAllTvGenres();
 }

@@ -7,10 +7,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,24 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.list.presenter.ListPresenter;
-import com.example.android.filmfun4me.activity.activity.main.view.MainActivity;
-import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
-import com.example.android.filmfun4me.utils.BaseUtils;
 import com.example.android.filmfun4me.utils.Constants;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -76,11 +64,11 @@ public class ListFragment extends Fragment implements ListView {
         return listFragment;
     }
 
-    public static ListFragment newSearchInstance() {
+    public static ListFragment newSearchInstance(int selectedButton) {
         ListFragment listFragment = new ListFragment();
-        /*Bundle args = new Bundle();
-        args.putString(SearchManager.QUERY, query);
-        listFragment.setArguments(args);*/
+        Bundle args = new Bundle();
+        args.putInt(Constants.SELECTED_BUTTON, selectedButton);
+        listFragment.setArguments(args);
         return listFragment;
     }
 
@@ -131,19 +119,18 @@ public class ListFragment extends Fragment implements ListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (isNetworkAvailable()){
-            if (getArguments() != null && getArguments().containsKey(Constants.PAGER_POSITION) && getArguments().containsKey(Constants.SELECTED_BUTTON)){
-                pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
+        if (isNetworkAvailable() && getArguments() != null){
+            if (getArguments().containsKey(Constants.SELECTED_BUTTON)){
                 selectedButton = (int) getArguments().get(Constants.SELECTED_BUTTON);
-
-
-                if (selectedButton == Constants.BUTTON_MOVIES){
+                if (getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_MOVIES){
+                    pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
                     listPresenter.setMovieView(this, pagerPosition);
-                } else if (selectedButton == Constants.BUTTON_TV_SHOWS){
+                } else if(getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_TV_SHOWS) {
+                    pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
                     listPresenter.setTvShowView(this, pagerPosition);
+                } else {
+                    listPresenter.setSearchView(this);
                 }
-            } else {
-                listPresenter.setMovieSearchView(this);
             }
         } else {
             Toast.makeText(getActivity(), "No network connection! Please check your internet connection", Toast.LENGTH_LONG).show();
@@ -164,15 +151,27 @@ public class ListFragment extends Fragment implements ListView {
     }
 
     @Override
+    public void setUpMovieSearchView() {
+        if (customAdapter == null){
+            customAdapter = new ListMovieRecyclerAdapter(listPresenter);
+        }
+        if (scaleInAnimationAdapter == null){
+            setAnimationAdapter();
+        }
+        customAdapter.notifyDataSetChanged();
+        scaleInAnimationAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void setUpTvShowView() {
         customAdapter = new ListTvShowRecyclerAdapter(listPresenter);
         setAnimationAdapter();
     }
 
     @Override
-    public void setUpMovieSearchView() {
+    public void setUpTvSearchView() {
         if (customAdapter == null){
-            customAdapter = new ListMovieRecyclerAdapter(listPresenter);
+            customAdapter = new ListTvShowRecyclerAdapter(listPresenter);
         }
         if (scaleInAnimationAdapter == null){
             setAnimationAdapter();
@@ -235,6 +234,7 @@ public class ListFragment extends Fragment implements ListView {
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
+        // setOnCloseListener doesn't work so implemented this
         MenuItem menuItem = menu.findItem(R.id.search);
         menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
@@ -242,7 +242,6 @@ public class ListFragment extends Fragment implements ListView {
                 return true;
             }
 
-            // setOnCloseListener doesn't work so implemented this
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 callback.onSearchDialogClosed();
@@ -258,7 +257,13 @@ public class ListFragment extends Fragment implements ListView {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                listPresenter.showSearchResults(newText);
+                if (!newText.contentEquals("")){
+                    if (selectedButton == Constants.BUTTON_MOVIES){
+                        listPresenter.showMovieSearchResults(newText);
+                    } else {
+                        listPresenter.showTvSearchResults(newText);
+                    }
+                }
                 return false;
             }
         });

@@ -17,14 +17,14 @@ import java.util.List;
 
 public interface ListView {
 
-    // Set view methods
     void setUpMovieView();
-
-    void setUpTvShowView();
 
     void setUpMovieSearchView();
 
-    // Click methods
+    void setUpTvShowView();
+
+    void setUpTvSearchView();
+
     void onMovieClicked(Movie movie, String singleMovieGenres);
 
     void onTvShowClicked(TvShow tvShow, String singleMovieGenre);

@@ -28,6 +28,9 @@ public interface MoviesWebService {
     @GET("3/movie/upcoming?")
     io.reactivex.Observable<MoviesWrapper> upcomingMovies();
 
+    @GET("3/search/movie?")
+    Observable<MoviesWrapper> getListOfMoviesBySearch(@Query("query") String searchQuery);
+
     @GET("3/movie/{movieId}")
     Observable<Movie> getMovieDetails(@Path("movieId")String movieId);
 
@@ -39,8 +42,5 @@ public interface MoviesWebService {
 
     @GET("3/genre/movie/list")
     Observable<GenreWrapper> getListOfAllMovieGenres();
-
-    @GET("3/search/movie?")
-    Observable<MoviesWrapper> getListOfMoviesBySearch(@Query("query") String searchQuery);
 
 }
