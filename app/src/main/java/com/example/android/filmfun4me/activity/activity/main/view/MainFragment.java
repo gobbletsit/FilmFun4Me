@@ -12,12 +12,11 @@ import android.widget.ImageButton;
 import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.main.presenter.MainPresenter;
-import static com.example.android.filmfun4me.utils.Constants.*;
 
 import javax.inject.Inject;
 
 
-public class MainFragment extends Fragment implements MainView {
+public class MainFragment extends Fragment {
 
     @Inject
     MainPresenter presenter;
@@ -53,13 +52,8 @@ public class MainFragment extends Fragment implements MainView {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ImageButton moviesButton = new ImageButton(getContext());
-        ImageButton tvShowsButton = new ImageButton(getContext());
-
-        moviesButton = view.findViewById(R.id.image_button_movie);
-        tvShowsButton = view.findViewById(R.id.image_button_tv);
-
-        presenter.setView(this);
+        ImageButton moviesButton = view.findViewById(R.id.image_button_movie);
+        ImageButton tvShowsButton = view.findViewById(R.id.image_button_tv);
 
         moviesButton.setOnClickListener(new View.OnClickListener() {
             @Override
