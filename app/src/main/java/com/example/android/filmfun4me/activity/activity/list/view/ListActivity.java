@@ -25,7 +25,13 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     private ImageButton ibMovies;
     private ImageButton ibTv;
 
-    int selectedButton;
+    private int selectedButton;
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,10 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         footer = findViewById(R.id.list_activity_footer);
         ibMovies = findViewById(R.id.ib_movies);
         ibTv = findViewById(R.id.ib_tv);
+
+        if (savedInstanceState != null){
+            selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
+        }
 
         setTitle(getStringTitle(selectedButton));
         ListFragmentPagerAdapter listFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
@@ -54,7 +64,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
                 setTitle(getStringTitle(selectedButton));
                 ListFragmentPagerAdapter listMovieFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
                 viewPager.setAdapter(listMovieFragmentPagerAdapter);
-                tabLayout.setupWithViewPager(viewPager);
+                tabLayout.setupWithViewPager(viewPager, true);
 
             }
         });
@@ -68,7 +78,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
                 setTitle(getStringTitle(selectedButton));
                 ListFragmentPagerAdapter listTvFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
                 viewPager.setAdapter(listTvFragmentPagerAdapter);
-                tabLayout.setupWithViewPager(viewPager);
+                tabLayout.setupWithViewPager(viewPager, true);
             }
         });
     }
@@ -120,5 +130,11 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         } else {
             return "TV shows";
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
     }
 }

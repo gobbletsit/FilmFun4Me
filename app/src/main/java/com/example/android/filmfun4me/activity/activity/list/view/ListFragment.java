@@ -79,9 +79,9 @@ public class ListFragment extends Fragment implements ListView {
             if (savedInstanceState.containsKey(Constants.PAGER_POSITION)){
                 pagerPosition = (int) savedInstanceState.get(Constants.PAGER_POSITION);
             }
-            if (savedInstanceState.containsKey(Constants.SELECTED_BUTTON)){
+            /*if (savedInstanceState.containsKey(Constants.SELECTED_BUTTON)){
                 selectedButton = (int) savedInstanceState.get(Constants.SELECTED_BUTTON);
-            }
+            }*/
         }
     }
 
@@ -288,7 +288,7 @@ public class ListFragment extends Fragment implements ListView {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(Constants.PAGER_POSITION,pagerPosition);
-        outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
+        //outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
     }
 
     public interface Callback {

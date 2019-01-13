@@ -4,12 +4,15 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.example.android.filmfun4me.utils.Constants;
 
 /**
  * Created by gobov on 1/14/2018.
  */
 
-public class ListFragmentPagerAdapter extends FragmentPagerAdapter{
+public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     // for resource string titles
     private Context mContext;
@@ -32,7 +35,7 @@ public class ListFragmentPagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public int getCount() {
-        if (selectedButton == 0){
+        if (selectedButton == Constants.BUTTON_MOVIES){
             return 3;
         } else {
             return 2;
@@ -43,7 +46,7 @@ public class ListFragmentPagerAdapter extends FragmentPagerAdapter{
     @Override
     public CharSequence getPageTitle(int position) {
         // you will set which titles to retrieve based on SELECTED BUTTON
-        if (selectedButton == 0){
+        if (selectedButton == Constants.BUTTON_MOVIES){
             if (position == 0){
                 return "Most Popular";
             } else if (position == 1){
@@ -51,7 +54,7 @@ public class ListFragmentPagerAdapter extends FragmentPagerAdapter{
             } else {
                 return "Upcoming";
             }
-        } else if (selectedButton == 1){
+        } else if (selectedButton == Constants.BUTTON_TV_SHOWS){
             if (position == 0){
                 return "Most Popular";
             } else {
