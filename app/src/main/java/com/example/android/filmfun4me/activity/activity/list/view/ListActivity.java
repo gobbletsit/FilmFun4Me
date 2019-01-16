@@ -18,6 +18,8 @@ import com.example.android.filmfun4me.utils.Constants;
 
 public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
+    public static final String SEARCH_VISIBLE = "search_visible";
+
     private FrameLayout searchFragmentLayout;
     private TabLayout tabLayout;
     private ConstraintLayout footer;
@@ -26,12 +28,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     private ImageButton ibTv;
 
     private int selectedButton;
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
-    }
+    private boolean isSearchVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +44,10 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
         if (savedInstanceState != null){
             selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
+            isSearchVisible = savedInstanceState.getBoolean(SEARCH_VISIBLE);
+            if (isSearchVisible){
+                switchToSearchFragment();
+            }
         }
 
         setTitle(getStringTitle(selectedButton));
@@ -107,14 +108,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     @Override
     public void onSearchItemClick() {
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-        ListFragment searchFragment = ListFragment.newSearchInstance(selectedButton);
-        transaction.replace(R.id.root_list_search_results_container, searchFragment);
-        transaction.commit();
-        tabLayout.setVisibility(View.GONE);
-        searchFragmentLayout.setVisibility(View.VISIBLE);
-        footer.setVisibility(View.GONE);
+        switchToSearchFragment();
     }
 
     @Override
@@ -135,6 +129,26 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (searchFragmentLayout.getVisibility() == View.VISIBLE){
+            isSearchVisible = true;
+        }
         outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
+        outState.putBoolean(SEARCH_VISIBLE, isSearchVisible);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    private void switchToSearchFragment(){
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        ListFragment searchFragment = ListFragment.newSearchInstance(selectedButton);
+        transaction.replace(R.id.root_list_search_results_container, searchFragment);
+        transaction.commit();
+        tabLayout.setVisibility(View.GONE);
+        searchFragmentLayout.setVisibility(View.VISIBLE);
+        footer.setVisibility(View.GONE);
     }
 }
