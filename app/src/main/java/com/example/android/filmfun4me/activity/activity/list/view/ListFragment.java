@@ -37,6 +37,7 @@ import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 public class ListFragment extends Fragment implements ListView {
 
     private static final String TAG = ListFragment.class.getSimpleName();
+    private String savedSearchQuery;
 
     @Inject
     ListPresenter listPresenter;
@@ -79,8 +80,12 @@ public class ListFragment extends Fragment implements ListView {
             if (savedInstanceState.containsKey(Constants.PAGER_POSITION)){
                 pagerPosition = (int) savedInstanceState.get(Constants.PAGER_POSITION);
             }
+            if (savedInstanceState.containsKey("saved_query")){
+
+                savedSearchQuery = savedInstanceState.getString("saved_query");
+            }
             if (savedInstanceState.containsKey(Constants.SELECTED_BUTTON)){
-                selectedButton = (int) savedInstanceState.get(Constants.SELECTED_BUTTON);
+                selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
             }
         }
     }
@@ -239,6 +244,13 @@ public class ListFragment extends Fragment implements ListView {
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
+        if (savedSearchQuery != null){
+            searchView.setIconified(true);
+            searchView.onActionViewExpanded();
+            searchView.setQuery(savedSearchQuery, false);
+            searchView.setFocusable(true);
+        }
+
         // setOnCloseListener doesn't work so implemented this
         MenuItem menuItem = menu.findItem(R.id.search);
         menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -262,6 +274,7 @@ public class ListFragment extends Fragment implements ListView {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                savedSearchQuery = newText;
                 if (!newText.contentEquals("")){
                     if (selectedButton == Constants.BUTTON_MOVIES){
                         listPresenter.showMovieSearchResults(newText);
@@ -288,7 +301,7 @@ public class ListFragment extends Fragment implements ListView {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(Constants.PAGER_POSITION,pagerPosition);
-        outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
+        outState.putString("saved_query", savedSearchQuery);
     }
 
     public interface Callback {

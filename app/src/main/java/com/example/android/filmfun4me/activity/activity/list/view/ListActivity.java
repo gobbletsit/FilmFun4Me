@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
@@ -18,6 +19,8 @@ import com.example.android.filmfun4me.utils.Constants;
 
 public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
+    public static final String SEARCH_VISIBLE = "search_visible";
+
     private FrameLayout searchFragmentLayout;
     private TabLayout tabLayout;
     private ConstraintLayout footer;
@@ -25,7 +28,11 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     private ImageButton ibMovies;
     private ImageButton ibTv;
 
-    int selectedButton;
+    private TextView footerMoviesLabel;
+    private TextView footerTvLabel;
+
+    private int selectedButton;
+    private boolean isSearchVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,16 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         footer = findViewById(R.id.list_activity_footer);
         ibMovies = findViewById(R.id.ib_movies);
         ibTv = findViewById(R.id.ib_tv);
+        footerMoviesLabel = findViewById(R.id.footer_movie_label);
+        footerTvLabel = findViewById(R.id.footer_tv_label);
+
+        if (savedInstanceState != null){
+            selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
+            isSearchVisible = savedInstanceState.getBoolean(SEARCH_VISIBLE);
+            if (isSearchVisible){
+                switchToSearchFragment();
+            }
+        }
 
         setTitle(getStringTitle(selectedButton));
         ListFragmentPagerAdapter listFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
@@ -45,32 +62,40 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         tabLayout.setupWithViewPager(viewPager);
 
         ibMovies.setSelected(true);
-        ibMovies.setOnClickListener(new View.OnClickListener() {
+        footerMoviesLabel.setSelected(true);
+        View.OnClickListener moviesClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_MOVIES;
                 ibMovies.setSelected(true);
+                footerMoviesLabel.setSelected(true);
                 ibTv.setSelected(false);
+                footerTvLabel.setSelected(false);
                 setTitle(getStringTitle(selectedButton));
                 ListFragmentPagerAdapter listMovieFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
                 viewPager.setAdapter(listMovieFragmentPagerAdapter);
-                tabLayout.setupWithViewPager(viewPager);
-
+                tabLayout.setupWithViewPager(viewPager, true);
             }
-        });
+        };
+        ibMovies.setOnClickListener(moviesClickListener);
+        footerMoviesLabel.setOnClickListener(moviesClickListener);
 
-        ibTv.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener tvClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_TV_SHOWS;
                 ibTv.setSelected(true);
+                footerTvLabel.setSelected(true);
                 ibMovies.setSelected(false);
+                footerMoviesLabel.setSelected(false);
                 setTitle(getStringTitle(selectedButton));
                 ListFragmentPagerAdapter listTvFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
                 viewPager.setAdapter(listTvFragmentPagerAdapter);
-                tabLayout.setupWithViewPager(viewPager);
+                tabLayout.setupWithViewPager(viewPager, true);
             }
-        });
+        };
+        ibTv.setOnClickListener(tvClickListener);
+        footerTvLabel.setOnClickListener(tvClickListener);
     }
 
     @Override
@@ -97,14 +122,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     @Override
     public void onSearchItemClick() {
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-        ListFragment searchFragment = ListFragment.newSearchInstance(selectedButton);
-        transaction.replace(R.id.root_list_search_results_container, searchFragment);
-        transaction.commit();
-        tabLayout.setVisibility(View.GONE);
-        searchFragmentLayout.setVisibility(View.VISIBLE);
-        footer.setVisibility(View.GONE);
+        switchToSearchFragment();
     }
 
     @Override
@@ -120,5 +138,31 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         } else {
             return "TV shows";
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (searchFragmentLayout.getVisibility() == View.VISIBLE){
+            isSearchVisible = true;
+        }
+        outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
+        outState.putBoolean(SEARCH_VISIBLE, isSearchVisible);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    private void switchToSearchFragment(){
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        ListFragment searchFragment = ListFragment.newSearchInstance(selectedButton);
+        transaction.replace(R.id.root_list_search_results_container, searchFragment);
+        transaction.commit();
+        tabLayout.setVisibility(View.GONE);
+        searchFragmentLayout.setVisibility(View.VISIBLE);
+        footer.setVisibility(View.GONE);
     }
 }
