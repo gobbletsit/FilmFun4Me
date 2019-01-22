@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
@@ -27,6 +28,9 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     private ImageButton ibMovies;
     private ImageButton ibTv;
 
+    private TextView footerMoviesLabel;
+    private TextView footerTvLabel;
+
     private int selectedButton;
     private boolean isSearchVisible;
 
@@ -41,6 +45,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         footer = findViewById(R.id.list_activity_footer);
         ibMovies = findViewById(R.id.ib_movies);
         ibTv = findViewById(R.id.ib_tv);
+        footerMoviesLabel = findViewById(R.id.footer_movie_label);
+        footerTvLabel = findViewById(R.id.footer_tv_label);
 
         if (savedInstanceState != null){
             selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
@@ -56,32 +62,40 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         tabLayout.setupWithViewPager(viewPager);
 
         ibMovies.setSelected(true);
-        ibMovies.setOnClickListener(new View.OnClickListener() {
+        footerMoviesLabel.setSelected(true);
+        View.OnClickListener moviesClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_MOVIES;
                 ibMovies.setSelected(true);
+                footerMoviesLabel.setSelected(true);
                 ibTv.setSelected(false);
+                footerTvLabel.setSelected(false);
                 setTitle(getStringTitle(selectedButton));
                 ListFragmentPagerAdapter listMovieFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
                 viewPager.setAdapter(listMovieFragmentPagerAdapter);
                 tabLayout.setupWithViewPager(viewPager, true);
-
             }
-        });
+        };
+        ibMovies.setOnClickListener(moviesClickListener);
+        footerMoviesLabel.setOnClickListener(moviesClickListener);
 
-        ibTv.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener tvClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_TV_SHOWS;
                 ibTv.setSelected(true);
+                footerTvLabel.setSelected(true);
                 ibMovies.setSelected(false);
+                footerMoviesLabel.setSelected(false);
                 setTitle(getStringTitle(selectedButton));
                 ListFragmentPagerAdapter listTvFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
                 viewPager.setAdapter(listTvFragmentPagerAdapter);
                 tabLayout.setupWithViewPager(viewPager, true);
             }
-        });
+        };
+        ibTv.setOnClickListener(tvClickListener);
+        footerTvLabel.setOnClickListener(tvClickListener);
     }
 
     @Override
