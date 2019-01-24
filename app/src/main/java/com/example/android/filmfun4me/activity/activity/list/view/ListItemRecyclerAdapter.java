@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 public class ListItemRecyclerAdapter extends RecyclerView.Adapter<ListItemRecyclerAdapter.ViewHolder> {
 
-    ListPresenter listPresenter;
+    private ListPresenter listPresenter;
     private Context context;
 
 

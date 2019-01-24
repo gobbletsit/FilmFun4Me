@@ -25,7 +25,7 @@ public class ListModule {
         return new ListInteractorImpl(moviesWebService, tvShowsWebService);
     }
 
-    // so it stays on activity level instead of application level with @Singleton
+    // to stay on activity level instead of application level with @Singleton
     @ListScope
     @Provides
     ListPresenter provideListPresenter(ListInteractor listInteractor) {
