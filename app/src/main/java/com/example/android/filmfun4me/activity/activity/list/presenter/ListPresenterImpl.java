@@ -42,6 +42,7 @@ public class ListPresenterImpl implements ListPresenter {
 
     private PublishSubject publishSubject;
 
+    // for adapter to know which list to populate
     private int selectedButton;
 
     public ListPresenterImpl(ListInteractor listInteractor) {
@@ -154,7 +155,7 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void onListItemInteraction(int itemPosition) {
-        if (selectedButton == Constants.BUTTON_TV_SHOWS){
+        if (selectedButton == Constants.BUTTON_MOVIES){
             Movie movie = movieList.get(itemPosition);
             view.onMovieClicked(movie, getSingleItemAppendedGenres(movie.getGenreIds()));
         } else {
@@ -291,6 +292,7 @@ public class ListPresenterImpl implements ListPresenter {
             int genreId = currentGenreIds[i];
             for (int a = 0; a < genreList.size(); a++){
                 if (genreId == genreList.get(a).getGenreId()){
+                    // the last one doesn't need the comma
                     if (i != currentGenreIds.length -1){
                         appendedGenres = stringBuilder.append(genreList.get(a).getGenreName()).append(", ").toString();
                     } else {
