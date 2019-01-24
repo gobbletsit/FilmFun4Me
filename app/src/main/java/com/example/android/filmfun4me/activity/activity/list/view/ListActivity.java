@@ -34,6 +34,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     private int selectedButton;
     private boolean isSearchVisible;
 
+    ListFragmentPagerAdapter listFragmentPagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         }
 
         setTitle(getStringTitle(selectedButton));
-        ListFragmentPagerAdapter listFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
+        listFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
         viewPager.setAdapter(listFragmentPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -159,8 +161,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             ibTv.setSelected(false);
             footerTvLabel.setSelected(false);
             setTitle(getStringTitle(selectedButton));
-            ListFragmentPagerAdapter listMovieFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
-            viewPager.setAdapter(listMovieFragmentPagerAdapter);
+            listFragmentPagerAdapter.setSelectedButton(selectedButton);
+            viewPager.setAdapter(listFragmentPagerAdapter);
             tabLayout.setupWithViewPager(viewPager, true);
         } else {
             ibTv.setSelected(true);
@@ -168,8 +170,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             ibMovies.setSelected(false);
             footerMoviesLabel.setSelected(false);
             setTitle(getStringTitle(selectedButton));
-            ListFragmentPagerAdapter listTvFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
-            viewPager.setAdapter(listTvFragmentPagerAdapter);
+            listFragmentPagerAdapter.setSelectedButton(selectedButton);
+            viewPager.setAdapter(listFragmentPagerAdapter);
             tabLayout.setupWithViewPager(viewPager, true);
         }
     }

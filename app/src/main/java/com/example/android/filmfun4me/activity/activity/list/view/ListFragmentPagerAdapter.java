@@ -64,4 +64,8 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
             return null;
         }
     }
+
+    public void setSelectedButton(int selectedButton) {
+        this.selectedButton = selectedButton;
+    }
 }
