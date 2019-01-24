@@ -50,6 +50,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         footerMoviesLabel = findViewById(R.id.footer_movie_label);
         footerTvLabel = findViewById(R.id.footer_tv_label);
 
+        // you won't need this soon
         if (savedInstanceState != null){
             selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
             isSearchVisible = savedInstanceState.getBoolean(SEARCH_VISIBLE);
@@ -69,7 +70,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_MOVIES;
-                onFooterButtonClick(viewPager);
+                onFooterButtonClick();
             }
         };
         ibMovies.setOnClickListener(moviesClickListener);
@@ -79,7 +80,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_TV_SHOWS;
-                onFooterButtonClick(viewPager);
+                onFooterButtonClick();
             }
         };
         ibTv.setOnClickListener(tvClickListener);
@@ -120,14 +121,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         footer.setVisibility(View.VISIBLE);
     }
 
-    private String getStringTitle(int selectedButton){
-        if (selectedButton == 0){
-            return "Movies";
-        } else {
-            return "TV shows";
-        }
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -154,7 +147,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         footer.setVisibility(View.GONE);
     }
 
-    private void onFooterButtonClick(ViewPager viewPager){
+    private void onFooterButtonClick(){
         if (selectedButton == Constants.BUTTON_MOVIES){
             ibMovies.setSelected(true);
             footerMoviesLabel.setSelected(true);
@@ -162,8 +155,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             footerTvLabel.setSelected(false);
             setTitle(getStringTitle(selectedButton));
             listFragmentPagerAdapter.setSelectedButton(selectedButton);
-            viewPager.setAdapter(listFragmentPagerAdapter);
-            tabLayout.setupWithViewPager(viewPager, true);
+            listFragmentPagerAdapter.notifyDataSetChanged();
         } else {
             ibTv.setSelected(true);
             footerTvLabel.setSelected(true);
@@ -171,8 +163,15 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             footerMoviesLabel.setSelected(false);
             setTitle(getStringTitle(selectedButton));
             listFragmentPagerAdapter.setSelectedButton(selectedButton);
-            viewPager.setAdapter(listFragmentPagerAdapter);
-            tabLayout.setupWithViewPager(viewPager, true);
+            listFragmentPagerAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private String getStringTitle(int selectedButton){
+        if (selectedButton == 0){
+            return "Movies";
+        } else {
+            return "TV shows";
         }
     }
 }

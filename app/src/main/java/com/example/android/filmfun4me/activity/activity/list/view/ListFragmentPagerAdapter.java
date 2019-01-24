@@ -65,6 +65,11 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
     public void setSelectedButton(int selectedButton) {
         this.selectedButton = selectedButton;
     }
