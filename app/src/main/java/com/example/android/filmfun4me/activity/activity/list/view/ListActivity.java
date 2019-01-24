@@ -67,14 +67,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_MOVIES;
-                ibMovies.setSelected(true);
-                footerMoviesLabel.setSelected(true);
-                ibTv.setSelected(false);
-                footerTvLabel.setSelected(false);
-                setTitle(getStringTitle(selectedButton));
-                ListFragmentPagerAdapter listMovieFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
-                viewPager.setAdapter(listMovieFragmentPagerAdapter);
-                tabLayout.setupWithViewPager(viewPager, true);
+                onFooterButtonClick(viewPager);
             }
         };
         ibMovies.setOnClickListener(moviesClickListener);
@@ -84,14 +77,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_TV_SHOWS;
-                ibTv.setSelected(true);
-                footerTvLabel.setSelected(true);
-                ibMovies.setSelected(false);
-                footerMoviesLabel.setSelected(false);
-                setTitle(getStringTitle(selectedButton));
-                ListFragmentPagerAdapter listTvFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
-                viewPager.setAdapter(listTvFragmentPagerAdapter);
-                tabLayout.setupWithViewPager(viewPager, true);
+                onFooterButtonClick(viewPager);
             }
         };
         ibTv.setOnClickListener(tvClickListener);
@@ -164,5 +150,27 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         tabLayout.setVisibility(View.GONE);
         searchFragmentLayout.setVisibility(View.VISIBLE);
         footer.setVisibility(View.GONE);
+    }
+
+    private void onFooterButtonClick(ViewPager viewPager){
+        if (selectedButton == Constants.BUTTON_MOVIES){
+            ibMovies.setSelected(true);
+            footerMoviesLabel.setSelected(true);
+            ibTv.setSelected(false);
+            footerTvLabel.setSelected(false);
+            setTitle(getStringTitle(selectedButton));
+            ListFragmentPagerAdapter listMovieFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
+            viewPager.setAdapter(listMovieFragmentPagerAdapter);
+            tabLayout.setupWithViewPager(viewPager, true);
+        } else {
+            ibTv.setSelected(true);
+            footerTvLabel.setSelected(true);
+            ibMovies.setSelected(false);
+            footerMoviesLabel.setSelected(false);
+            setTitle(getStringTitle(selectedButton));
+            ListFragmentPagerAdapter listTvFragmentPagerAdapter = new ListFragmentPagerAdapter(ListActivity.this, getSupportFragmentManager(), selectedButton);
+            viewPager.setAdapter(listTvFragmentPagerAdapter);
+            tabLayout.setupWithViewPager(viewPager, true);
+        }
     }
 }
