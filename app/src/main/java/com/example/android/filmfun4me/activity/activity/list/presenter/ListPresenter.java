@@ -21,8 +21,6 @@ import java.util.List;
 
 public interface ListPresenter {
 
-    void setSearchView(ListView listView);
-
     // Movie
     void setMovieView(ListView listView, int pagerPosition);
 
@@ -33,10 +31,6 @@ public interface ListPresenter {
     void showUpcomingMovies();
 
     void showMovieSearchResults(String searchQuery);
-
-    void onBindMovieListItemAtPosition(int position, ListItemView listItemView);
-    int getMovieListItemRowsCount();
-    void onMovieListItemInteraction(int itemPosition);
 
     void getMovieGenres();
 
@@ -49,13 +43,15 @@ public interface ListPresenter {
 
     void showTvSearchResults(String searchQuery);
 
-    void onBindTvShowListItemAtPosition(int position, ListItemView listItemView);
-    int getTvShowListItemRowCount();
-    void onTvShowListItemInteraction(int itemPosition);
-
     void getTvGenres();
 
     // both
+    void setSearchView(ListView listView);
+
+    void onBindListItemAtPosition(int position, ListItemView listItemView);
+    int getListItemRowsCount();
+    void onListItemInteraction(int itemPosition);
+    
     void destroy();
 
 }

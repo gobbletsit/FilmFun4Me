@@ -46,7 +46,10 @@ public class ListFragment extends Fragment implements ListView {
     private int pagerPosition;
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter customAdapter;
+
+    @Inject
+    RecyclerView.Adapter customAdapter;
+
     private ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     private Callback callback;
@@ -81,7 +84,6 @@ public class ListFragment extends Fragment implements ListView {
                 pagerPosition = (int) savedInstanceState.get(Constants.PAGER_POSITION);
             }
             if (savedInstanceState.containsKey("saved_query")){
-
                 savedSearchQuery = savedInstanceState.getString("saved_query");
             }
             if (savedInstanceState.containsKey(Constants.SELECTED_BUTTON)){
@@ -156,15 +158,11 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void setUpMovieView() {
-        customAdapter = new ListMovieRecyclerAdapter(listPresenter);
         setAnimationAdapter();
     }
 
     @Override
     public void setUpMovieSearchView() {
-        if (customAdapter == null){
-            customAdapter = new ListMovieRecyclerAdapter(listPresenter);
-        }
         if (scaleInAnimationAdapter == null){
             setAnimationAdapter();
         }
@@ -174,15 +172,11 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void setUpTvShowView() {
-        customAdapter = new ListTvShowRecyclerAdapter(listPresenter);
         setAnimationAdapter();
     }
 
     @Override
     public void setUpTvSearchView() {
-        if (customAdapter == null){
-            customAdapter = new ListTvShowRecyclerAdapter(listPresenter);
-        }
         if (scaleInAnimationAdapter == null){
             setAnimationAdapter();
         }

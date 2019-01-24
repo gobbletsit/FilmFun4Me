@@ -4,8 +4,9 @@ import android.app.Application;
 import android.os.StrictMode;
 
 import com.example.android.filmfun4me.di.AppComponent;
-import com.example.android.filmfun4me.di.DaggerAppComponent;
+
 import com.example.android.filmfun4me.di.AppModule;
+import com.example.android.filmfun4me.di.DaggerAppComponent;
 import com.example.android.filmfun4me.di.DetailComponent;
 import com.example.android.filmfun4me.di.DetailModule;
 import com.example.android.filmfun4me.di.ListComponent;
