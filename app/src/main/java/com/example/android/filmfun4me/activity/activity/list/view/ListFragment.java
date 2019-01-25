@@ -131,7 +131,8 @@ public class ListFragment extends Fragment implements ListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (isNetworkAvailable() && getArguments() != null){
+        //isNetworkAvailable() &&
+        if (getArguments() != null){
             if (getArguments().containsKey(Constants.SELECTED_BUTTON)){
                 selectedButton = (int) getArguments().get(Constants.SELECTED_BUTTON);
                 if (getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_MOVIES){
@@ -144,9 +145,9 @@ public class ListFragment extends Fragment implements ListView {
                     listPresenter.setSearchView(this);
                 }
             }
-        } else {
+        } /*else {
             Toast.makeText(getActivity(), "No network connection! Please check your internet connection", Toast.LENGTH_LONG).show();
-        }
+        }*/
     }
 
 

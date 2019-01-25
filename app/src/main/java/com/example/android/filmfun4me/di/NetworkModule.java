@@ -36,10 +36,16 @@ public class NetworkModule {
 
     private static final int CONNECT_TIMEOUT_IN_MS = 30000;
 
+    /*@Singleton
+    @Provides
+    RequestInterceptor providesRequestInterceptor(Context context){
+        return new RequestInterceptor(context);
+    }*/
+
     @Provides
     @Singleton
-    Interceptor providesRequestInterceptor(RequestInterceptor interceptor) {
-        return interceptor;
+    Interceptor providesRequestInterceptor(Context context) {
+        return new RequestInterceptor(context);
     }
 
     @Provides
