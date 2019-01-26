@@ -30,8 +30,10 @@ import com.example.android.filmfun4me.utils.Constants;
 
 public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
-    public static final String SEARCH_VISIBLE = "search_visible";
-    public static final String SEARCH_FRAG = "SEARCH_FRAG";
+    public static boolean isListActive;
+
+    private static final String SEARCH_VISIBLE = "search_visible";
+    private static final String SEARCH_FRAG = "SEARCH_FRAG";
 
     private FrameLayout searchFragmentLayout;
     private TabLayout tabLayout;
@@ -49,6 +51,12 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     ListFragmentPagerAdapter listFragmentPagerAdapter;
 
     private String savedSearchQuery;
+
+    @Override
+    protected void onStart() {
+        isListActive = true;
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +142,12 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         }
         outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
         outState.putBoolean(SEARCH_VISIBLE, isSearchVisible);
+    }
+
+    @Override
+    protected void onStop() {
+        isListActive = false;
+        super.onStop();
     }
 
     @Override

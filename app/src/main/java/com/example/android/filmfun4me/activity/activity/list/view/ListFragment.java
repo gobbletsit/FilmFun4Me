@@ -144,9 +144,9 @@ public class ListFragment extends Fragment implements ListView {
                     listPresenter.setSearchView(this);
                 }
             }
-        } /*else {
-            Toast.makeText(getActivity(), "No network connection! Please check your internet connection", Toast.LENGTH_LONG).show();
-        }*/
+        } else {
+            Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

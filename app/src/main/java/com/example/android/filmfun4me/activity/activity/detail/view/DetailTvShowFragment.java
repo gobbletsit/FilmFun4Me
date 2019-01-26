@@ -1,8 +1,11 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.example.android.filmfun4me.BaseApplication;
@@ -51,6 +56,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @BindView(R.id.recycler_tv_show_videos) RecyclerView recyclerViewVideos;
     @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
     @BindView(R.id.recycler_season_list) RecyclerView recyclerViewSeasons;
+
+    @BindView(R.id.progress_bar_tv_details) ProgressBar progressBar;
+    @BindView(R.id.tv_details_container_lyt) ConstraintLayout detailsContainerLyt;
 
     private ListEpisodeRecyclerAdapter customEpisodeAdapter;
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
@@ -100,13 +108,18 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
-            TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
-            if (tvShow != null) {
-                detailPresenter.setDetailView(this);
-                detailPresenter.showTvShowDetails(tvShow);
+        if (isNetworkAvailable()){
+            if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
+                TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
+                if (tvShow != null) {
+                    detailPresenter.setDetailView(this);
+                    detailPresenter.showTvShowDetails(tvShow);
+                }
             }
+        } else {
+            Toast.makeText(getActivity(), "No network Connection!", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @Override
@@ -138,7 +151,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showVideos() {
-        listVideosRecyclerAdapter.notifyDataSetChanged();
+        if (listVideosRecyclerAdapter!= null){
+            listVideosRecyclerAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -153,7 +168,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showEpisodeList() {
-        //customEpisodeAdapter.notifyDataSetChanged();
         recyclerViewEpisodes.setVisibility(View.VISIBLE);
         recyclerViewEpisodes.setHasFixedSize(true);
         recyclerViewEpisodes.requestFocus();
@@ -192,14 +206,30 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
         listSeasonButtonRecyclerAdapter = new ListSeasonButtonRecyclerAdapter(detailPresenter, tvShowId);
         recyclerViewSeasons.setAdapter(listSeasonButtonRecyclerAdapter);
-
-        //customEpisodeAdapter = new ListEpisodeRecyclerAdapter(detailPresenter);
-        //recyclerViewEpisodes.setAdapter(customEpisodeAdapter);
     }
 
     @Override
     public void onTrailerClicked(String videoUrl) {
         callback.onTrailerClick(videoUrl);
+    }
+
+    @Override
+    public void showLoading() {
+        detailsContainerLyt.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onLoadingFinished() {
+        progressBar.setVisibility(View.GONE);
+        detailsContainerLyt.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void loadingErrorMessage(String error) {
+        progressBar.setVisibility(View.GONE);
+        detailsContainerLyt.setVisibility(View.GONE);
+        Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -213,5 +243,12 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void onDestroy() {
         super.onDestroy();
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
