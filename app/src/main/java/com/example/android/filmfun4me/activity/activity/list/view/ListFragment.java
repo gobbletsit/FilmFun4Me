@@ -103,7 +103,7 @@ public class ListFragment extends Fragment implements ListView {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
 
         ((BaseApplication) getActivity().getApplication()).createListComponent().inject(this);
 
@@ -230,7 +230,7 @@ public class ListFragment extends Fragment implements ListView {
         recyclerView.setAdapter(scaleInAnimationAdapter);
     }
 
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
@@ -280,9 +280,9 @@ public class ListFragment extends Fragment implements ListView {
                 return false;
             }
         });
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search:
@@ -290,7 +290,7 @@ public class ListFragment extends Fragment implements ListView {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -304,5 +304,9 @@ public class ListFragment extends Fragment implements ListView {
         void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
         void onSearchItemClick();
         void onSearchDialogClosed();
+    }
+
+    public void searchMovies(String query){
+        listPresenter.showMovieSearchResults(query);
     }
 }
