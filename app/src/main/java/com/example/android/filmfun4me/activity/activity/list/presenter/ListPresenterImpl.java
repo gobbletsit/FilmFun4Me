@@ -8,6 +8,7 @@ import com.example.android.filmfun4me.activity.activity.list.view.ListView;
 import com.example.android.filmfun4me.data.Genre;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
+import com.example.android.filmfun4me.utils.Constants;
 import com.example.android.filmfun4me.utils.RxUtils;
 
 import java.util.ArrayList;
@@ -40,6 +41,9 @@ public class ListPresenterImpl implements ListPresenter {
     private List<Genre> genreList = new ArrayList<>(40);
 
     private PublishSubject publishSubject;
+
+    // for adapter to know which list to populate
+    private int selectedButton;
 
     public ListPresenterImpl(ListInteractor listInteractor) {
         this.listInteractor = listInteractor;
@@ -92,6 +96,7 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void showMovieSearchResults(String query) {
+        selectedButton = Constants.BUTTON_MOVIES;
         if (!query.contentEquals("")){
             //if (publishSubject == null) {
             publishSubject = PublishSubject.create();
@@ -125,27 +130,47 @@ public class ListPresenterImpl implements ListPresenter {
 
     }
 
-    public void onBindMovieListItemAtPosition(int position, ListItemView listItemView) {
-        Movie movie = movieList.get(position);
-        listItemView.setItemTitle(movie.getTitle());
-        listItemView.setItemPoster(movie.getPosterPath());
-        listItemView.setGenreName(getSingleItemAppendedGenres(movie.getGenreIds()));
+    public void onBindListItemAtPosition(int position, ListItemView listItemView) {
+        if (selectedButton == Constants.BUTTON_MOVIES){
+            Movie movie = movieList.get(position);
+            listItemView.setItemTitle(movie.getTitle());
+            listItemView.setItemPoster(movie.getPosterPath());
+            listItemView.setGenreName(getSingleItemAppendedGenres(movie.getGenreIds()));
+        } else {
+            TvShow tvShow = tvShowList.get(position);
+            listItemView.setItemTitle(tvShow.getTitle());
+            listItemView.setItemPoster(tvShow.getPosterPath());
+            listItemView.setGenreName(getSingleItemAppendedGenres(tvShow.getGenreIds()));
+        }
+
     }
 
-    public int getMovieListItemRowsCount() {
-        return movieList.size();
+    public int getListItemRowsCount() {
+        if (selectedButton == Constants.BUTTON_MOVIES){
+            return movieList.size();
+        } else {
+            return tvShowList.size();
+        }
+
     }
 
     @Override
-    public void onMovieListItemInteraction(int itemPosition) {
-        Movie movie = movieList.get(itemPosition);
-        view.onMovieClicked(movie, getSingleItemAppendedGenres(movie.getGenreIds()));
+    public void onListItemInteraction(int itemPosition) {
+        if (selectedButton == Constants.BUTTON_MOVIES){
+            Movie movie = movieList.get(itemPosition);
+            view.onMovieClicked(movie, getSingleItemAppendedGenres(movie.getGenreIds()));
+        } else {
+            TvShow tvShow = tvShowList.get(itemPosition);
+            view.onTvShowClicked(tvShow, getSingleItemAppendedGenres(tvShow.getGenreIds()));
+        }
     }
 
     private void onMovieFetchSuccess(List<Movie> movieList) {
         this.movieList.clear();
         this.movieList.addAll(movieList);
+        selectedButton = Constants.BUTTON_MOVIES;
         if (isViewAttached()) {
+            view.onLoadingFinished();
             view.setUpMovieView();
         }
     }
@@ -186,6 +211,7 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void showTvSearchResults(String searchQuery) {
+        selectedButton = Constants.BUTTON_TV_SHOWS;
         publishSubject = PublishSubject.create();
         publishSubject
                 .debounce(300, TimeUnit.MILLISECONDS)
@@ -198,8 +224,10 @@ public class ListPresenterImpl implements ListPresenter {
                     public void onNext(List<TvShow> response) {
                         tvShowList.clear();
                         tvShowList = response;
+                        Log.i(ListPresenterImpl.class.getSimpleName(), "tvlistSize = " + tvShowList.size());
                         if (isViewAttached()){
                             view.setUpTvSearchView();
+                            Log.i(ListPresenterImpl.class.getSimpleName(), "IS VIEW ATTACHED " + isViewAttached());
                         }
                     }
                     @Override
@@ -215,29 +243,12 @@ public class ListPresenterImpl implements ListPresenter {
         publishSubject.onNext(searchQuery);
     }
 
-    @Override
-    public void onBindTvShowListItemAtPosition(int position, ListItemView listItemView) {
-        TvShow tvShow = tvShowList.get(position);
-        listItemView.setItemTitle(tvShow.getTitle());
-        listItemView.setItemPoster(tvShow.getPosterPath());
-        listItemView.setGenreName(getSingleItemAppendedGenres(tvShow.getGenreIds()));
-    }
-
-    @Override
-    public int getTvShowListItemRowCount() {
-        return tvShowList.size();
-    }
-
-    @Override
-    public void onTvShowListItemInteraction(int itemPosition) {
-        TvShow tvShow = tvShowList.get(itemPosition);
-        view.onTvShowClicked(tvShow, getSingleItemAppendedGenres(tvShow.getGenreIds()));
-    }
-
     private void onTvShowFetchSuccess(List<TvShow> tvShowList) {
         this.tvShowList.clear();
         this.tvShowList.addAll(tvShowList);
+        selectedButton = Constants.BUTTON_TV_SHOWS;
         if (isViewAttached()) {
+            view.onLoadingFinished();
             view.setUpTvShowView();
         }
     }
@@ -247,7 +258,6 @@ public class ListPresenterImpl implements ListPresenter {
         view.loadingErrorMessage(e.getMessage());
     }
 
-    // GENRE
     @Override
     public void getMovieGenres() {
         disposableGenres = listInteractor.getListOfAllMovieGenres()
@@ -286,6 +296,7 @@ public class ListPresenterImpl implements ListPresenter {
             int genreId = currentGenreIds[i];
             for (int a = 0; a < genreList.size(); a++){
                 if (genreId == genreList.get(a).getGenreId()){
+                    // the last one doesn't need the comma
                     if (i != currentGenreIds.length -1){
                         appendedGenres = stringBuilder.append(genreList.get(a).getGenreName()).append(", ").toString();
                     } else {

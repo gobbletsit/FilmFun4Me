@@ -36,4 +36,10 @@ public interface DetailView {
 
     void onTrailerClicked(String videoUrl);
 
+    void showLoading();
+
+    void onLoadingFinished();
+
+    void loadingErrorMessage(String error);
+
 }

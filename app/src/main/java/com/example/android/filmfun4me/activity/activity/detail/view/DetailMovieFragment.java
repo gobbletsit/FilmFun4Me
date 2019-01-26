@@ -2,8 +2,11 @@ package com.example.android.filmfun4me.activity.activity.detail.view;
 
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -14,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.example.android.filmfun4me.BaseApplication;
@@ -56,6 +61,9 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
 
     @BindView(R.id.recycler_movie_videos) RecyclerView recyclerViewVideos;
     @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
+
+    @BindView(R.id.progress_bar_movie_details) ProgressBar progressBar;
+    @BindView(R.id.movie_details_container_lyt) ConstraintLayout detailsContainerLyt;
 
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
     private ListReviewRecyclerAdapter listReviewsRecyclerAdapter;
@@ -109,12 +117,16 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
-            Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
-            if (movie != null) {
-                detailPresenter.setDetailView(this);
-                detailPresenter.showMovieDetails(movie);
+        if (isNetworkAvailable()){
+            if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
+                Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
+                if (movie != null) {
+                    detailPresenter.setDetailView(this);
+                    detailPresenter.showMovieDetails(movie);
+                }
             }
+        } else {
+            Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -150,7 +162,7 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
 
     @Override
     public void showEpisodes(ArrayList<ParentObject> parentObjects) {
-        // nothing here
+        // DO NOTHING
     }
 
     @Override
@@ -165,12 +177,16 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
 
     @Override
     public void showVideos() {
-        listVideosRecyclerAdapter.notifyDataSetChanged();
+        if (listVideosRecyclerAdapter != null){
+            listVideosRecyclerAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void showReviews() {
-        listReviewsRecyclerAdapter.notifyDataSetChanged();
+        if (listVideosRecyclerAdapter != null){
+            listReviewsRecyclerAdapter.notifyDataSetChanged();
+        }
         tvReviewLabel.setVisibility(View.VISIBLE);
         btn_drop_review.setVisibility(View.VISIBLE);
     }
@@ -199,16 +215,22 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
+    public void showLoading() {
+        detailsContainerLyt.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        getArguments().clear();
-        detailPresenter.destroy();
+    public void onLoadingFinished() {
+        progressBar.setVisibility(View.GONE);
+        detailsContainerLyt.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void loadingErrorMessage(String error) {
+        progressBar.setVisibility(View.GONE);
+        detailsContainerLyt.setVisibility(View.GONE);
+        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -221,5 +243,24 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
             recyclerViewReviews.setVisibility(View.VISIBLE);
             recyclerViewReviews.requestFocus();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getArguments().clear();
+        detailPresenter.destroy();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

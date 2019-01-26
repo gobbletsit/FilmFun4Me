@@ -45,7 +45,7 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // you will set which titles to retrieve based on SELECTED BUTTON
+        // set which titles to retrieve based on SELECTED BUTTON
         if (selectedButton == Constants.BUTTON_MOVIES){
             if (position == 0){
                 return "Most Popular";
@@ -63,5 +63,14 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    public void setSelectedButton(int selectedButton) {
+        this.selectedButton = selectedButton;
     }
 }

@@ -10,39 +10,35 @@ import android.widget.TextView;
 
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.list.presenter.ListPresenter;
-import com.example.android.filmfun4me.data.Genre;
-import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
-public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecyclerAdapter.ViewHolder> {
+public class ListItemRecyclerAdapter extends RecyclerView.Adapter<ListItemRecyclerAdapter.ViewHolder> {
 
     private ListPresenter listPresenter;
     private Context context;
 
 
-    ListMovieRecyclerAdapter (ListPresenter listPresenter){
+    public ListItemRecyclerAdapter(ListPresenter listPresenter){
         this.listPresenter = listPresenter;
     }
 
 
     @Override
-    public ListMovieRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ListItemRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ListMovieRecyclerAdapter.ViewHolder holder, int position) {
-        listPresenter.onBindMovieListItemAtPosition(position, holder);
+    public void onBindViewHolder(ListItemRecyclerAdapter.ViewHolder holder, int position) {
+        listPresenter.onBindListItemAtPosition(position, holder);
     }
 
     @Override
     public int getItemCount() {
-        return listPresenter.getMovieListItemRowsCount();
+        return listPresenter.getListItemRowsCount();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ListItemView {
@@ -63,7 +59,7 @@ public class ListMovieRecyclerAdapter extends RecyclerView.Adapter<ListMovieRecy
 
         @Override
         public void onClick(View view) {
-            listPresenter.onMovieListItemInteraction(getAdapterPosition());
+            listPresenter.onListItemInteraction(getAdapterPosition());
         }
 
         @Override
