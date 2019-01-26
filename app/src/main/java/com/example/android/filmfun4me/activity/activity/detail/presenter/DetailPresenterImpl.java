@@ -245,16 +245,16 @@ public class DetailPresenterImpl implements DetailPresenter {
         detailView.showEpisodes(parentObjectArrayList);
     }
 
-    private boolean isViewAttached() {
-        return detailView != null;
-    }
-
     @Override
     public void whenTrailerClicked(View view) {
         String videoUrl = (String) view.getTag();
         if (videoUrl != null){
             detailView.onTrailerClicked(videoUrl);
         }
+    }
+
+    private boolean isViewAttached() {
+        return detailView != null;
     }
 
     @Override

@@ -258,7 +258,6 @@ public class ListPresenterImpl implements ListPresenter {
         view.loadingErrorMessage(e.getMessage());
     }
 
-    // GENRE
     @Override
     public void getMovieGenres() {
         disposableGenres = listInteractor.getListOfAllMovieGenres()

@@ -100,11 +100,8 @@ public class ListFragment extends Fragment implements ListView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setRetainInstance(true);
-
         ((BaseApplication) getActivity().getApplication()).createListComponent().inject(this);
-
     }
 
     @Override
@@ -130,8 +127,7 @@ public class ListFragment extends Fragment implements ListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //isNetworkAvailable() &&
-        if (getArguments() != null){
+        if (getArguments() != null && isNetworkAvailable()){
             if (getArguments().containsKey(Constants.SELECTED_BUTTON)){
                 selectedButton = (int) getArguments().get(Constants.SELECTED_BUTTON);
                 if (getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_MOVIES){
@@ -216,13 +212,6 @@ public class ListFragment extends Fragment implements ListView {
         ((BaseApplication) getActivity().getApplication()).releaseListComponent();
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
     private void setAnimationAdapter(){
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
@@ -231,6 +220,18 @@ public class ListFragment extends Fragment implements ListView {
         scaleInAnimationAdapter.setFirstOnly(false);
         scaleInAnimationAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(scaleInAnimationAdapter);
+    }
+
+    public void searchMovies(String query){
+        listPresenter.showMovieSearchResults(query);
+    }
+
+    public void searchTvShows(String query){listPresenter.showTvSearchResults(query);}
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override
@@ -243,10 +244,4 @@ public class ListFragment extends Fragment implements ListView {
         void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
         void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
     }
-
-    public void searchMovies(String query){
-        listPresenter.showMovieSearchResults(query);
-    }
-
-    public void searchTvShows(String query){listPresenter.showTvSearchResults(query);}
 }

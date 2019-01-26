@@ -124,7 +124,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showMovieDetails(Movie movie) {
-        // NOTHING HERE
+        // DO NOTHING
     }
 
     @Override
@@ -163,7 +163,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showSeasonList() {
-        listSeasonButtonRecyclerAdapter.notifyDataSetChanged();
+        if (listSeasonButtonRecyclerAdapter != null){
+            listSeasonButtonRecyclerAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -248,7 +250,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

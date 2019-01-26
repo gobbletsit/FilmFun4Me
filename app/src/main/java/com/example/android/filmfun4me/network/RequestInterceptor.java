@@ -24,7 +24,7 @@ import okhttp3.Response;
 public class RequestInterceptor implements Interceptor {
 
     private static final String API_KEY_TAG = "api_key";
-    Context context;
+    private Context context;
 
     @Inject
     public RequestInterceptor(Context context) {
@@ -35,28 +35,24 @@ public class RequestInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
 
         Request request = chain.request();
-
         HttpUrl httpUrl = request.url();
 
         // getting the key from the gradle properties file
         HttpUrl url = httpUrl.newBuilder().addQueryParameter(API_KEY_TAG, BuildConfig.MOVIE_CONSUMER_KEY).build();
 
-
-        //finalRequest = request.newBuilder().url(url).build();
+        // caching
         Request finalRequest;
         if (isNetworkAvailable(context)){
             finalRequest = request.newBuilder().url(url).header("Cache-Control", "public, max-age=" + 5).build();
         } else {                                                                                                       // 3 DAYS AGO, IF NOT DISCARD
             finalRequest = request.newBuilder().removeHeader("Pragma").header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 3).url(url).build();
         }
-
         return chain.proceed(finalRequest);
     }
 
     private boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

@@ -162,31 +162,12 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
 
     @Override
     public void showEpisodes(ArrayList<ParentObject> parentObjects) {
-        // nothing here
+        // DO NOTHING
     }
 
     @Override
     public void onTrailerClicked(String videoUrl) {
         callback.onTrailerClick(videoUrl);
-    }
-
-    @Override
-    public void showLoading() {
-        detailsContainerLyt.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onLoadingFinished() {
-        progressBar.setVisibility(View.GONE);
-        detailsContainerLyt.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void loadingErrorMessage(String error) {
-        progressBar.setVisibility(View.GONE);
-        detailsContainerLyt.setVisibility(View.GONE);
-        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -234,16 +215,22 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
+    public void showLoading() {
+        detailsContainerLyt.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        getArguments().clear();
-        detailPresenter.destroy();
+    public void onLoadingFinished() {
+        progressBar.setVisibility(View.GONE);
+        detailsContainerLyt.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void loadingErrorMessage(String error) {
+        progressBar.setVisibility(View.GONE);
+        detailsContainerLyt.setVisibility(View.GONE);
+        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -258,10 +245,22 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getArguments().clear();
+        detailPresenter.destroy();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
+    }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

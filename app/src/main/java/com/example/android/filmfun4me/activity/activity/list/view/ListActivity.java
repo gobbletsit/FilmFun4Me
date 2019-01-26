@@ -72,7 +72,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         footerMoviesLabel = findViewById(R.id.footer_movie_label);
         footerTvLabel = findViewById(R.id.footer_tv_label);
 
-        // you won't need this soon
         if (savedInstanceState != null){
             selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
             if (savedInstanceState.containsKey(SEARCH_VISIBLE)){
@@ -134,28 +133,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         startActivity(detailIntent);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (isSearchVisible){
-            outState.putString("saved_query", savedSearchQuery);
-        }
-        outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
-        outState.putBoolean(SEARCH_VISIBLE, isSearchVisible);
-    }
-
-    @Override
-    protected void onStop() {
-        isListActive = false;
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
-    }
-
     private void switchToSearchFragment(){
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -187,21 +164,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         }
     }
 
-    private String getStringTitle(int selectedButton){
-        if (selectedButton == 0){
-            return "Movies";
-        } else {
-            return "TV shows";
-        }
-    }
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -212,7 +174,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
                 switchToSearchFragment();
                 return super.onOptionsItemSelected(item);
         }
-
         return true;
     }
 
@@ -285,5 +246,34 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private String getStringTitle(int selectedButton){
+        if (selectedButton == 0){
+            return "Movies";
+        } else {
+            return "TV shows";
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        isListActive = false;
+        super.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (isSearchVisible){
+            outState.putString("saved_query", savedSearchQuery);
+        }
+        outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
+        outState.putBoolean(SEARCH_VISIBLE, isSearchVisible);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
