@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.filmfun4me.BaseApplication;
@@ -52,6 +53,8 @@ public class ListFragment extends Fragment implements ListView {
     private ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     private Callback callback;
+
+    private ProgressBar progressBar;
 
     public ListFragment() {
         // Required empty public constructor
@@ -111,6 +114,7 @@ public class ListFragment extends Fragment implements ListView {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         recyclerView = view.findViewById(R.id.rec_list_activity);
+        progressBar = view.findViewById(R.id.progress_bar);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -186,11 +190,17 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void showLoading() {
-        // setup progress bar
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onLoadingFinished() {
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void loadingErrorMessage(String error) {
+        progressBar.setVisibility(View.GONE);
         Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
     }
 

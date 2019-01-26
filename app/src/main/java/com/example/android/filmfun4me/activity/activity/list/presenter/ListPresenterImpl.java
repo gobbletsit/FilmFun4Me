@@ -170,6 +170,7 @@ public class ListPresenterImpl implements ListPresenter {
         this.movieList.addAll(movieList);
         selectedButton = Constants.BUTTON_MOVIES;
         if (isViewAttached()) {
+            view.onLoadingFinished();
             view.setUpMovieView();
         }
     }
@@ -247,6 +248,7 @@ public class ListPresenterImpl implements ListPresenter {
         this.tvShowList.addAll(tvShowList);
         selectedButton = Constants.BUTTON_TV_SHOWS;
         if (isViewAttached()) {
+            view.onLoadingFinished();
             view.setUpTvShowView();
         }
     }

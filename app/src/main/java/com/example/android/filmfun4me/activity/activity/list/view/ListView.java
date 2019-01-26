@@ -32,6 +32,8 @@ public interface ListView {
 
     void showLoading();
 
+    void onLoadingFinished();
+
     void loadingErrorMessage(String error);
 
 
