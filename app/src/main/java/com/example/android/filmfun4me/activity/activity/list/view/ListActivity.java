@@ -54,6 +54,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     @Override
     protected void onStart() {
+        // for receiver to know if running
         isListActive = true;
         super.onStart();
     }
