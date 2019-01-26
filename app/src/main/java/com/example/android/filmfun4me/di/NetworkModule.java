@@ -57,7 +57,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     File providesCacheFile(Context context){
-        return new File(context.getCacheDir(), "okhttp.cache");
+        return new File(context.getCacheDir(), "responses");
     }
 
     @Provides
@@ -70,7 +70,7 @@ public class NetworkModule {
 
         return new okhttp3.OkHttpClient.Builder()
                 .connectTimeout(CONNECT_TIMEOUT_IN_MS, java.util.concurrent.TimeUnit.MILLISECONDS)
-                .addInterceptor(loggingInterceptor)
+                .addNetworkInterceptor(loggingInterceptor)
                 .addInterceptor(requestInterceptor)
                 .cache(cache)
                 .build();

@@ -45,9 +45,9 @@ public class RequestInterceptor implements Interceptor {
         //finalRequest = request.newBuilder().url(url).build();
         Request finalRequest;
         if (isNetworkAvailable(context)){
-            finalRequest = request.newBuilder().header("Cache-Control", "public, max-age=" + 5).url(url).build();
+            finalRequest = request.newBuilder().url(url).header("Cache-Control", "public, max-age=" + 5).build();
         } else {                                                                                                       // 3 DAYS AGO, IF NOT DISCARD
-            finalRequest = request.newBuilder().removeHeader("Pragma").header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 3).build();
+            finalRequest = request.newBuilder().removeHeader("Pragma").header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 3).url(url).build();
         }
 
         return chain.proceed(finalRequest);

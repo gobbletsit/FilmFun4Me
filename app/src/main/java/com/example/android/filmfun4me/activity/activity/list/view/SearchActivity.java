@@ -115,13 +115,4 @@ public class SearchActivity extends AppCompatActivity implements ListFragment.Ca
 
     }
 
-    @Override
-    public void onSearchItemClick() {
-
-    }
-
-    @Override
-    public void onSearchDialogClosed() {
-
-    }
 }
