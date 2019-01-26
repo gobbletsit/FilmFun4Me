@@ -13,15 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.activity.list.view.SearchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.activity.list.view.ListActivity" />
-        </activity>
         <activity android:name=".activity.activity.list.view.ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
