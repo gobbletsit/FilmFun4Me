@@ -70,9 +70,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             if (savedInstanceState.containsKey(SEARCH_VISIBLE)){
                 isSearchVisible = savedInstanceState.getBoolean(SEARCH_VISIBLE);
                 if (isSearchVisible){
-                    Log.i(ListActivity.class.getSimpleName(), "IS VISIBLE = " + String.valueOf(isSearchVisible));
                     savedSearchQuery = savedInstanceState.getString("saved_query");
-                    Log.i(ListActivity.class.getSimpleName(), "SAVED QUERY = " + savedSearchQuery);
                     switchToSearchFragment();
                 }
             }
@@ -126,18 +124,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         extras.putInt(Constants.SELECTED_BUTTON, selectedButton);
         detailIntent.putExtras(extras);
         startActivity(detailIntent);
-    }
-
-    @Override
-    public void onSearchItemClick() {
-        switchToSearchFragment();
-    }
-
-    @Override
-    public void onSearchDialogClosed() {
-        searchFragmentLayout.setVisibility(View.GONE);
-        tabLayout.setVisibility(View.VISIBLE);
-        footer.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -207,6 +193,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         switch (item.getItemId()){
             case R.id.search:
                 onSearchRequested();
+                // for orientation change
                 isSearchVisible = true;
                 switchToSearchFragment();
                 return super.onOptionsItemSelected(item);
@@ -232,6 +219,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
         if (savedSearchQuery != null ){
             Log.i(ListActivity.class.getSimpleName(), "onCreateOptionsMenu: = " + savedSearchQuery);
+            searchView.clearFocus();
         searchView.setIconified(false);
         menuItem.expandActionView();
         searchView.post(new Runnable() {
@@ -240,7 +228,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
                 searchView.setQuery(savedSearchQuery, false);
             }
         });
-        searchView.setFocusable(true);
         }
 
         // setOnCloseListener doesn't work so implemented this
@@ -270,12 +257,13 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             public boolean onQueryTextChange(String newText) {
                 savedSearchQuery = newText;
                 if (!newText.contentEquals("")){
+                    ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(SEARCH_FRAG);
                     if (selectedButton == Constants.BUTTON_MOVIES){
-                        ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(SEARCH_FRAG);
                         listFragment.searchMovies(newText);
                         return true;
                     } else {
-                        //listPresenter.showTvSearchResults(newText);
+                        listFragment.searchTvShows(newText);
+                        return true;
                     }
                 }
                 return false;

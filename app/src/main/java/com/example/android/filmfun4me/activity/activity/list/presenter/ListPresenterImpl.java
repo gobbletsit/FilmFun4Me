@@ -96,6 +96,7 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void showMovieSearchResults(String query) {
+        selectedButton = Constants.BUTTON_MOVIES;
         if (!query.contentEquals("")){
             //if (publishSubject == null) {
             publishSubject = PublishSubject.create();
@@ -162,7 +163,6 @@ public class ListPresenterImpl implements ListPresenter {
             TvShow tvShow = tvShowList.get(itemPosition);
             view.onTvShowClicked(tvShow, getSingleItemAppendedGenres(tvShow.getGenreIds()));
         }
-
     }
 
     private void onMovieFetchSuccess(List<Movie> movieList) {
@@ -210,6 +210,7 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void showTvSearchResults(String searchQuery) {
+        selectedButton = Constants.BUTTON_TV_SHOWS;
         publishSubject = PublishSubject.create();
         publishSubject
                 .debounce(300, TimeUnit.MILLISECONDS)
@@ -222,8 +223,10 @@ public class ListPresenterImpl implements ListPresenter {
                     public void onNext(List<TvShow> response) {
                         tvShowList.clear();
                         tvShowList = response;
+                        Log.i(ListPresenterImpl.class.getSimpleName(), "tvlistSize = " + tvShowList.size());
                         if (isViewAttached()){
                             view.setUpTvSearchView();
+                            Log.i(ListPresenterImpl.class.getSimpleName(), "IS VIEW ATTACHED " + isViewAttached());
                         }
                     }
                     @Override

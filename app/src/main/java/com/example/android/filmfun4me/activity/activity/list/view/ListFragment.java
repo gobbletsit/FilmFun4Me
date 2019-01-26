@@ -37,7 +37,6 @@ import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 public class ListFragment extends Fragment implements ListView {
 
     private static final String TAG = ListFragment.class.getSimpleName();
-    private String savedSearchQuery;
 
     @Inject
     ListPresenter listPresenter;
@@ -83,9 +82,6 @@ public class ListFragment extends Fragment implements ListView {
             if (savedInstanceState.containsKey(Constants.PAGER_POSITION)){
                 pagerPosition = (int) savedInstanceState.get(Constants.PAGER_POSITION);
             }
-            if (savedInstanceState.containsKey("saved_query")){
-                savedSearchQuery = savedInstanceState.getString("saved_query");
-            }
             if (savedInstanceState.containsKey(Constants.SELECTED_BUTTON)){
                 selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
             }
@@ -103,7 +99,6 @@ public class ListFragment extends Fragment implements ListView {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
-        //setHasOptionsMenu(true);
 
         ((BaseApplication) getActivity().getApplication()).createListComponent().inject(this);
 
@@ -148,13 +143,6 @@ public class ListFragment extends Fragment implements ListView {
         } /*else {
             Toast.makeText(getActivity(), "No network connection! Please check your internet connection", Toast.LENGTH_LONG).show();
         }*/
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        listPresenter.destroy();
     }
 
     @Override
@@ -206,6 +194,11 @@ public class ListFragment extends Fragment implements ListView {
         Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        listPresenter.destroy();
+    }
 
     @Override
     public void onDestroy() {
@@ -230,83 +223,20 @@ public class ListFragment extends Fragment implements ListView {
         recyclerView.setAdapter(scaleInAnimationAdapter);
     }
 
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        inflater.inflate(R.menu.search_menu, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-
-        if (savedSearchQuery != null){
-            searchView.setIconified(true);
-            searchView.onActionViewExpanded();
-            searchView.setQuery(savedSearchQuery, false);
-            searchView.setFocusable(true);
-        }
-
-        // setOnCloseListener doesn't work so implemented this
-        MenuItem menuItem = menu.findItem(R.id.search);
-        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                callback.onSearchDialogClosed();
-                return true;
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                savedSearchQuery = newText;
-                if (!newText.contentEquals("")){
-                    if (selectedButton == Constants.BUTTON_MOVIES){
-                        listPresenter.showMovieSearchResults(newText);
-                    } else {
-                        listPresenter.showTvSearchResults(newText);
-                    }
-                }
-                return false;
-            }
-        });
-    }*/
-
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-                callback.onSearchItemClick();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(Constants.PAGER_POSITION,pagerPosition);
-        outState.putString("saved_query", savedSearchQuery);
     }
 
     public interface Callback {
         void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
         void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
-        void onSearchItemClick();
-        void onSearchDialogClosed();
     }
 
     public void searchMovies(String query){
         listPresenter.showMovieSearchResults(query);
     }
+
+    public void searchTvShows(String query){listPresenter.showTvSearchResults(query);}
 }
