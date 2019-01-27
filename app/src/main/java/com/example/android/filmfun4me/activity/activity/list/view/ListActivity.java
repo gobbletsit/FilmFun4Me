@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.constraint.ConstraintLayout;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.filmfun4me.NetworkChangeReceiver;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
 import com.example.android.filmfun4me.data.Movie;
@@ -52,6 +54,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     private String savedSearchQuery;
 
+    private NetworkChangeReceiver networkChangeReceiver;
+
     @Override
     protected void onStart() {
         // for receiver to know if running
@@ -72,6 +76,12 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         ibTv = findViewById(R.id.ib_tv);
         footerMoviesLabel = findViewById(R.id.footer_movie_label);
         footerTvLabel = findViewById(R.id.footer_tv_label);
+
+        // register only if there is no connection so we can reload when the connection is re-established
+        if (!isNetworkAvailable()){
+            networkChangeReceiver = new NetworkChangeReceiver();
+            registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
 
         if (savedInstanceState != null){
             selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
@@ -257,6 +267,19 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         }
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    // for broadcast receiver to trigger when connection is re-established
+    public void reload(){
+        listFragmentPagerAdapter.setSelectedButton(selectedButton);
+        listFragmentPagerAdapter.notifyDataSetChanged();
+    }
+
+
     @Override
     protected void onStop() {
         isListActive = false;
@@ -275,6 +298,9 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     @Override
     protected void onDestroy() {
+        if (networkChangeReceiver != null){
+            unregisterReceiver(networkChangeReceiver);
+        }
         super.onDestroy();
     }
 }
