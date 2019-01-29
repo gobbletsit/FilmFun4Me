@@ -37,8 +37,6 @@ public class RequestInterceptor implements Interceptor {
         Request request = chain.request();
         HttpUrl httpUrl = request.url();
 
-        // 60 * 60 * 24 * 3
-
         // getting the key from the gradle properties file
         HttpUrl url = httpUrl.newBuilder().addQueryParameter(API_KEY_TAG, BuildConfig.MOVIE_CONSUMER_KEY).build();
 

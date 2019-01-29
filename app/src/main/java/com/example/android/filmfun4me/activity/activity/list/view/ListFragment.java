@@ -2,13 +2,17 @@ package com.example.android.filmfun4me.activity.activity.list.view;
 
 
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +59,8 @@ public class ListFragment extends Fragment implements ListView {
     private Callback callback;
 
     private ProgressBar progressBar;
+
+    private BroadcastReceiver broadcastReceiver;
 
     public ListFragment() {
         // Required empty public constructor
@@ -127,7 +133,7 @@ public class ListFragment extends Fragment implements ListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null && isNetworkAvailable()){
+        if (getArguments() != null){
             if (getArguments().containsKey(Constants.SELECTED_BUTTON)){
                 selectedButton = (int) getArguments().get(Constants.SELECTED_BUTTON);
                 if (getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_MOVIES){
@@ -140,8 +146,6 @@ public class ListFragment extends Fragment implements ListView {
                     listPresenter.setSearchView(this);
                 }
             }
-        } else {
-            Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -243,5 +247,9 @@ public class ListFragment extends Fragment implements ListView {
     public interface Callback {
         void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
         void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
+    }
+
+    private void setForReceiver(){
+        listPresenter.setMovieView(this, pagerPosition);
     }
 }
