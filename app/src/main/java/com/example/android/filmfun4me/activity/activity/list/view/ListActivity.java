@@ -56,6 +56,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     private NetworkRegainedReceiver networkRegainedReceiver;
     private NetworkChangeReceiver networkChangeReceiver;
 
+    private boolean receiverRegistered;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,19 +179,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.search:
-                onSearchRequested();
-                // for orientation change
-                isSearchVisible = true;
-                switchToSearchFragment();
-                return super.onOptionsItemSelected(item);
-        }
-        return true;
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
@@ -204,17 +193,28 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
         MenuItem menuItem = menu.findItem(R.id.search);
 
-        if (savedSearchQuery != null ){
+        // on orientation change
+        if (savedSearchQuery != null){
             searchView.clearFocus();
-        searchView.setIconified(false);
-        menuItem.expandActionView();
-        searchView.post(new Runnable() {
+            //searchView.setIconified(false);
+            menuItem.expandActionView();
+            searchView.post(new Runnable() {
+                @Override
+                public void run() {
+                    searchView.setQuery(savedSearchQuery, false);
+                }
+            });
+        }
+
+        // no need to override onOptionsItemSelected
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
-            public void run() {
-                searchView.setQuery(savedSearchQuery, false);
+            public boolean onMenuItemClick(MenuItem item) {
+                isSearchVisible = true;
+                switchToSearchFragment();
+                return false;
             }
         });
-        }
 
         // setOnCloseListener doesn't work so implemented this
         menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -242,8 +242,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             @Override
             public boolean onQueryTextChange(String newText) {
                 savedSearchQuery = newText;
+                ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(SEARCH_FRAG);
                 if (!newText.contentEquals("")){
-                    ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(SEARCH_FRAG);
                     if (selectedButton == Constants.BUTTON_MOVIES){
                         listFragment.searchMovies(newText);
                         return true;
@@ -280,6 +280,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkRegainedReceiver, intentFilter);
+        receiverRegistered = true;
 
     }
 
@@ -287,10 +288,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     @Override
     protected void onStop() {
         isListActive = false;
-        if (networkChangeReceiver != null){
-            unregisterReceiver(networkChangeReceiver);
-        }
-        if (networkRegainedReceiver != null){
+        unregisterReceiver(networkChangeReceiver);
+        if (receiverRegistered){
             unregisterReceiver(networkRegainedReceiver);
         }
         super.onStop();
