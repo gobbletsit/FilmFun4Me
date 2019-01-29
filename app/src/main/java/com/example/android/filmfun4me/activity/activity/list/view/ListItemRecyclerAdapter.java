@@ -18,11 +18,9 @@ public class ListItemRecyclerAdapter extends RecyclerView.Adapter<ListItemRecycl
     private ListPresenter listPresenter;
     private Context context;
 
-
     public ListItemRecyclerAdapter(ListPresenter listPresenter){
         this.listPresenter = listPresenter;
     }
-
 
     @Override
     public ListItemRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -77,6 +75,5 @@ public class ListItemRecyclerAdapter extends RecyclerView.Adapter<ListItemRecycl
             Picasso.with(context).load(BaseUtils.getPosterPath(posterPath)).into(iv_movie_poster);
         }
     }
-
 }
 

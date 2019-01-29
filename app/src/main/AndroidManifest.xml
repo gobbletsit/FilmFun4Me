@@ -29,7 +29,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.activity.list.view.ListActivity" />
         </activity>
-        <receiver android:name=".NetworkChangeReceiver" >
+        <receiver android:name=".NetworkLostReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>

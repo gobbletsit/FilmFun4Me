@@ -126,7 +126,7 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
                 }
             }
         } else {
-            Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -248,7 +248,6 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getArguments().clear();
         detailPresenter.destroy();
     }
 

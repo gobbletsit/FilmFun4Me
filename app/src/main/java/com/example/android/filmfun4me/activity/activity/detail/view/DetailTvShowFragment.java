@@ -60,7 +60,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @BindView(R.id.progress_bar_tv_details) ProgressBar progressBar;
     @BindView(R.id.tv_details_container_lyt) ConstraintLayout detailsContainerLyt;
 
-    private ListEpisodeRecyclerAdapter customEpisodeAdapter;
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
     private ListSeasonButtonRecyclerAdapter listSeasonButtonRecyclerAdapter;
 
@@ -117,9 +116,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
                 }
             }
         } else {
-            Toast.makeText(getActivity(), "No network Connection!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
@@ -237,7 +235,6 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getArguments().clear();
         detailPresenter.destroy();
     }
 

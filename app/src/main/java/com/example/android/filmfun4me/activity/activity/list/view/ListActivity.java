@@ -5,14 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,13 +19,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.android.filmfun4me.NetworkChangeReceiver;
+import com.example.android.filmfun4me.NetworkLostReceiver;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.Constants;
-import com.example.android.filmfun4me.utils.NetworkRegainedReceiver;
+import com.example.android.filmfun4me.NetworkRegainedReceiver;
 
 public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
@@ -35,6 +33,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     private static final String SEARCH_VISIBLE = "search_visible";
     private static final String SEARCH_FRAG = "SEARCH_FRAG";
+    private static final String QUERY = "query";
 
     private FrameLayout searchFragmentLayout;
     private TabLayout tabLayout;
@@ -46,17 +45,15 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     private TextView footerMoviesLabel;
     private TextView footerTvLabel;
 
+    private ListFragmentPagerAdapter listFragmentPagerAdapter;
+
     private int selectedButton;
     private boolean isSearchVisible;
-
-    ListFragmentPagerAdapter listFragmentPagerAdapter;
-
     private String savedSearchQuery;
 
     private NetworkRegainedReceiver networkRegainedReceiver;
-    private NetworkChangeReceiver networkChangeReceiver;
-
-    private boolean receiverRegistered;
+    private NetworkLostReceiver networkLostReceiver;
+    private boolean isReceiverRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +74,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             if (savedInstanceState.containsKey(SEARCH_VISIBLE)){
                 isSearchVisible = savedInstanceState.getBoolean(SEARCH_VISIBLE);
                 if (isSearchVisible){
-                    savedSearchQuery = savedInstanceState.getString("saved_query");
+                    savedSearchQuery = savedInstanceState.getString(QUERY);
                     switchToSearchFragment();
                 }
             }
@@ -115,13 +112,11 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     protected void onStart() {
         // for receiver to know if running
         isListActive = true;
-        // register only if there is no connection so we can reload when the connection is re-established
-        //if (!isNetworkAvailable()){
-        networkChangeReceiver = new NetworkChangeReceiver();
-        networkChangeReceiver.setListActivityHandler(this);
+        networkLostReceiver = new NetworkLostReceiver();
+        networkLostReceiver.setListActivityHandler(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeReceiver, intentFilter);
+        registerReceiver(networkLostReceiver, intentFilter);
         super.onStart();
     }
 
@@ -196,7 +191,6 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         // on orientation change
         if (savedSearchQuery != null){
             searchView.clearFocus();
-            //searchView.setIconified(false);
             menuItem.expandActionView();
             searchView.post(new Runnable() {
                 @Override
@@ -261,35 +255,34 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     private String getStringTitle(int selectedButton){
         if (selectedButton == 0){
-            return "Movies";
+            return getResources().getString(R.string.movies_label);
         } else {
-            return "TV shows";
+            return getResources().getString(R.string.tv_label);
         }
     }
 
-    // for broadcast receiver to trigger when connection is re-established
+    // for broadcast receiver to trigger(refresh) when connection is re-established
     public void reload(){
         listFragmentPagerAdapter.setSelectedButton(selectedButton);
         listFragmentPagerAdapter.notifyDataSetChanged();
     }
 
-    // called from NetworkChangeReceiver only if there is no connection
+    // called from NetworkLostReceiver only if there is no connection
     public void registerNetworkRegainedReceiver(){
         networkRegainedReceiver = new NetworkRegainedReceiver();
         networkRegainedReceiver.setListActivityHandler(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkRegainedReceiver, intentFilter);
-        receiverRegistered = true;
-
+        // so we can unregister
+        isReceiverRegistered = true;
     }
-
 
     @Override
     protected void onStop() {
         isListActive = false;
-        unregisterReceiver(networkChangeReceiver);
-        if (receiverRegistered){
+        unregisterReceiver(networkLostReceiver);
+        if (isReceiverRegistered){
             unregisterReceiver(networkRegainedReceiver);
         }
         super.onStop();
@@ -299,7 +292,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (isSearchVisible){
-            outState.putString("saved_query", savedSearchQuery);
+            outState.putString(QUERY, savedSearchQuery);
         }
         outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
         outState.putBoolean(SEARCH_VISIBLE, isSearchVisible);

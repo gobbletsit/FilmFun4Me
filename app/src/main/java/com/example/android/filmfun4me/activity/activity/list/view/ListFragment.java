@@ -60,7 +60,6 @@ public class ListFragment extends Fragment implements ListView {
 
     private ProgressBar progressBar;
 
-    private BroadcastReceiver broadcastReceiver;
 
     public ListFragment() {
         // Required empty public constructor
@@ -226,17 +225,11 @@ public class ListFragment extends Fragment implements ListView {
         recyclerView.setAdapter(scaleInAnimationAdapter);
     }
 
-    public void searchMovies(String query){
+    void searchMovies(String query){
         listPresenter.showMovieSearchResults(query);
     }
 
-    public void searchTvShows(String query){listPresenter.showTvSearchResults(query);}
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
+    void searchTvShows(String query){listPresenter.showTvSearchResults(query);}
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -247,9 +240,5 @@ public class ListFragment extends Fragment implements ListView {
     public interface Callback {
         void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
         void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
-    }
-
-    private void setForReceiver(){
-        listPresenter.setMovieView(this, pagerPosition);
     }
 }
