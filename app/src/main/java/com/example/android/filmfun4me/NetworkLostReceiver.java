@@ -22,6 +22,8 @@ public class NetworkLostReceiver extends BroadcastReceiver {
 
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
+        // if isListActive/isDetailActive
+
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())){
             if (networkInfo == null) {
                 Toast.makeText(context, context.getResources().getString(R.string.no_network_connection), Toast.LENGTH_LONG).show();

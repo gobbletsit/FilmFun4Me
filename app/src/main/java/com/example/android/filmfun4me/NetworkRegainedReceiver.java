@@ -20,6 +20,8 @@ public class NetworkRegainedReceiver extends BroadcastReceiver {
 
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
+        // if isListActive/isDetailActive
+
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())){
             if (networkInfo!= null && networkInfo.isConnected()){
                 listActivity.reload();
