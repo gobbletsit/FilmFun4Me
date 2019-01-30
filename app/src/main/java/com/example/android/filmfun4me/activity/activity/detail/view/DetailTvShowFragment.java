@@ -1,8 +1,6 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -59,8 +57,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @BindView(R.id.tv_tv_details_not_available)
     TextView tvDetailsNotAvailable;
 
-    @BindView(R.id.image_view_poster_tv_show)
-    ImageView ivTvShowPoster;
+    @BindView(R.id.image_view_cover_tv_show)
+    ImageView ivTvShowCover;
 
     @BindView(R.id.recycler_tv_show_videos)
     RecyclerView recyclerViewVideos;
@@ -140,9 +138,9 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void showTvDetails(TvShow tvShow) {
 
         if (tvShow.getBackdropPath() != null) {
-            Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(tvShow.getBackdropPath())).into(ivTvShowPoster);
+            Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(tvShow.getBackdropPath())).into(ivTvShowCover);
         } else {
-            Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(ivTvShowPoster);
+            Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(ivTvShowCover);
         }
 
         tvDetailTvShowTitle.setText(tvShow.getTitle());
