@@ -109,7 +109,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     }
 
     @Override
-    protected void onStart() {
+    protected void onResume() {
         // for receiver to know if running
         isListActive = true;
         networkLostReceiver = new NetworkLostReceiver();
@@ -117,7 +117,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkLostReceiver, intentFilter);
-        super.onStart();
+        super.onResume();
     }
 
     @Override
@@ -279,14 +279,14 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
     }
 
     @Override
-    protected void onStop() {
+    protected void onPause() {
         isListActive = false;
         unregisterReceiver(networkLostReceiver);
         if (isReceiverRegistered){
             unregisterReceiver(networkRegainedReceiver);
             isReceiverRegistered = false;
         }
-        super.onStop();
+        super.onPause();
     }
 
     @Override

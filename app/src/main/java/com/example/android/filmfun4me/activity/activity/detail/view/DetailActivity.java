@@ -1,6 +1,8 @@
 package com.example.android.filmfun4me.activity.activity.detail.view;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.android.filmfun4me.NetworkLostReceiver;
+import com.example.android.filmfun4me.NetworkRegainedReceiver;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
@@ -18,7 +22,17 @@ import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity implements Callback {
 
+    public static boolean isDetailActive;
+
     int selectedButton;
+
+    private NetworkRegainedReceiver networkRegainedReceiver;
+    private NetworkLostReceiver networkLostReceiver;
+    private boolean isReceiverRegistered;
+
+    private Movie movie;
+    private TvShow tvShow;
+    private String singleItemGenres;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +41,6 @@ public class DetailActivity extends AppCompatActivity implements Callback {
 
         Intent listIntent = getIntent();
         Bundle extras = listIntent.getExtras();
-
-        int selectedButton;
 
         if (extras != null) {
             selectedButton = extras.getInt(Constants.SELECTED_BUTTON);
@@ -39,20 +51,33 @@ public class DetailActivity extends AppCompatActivity implements Callback {
         }
 
         if (selectedButton == Constants.BUTTON_MOVIES && extras != null) {
-            Movie movie = extras.getParcelable(Constants.KEY_MOVIE);
-            String singleMovieGenres = extras.getString(Constants.KEY_SINGLE_MOVIE_GENRES);
+            movie = extras.getParcelable(Constants.KEY_MOVIE);
+            //String singleMovieGenres = extras.getString(Constants.KEY_SINGLE_MOVIE_GENRES);
+            singleItemGenres = extras.getString(Constants.KEY_SINGLE_MOVIE_GENRES);
             if (movie != null) {
-                switchToMovieDetailFragment(movie, singleMovieGenres);
+                switchToMovieDetailFragment(movie, singleItemGenres);
                 setTitle(getResources().getString(R.string.movie_details_label));
             }
         } else if (selectedButton == Constants.BUTTON_TV_SHOWS && extras != null ){
-            TvShow tvShow = extras.getParcelable(Constants.KEY_TV_SHOW);
-            String singleTvShowGenres = extras.getString(Constants.KEY_SINGLE_TV_SHOW_GENRES);
+            tvShow = extras.getParcelable(Constants.KEY_TV_SHOW);
+            //String singleTvShowGenres = extras.getString(Constants.KEY_SINGLE_TV_SHOW_GENRES);
+            singleItemGenres = extras.getString(Constants.KEY_SINGLE_TV_SHOW_GENRES);
             if (tvShow != null) {
-                switchToTvShowDetailFragment(tvShow, singleTvShowGenres);
+                switchToTvShowDetailFragment(tvShow, singleItemGenres);
                 setTitle(getResources().getString(R.string.tv_details_label));
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        isDetailActive = true;
+        networkLostReceiver = new NetworkLostReceiver();
+        networkLostReceiver.setDetailActivityHandler(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkLostReceiver, intentFilter);
+        super.onResume();
     }
 
     private void switchToMovieDetailFragment(Movie movie, String singleMovieGenres){
@@ -91,6 +116,36 @@ public class DetailActivity extends AppCompatActivity implements Callback {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void reload(){
+        if (selectedButton == Constants.BUTTON_MOVIES){
+            switchToMovieDetailFragment(movie, singleItemGenres);
+        } else if (selectedButton == Constants.BUTTON_TV_SHOWS){
+            switchToTvShowDetailFragment(tvShow, singleItemGenres);
+        }
+    }
+
+    // called from NetworkLostReceiver only if there is no connection
+    public void registerNetworkRegainedReceiver(){
+        networkRegainedReceiver = new NetworkRegainedReceiver();
+        networkRegainedReceiver.setDetailActivityHandler(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkRegainedReceiver, intentFilter);
+        // so we can unregister
+        isReceiverRegistered = true;
+    }
+
+    @Override
+    protected void onPause() {
+        isDetailActive = false;
+        unregisterReceiver(networkLostReceiver);
+        if (isReceiverRegistered){
+            unregisterReceiver(networkRegainedReceiver);
+            isReceiverRegistered = false;
+        }
+        super.onPause();
     }
 
     @Override

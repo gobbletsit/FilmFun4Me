@@ -117,7 +117,7 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (isNetworkAvailable()){
+        //if (isNetworkAvailable()){
             if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
                 Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
                 if (movie != null) {
@@ -125,9 +125,9 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
                     detailPresenter.showMovieDetails(movie);
                 }
             }
-        } else {
-            Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_LONG).show();
-        }
+       // } else {
+       //     Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_LONG).show();
+       // }
     }
 
     @Override
