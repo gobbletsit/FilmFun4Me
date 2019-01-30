@@ -57,7 +57,6 @@ public class ListFragment extends Fragment implements ListView {
         // Required empty public constructor
     }
 
-
     public static ListFragment newInstance(int position, int selectedButton) {
         ListFragment listFragment = new ListFragment();
         Bundle args = new Bundle();
