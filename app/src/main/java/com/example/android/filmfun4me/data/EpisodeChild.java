@@ -4,7 +4,7 @@ public class EpisodeChild {
 
     private String episodeOverview;
 
-    public EpisodeChild (String episodeOverview){
+    public EpisodeChild(String episodeOverview) {
         this.episodeOverview = episodeOverview;
     }
 

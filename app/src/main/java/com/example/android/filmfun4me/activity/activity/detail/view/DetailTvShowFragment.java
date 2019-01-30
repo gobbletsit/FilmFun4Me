@@ -44,29 +44,42 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     DetailPresenter detailPresenter;
 
     // view binding
-    @BindView(R.id.tv_detail_tv_show_title) TextView tvDetailTvShowTitle;
-    @BindView(R.id.tv_detail_tv_show_release_date) TextView tvDetailTvShowReleaseDate;
-    @BindView(R.id.tv_detail_tv_show_overview) TextView tvDetailTvShowOverview;
-    @BindView(R.id.tv_detail_tv_show_rating) TextView tvDetailTvShowRating;
-    @BindView(R.id.tv_detail_tv_show_lang) TextView tvDetailTvShowLang;
-    @BindView(R.id.tv_detail_tv_show_genre) TextView tvTvShowGenre;
+    @BindView(R.id.tv_detail_tv_show_title)
+    TextView tvDetailTvShowTitle;
+    @BindView(R.id.tv_detail_tv_show_release_date)
+    TextView tvDetailTvShowReleaseDate;
+    @BindView(R.id.tv_detail_tv_show_overview)
+    TextView tvDetailTvShowOverview;
+    @BindView(R.id.tv_detail_tv_show_rating)
+    TextView tvDetailTvShowRating;
+    @BindView(R.id.tv_detail_tv_show_lang)
+    TextView tvDetailTvShowLang;
+    @BindView(R.id.tv_detail_tv_show_genre)
+    TextView tvTvShowGenre;
+    @BindView(R.id.tv_tv_details_not_available)
+    TextView tvDetailsNotAvailable;
 
-    @BindView(R.id.image_view_poster_tv_show) ImageView ivTvShowPoster;
+    @BindView(R.id.image_view_poster_tv_show)
+    ImageView ivTvShowPoster;
 
-    @BindView(R.id.recycler_tv_show_videos) RecyclerView recyclerViewVideos;
-    @BindView(R.id.recycler_episode_list) RecyclerView recyclerViewEpisodes;
-    @BindView(R.id.recycler_season_list) RecyclerView recyclerViewSeasons;
+    @BindView(R.id.recycler_tv_show_videos)
+    RecyclerView recyclerViewVideos;
+    @BindView(R.id.recycler_episode_list)
+    RecyclerView recyclerViewEpisodes;
+    @BindView(R.id.recycler_season_list)
+    RecyclerView recyclerViewSeasons;
 
-    @BindView(R.id.progress_bar_tv_details) ProgressBar progressBar;
-    @BindView(R.id.tv_details_container_lyt) ConstraintLayout detailsContainerLyt;
+    @BindView(R.id.progress_bar_tv_details)
+    ProgressBar progressBar;
+    @BindView(R.id.tv_details_container_lyt)
+    ConstraintLayout detailsContainerLyt;
 
-    private ListEpisodeRecyclerAdapter customEpisodeAdapter;
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
     private ListSeasonButtonRecyclerAdapter listSeasonButtonRecyclerAdapter;
 
-    private Callback callback;
+    private OnTrailerClickCallback onTrailerClickCallback;
 
-    public DetailTvShowFragment (){
+    public DetailTvShowFragment() {
         // required empty public constructor
     }
 
@@ -82,7 +95,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callback = (Callback) context;
+        onTrailerClickCallback = (OnTrailerClickCallback) context;
     }
 
     @Override
@@ -108,16 +121,12 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (isNetworkAvailable()){
-            if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
-                TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
-                if (tvShow != null) {
-                    detailPresenter.setDetailView(this);
-                    detailPresenter.showTvShowDetails(tvShow);
-                }
+        if (getArguments() != null && getArguments().containsKey(Constants.KEY_TV_SHOW)) {
+            TvShow tvShow = (TvShow) getArguments().get(Constants.KEY_TV_SHOW);
+            if (tvShow != null) {
+                detailPresenter.setDetailView(this);
+                detailPresenter.showTvShowDetails(tvShow);
             }
-        } else {
-            Toast.makeText(getActivity(), "No network Connection!", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -130,7 +139,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @Override
     public void showTvDetails(TvShow tvShow) {
 
-        if (tvShow.getBackdropPath() != null){
+        if (tvShow.getBackdropPath() != null) {
             Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(tvShow.getBackdropPath())).into(ivTvShowPoster);
         } else {
             Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(ivTvShowPoster);
@@ -142,7 +151,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         tvDetailTvShowRating.setText(String.valueOf(tvShow.getVoteAverage()) + "/10");
         tvDetailTvShowLang.setText(tvShow.getLanguage());
 
-        if(getArguments() != null && getArguments().containsKey(Constants.KEY_SINGLE_TV_SHOW_GENRES)){
+        if (getArguments() != null && getArguments().containsKey(Constants.KEY_SINGLE_TV_SHOW_GENRES)) {
             tvTvShowGenre.setText(getArguments().getString(Constants.KEY_SINGLE_TV_SHOW_GENRES));
         }
 
@@ -151,7 +160,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showVideos() {
-        if (listVideosRecyclerAdapter!= null){
+        if (listVideosRecyclerAdapter != null) {
             listVideosRecyclerAdapter.notifyDataSetChanged();
         }
     }
@@ -163,7 +172,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void showSeasonList() {
-        if (listSeasonButtonRecyclerAdapter != null){
+        if (listSeasonButtonRecyclerAdapter != null) {
             listSeasonButtonRecyclerAdapter.notifyDataSetChanged();
         }
     }
@@ -184,7 +193,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         recyclerViewEpisodes.setAdapter(listEpisodeExpandableAdapter);
     }
 
-    private void setRecyclersLayouts(){
+    private void setRecyclersLayouts() {
 
         LinearLayoutManager videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewVideos.setLayoutManager(videoListLayoutManager);
@@ -202,7 +211,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         recyclerViewEpisodes.addItemDecoration(itemDecoration);
     }
 
-    private void setAdapters(String tvShowId){
+    private void setAdapters(String tvShowId) {
         listVideosRecyclerAdapter = new ListVideosRecyclerAdapter(detailPresenter);
         recyclerViewVideos.setAdapter(listVideosRecyclerAdapter);
 
@@ -212,7 +221,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void onTrailerClicked(String videoUrl) {
-        callback.onTrailerClick(videoUrl);
+        onTrailerClickCallback.onTrailerClick(videoUrl);
     }
 
     @Override
@@ -231,13 +240,17 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void loadingErrorMessage(String error) {
         progressBar.setVisibility(View.GONE);
         detailsContainerLyt.setVisibility(View.GONE);
-        Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        tvDetailsNotAvailable.setVisibility(View.VISIBLE);
+        if (error.contains("only-if-cached")) {
+            tvDetailsNotAvailable.setText(getResources().getString(R.string.details_check_internet));
+        } else {
+            Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getArguments().clear();
         detailPresenter.destroy();
     }
 
@@ -245,11 +258,5 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void onDestroy() {
         super.onDestroy();
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

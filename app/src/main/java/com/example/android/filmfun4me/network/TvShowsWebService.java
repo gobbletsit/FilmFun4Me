@@ -43,6 +43,4 @@ public interface TvShowsWebService {
     @GET("3/tv/{tv_id}/season/{season_number}")
     io.reactivex.Observable<EpisodeWrapper> getEpisodesFromService(@Path("tv_id") String tvId, @Path("season_number") int seasonNumber);
 
-    // will implement search by genre
-
 }

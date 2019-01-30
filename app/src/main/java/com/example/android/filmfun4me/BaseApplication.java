@@ -1,6 +1,10 @@
 package com.example.android.filmfun4me;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.StrictMode;
 
 import com.example.android.filmfun4me.di.AppComponent;
@@ -63,4 +67,5 @@ public class BaseApplication extends Application {
     }
 
     public DetailComponent getDetailComponent(){ return detailComponent;}
+
 }

@@ -1,18 +1,16 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,13 +18,18 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.android.filmfun4me.BaseApplication;
+import com.example.android.filmfun4me.NetworkLostReceiver;
 import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.activity.activity.detail.view.DetailActivity;
 import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.Constants;
+import com.example.android.filmfun4me.NetworkRegainedReceiver;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
@@ -34,51 +37,52 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
     private static final String SEARCH_VISIBLE = "search_visible";
     private static final String SEARCH_FRAG = "SEARCH_FRAG";
+    private static final String QUERY = "query";
 
-    private FrameLayout searchFragmentLayout;
-    private TabLayout tabLayout;
-    private ConstraintLayout footer;
+    @BindView(R.id.root_list_search_results_container)
+    FrameLayout searchFragmentLayout;
+    @BindView(R.id.tab_layout_list)
+    TabLayout tabLayout;
+    @BindView(R.id.list_activity_footer)
+    ConstraintLayout footerLayout;
 
-    private ImageButton ibMovies;
-    private ImageButton ibTv;
+    @BindView(R.id.ib_movies)
+    ImageButton ibMovies;
+    @BindView(R.id.ib_tv)
+    ImageButton ibTv;
 
-    private TextView footerMoviesLabel;
-    private TextView footerTvLabel;
+    @BindView(R.id.footer_movie_label)
+    TextView footerMoviesLabel;
+    @BindView(R.id.footer_tv_label)
+    TextView footerTvLabel;
+
+    @BindView(R.id.view_pager_list)
+    ViewPager viewPager;
+
+    private ListFragmentPagerAdapter listFragmentPagerAdapter;
 
     private int selectedButton;
+
     private boolean isSearchVisible;
+    private String query;
 
-    ListFragmentPagerAdapter listFragmentPagerAdapter;
-
-    private String savedSearchQuery;
-
-    @Override
-    protected void onStart() {
-        // for receiver to know if running
-        isListActive = true;
-        super.onStart();
-    }
+    private NetworkRegainedReceiver networkRegainedReceiver;
+    private NetworkLostReceiver networkLostReceiver;
+    private boolean isRegainedReceiverRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        searchFragmentLayout = findViewById(R.id.root_list_search_results_container);
-        tabLayout = findViewById(R.id.tab_layout_list);
-        ViewPager viewPager = findViewById(R.id.view_pager_list);
-        footer = findViewById(R.id.list_activity_footer);
-        ibMovies = findViewById(R.id.ib_movies);
-        ibTv = findViewById(R.id.ib_tv);
-        footerMoviesLabel = findViewById(R.id.footer_movie_label);
-        footerTvLabel = findViewById(R.id.footer_tv_label);
+        ButterKnife.bind(this);
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
-            if (savedInstanceState.containsKey(SEARCH_VISIBLE)){
+            if (savedInstanceState.containsKey(SEARCH_VISIBLE)) {
                 isSearchVisible = savedInstanceState.getBoolean(SEARCH_VISIBLE);
-                if (isSearchVisible){
-                    savedSearchQuery = savedInstanceState.getString("saved_query");
+                if (isSearchVisible) {
+                    query = savedInstanceState.getString(QUERY);
                     switchToSearchFragment();
                 }
             }
@@ -95,6 +99,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_MOVIES;
+                // switch fragment
                 onFooterButtonClick();
             }
         };
@@ -105,11 +110,24 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             @Override
             public void onClick(View v) {
                 selectedButton = Constants.BUTTON_TV_SHOWS;
+                // switch fragment
                 onFooterButtonClick();
             }
         };
         ibTv.setOnClickListener(tvClickListener);
         footerTvLabel.setOnClickListener(tvClickListener);
+    }
+
+    @Override
+    protected void onResume() {
+        // for receiver to know if activity running
+        isListActive = true;
+        networkLostReceiver = new NetworkLostReceiver();
+        networkLostReceiver.setListActivityHandler(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkLostReceiver, intentFilter);
+        super.onResume();
     }
 
     @Override
@@ -134,24 +152,25 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         startActivity(detailIntent);
     }
 
-    private void switchToSearchFragment(){
+    private void switchToSearchFragment() {
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
         ListFragment searchFragment = ListFragment.newSearchInstance(selectedButton);
         transaction.replace(R.id.root_list_search_results_container, searchFragment, SEARCH_FRAG);
         transaction.commit();
         tabLayout.setVisibility(View.GONE);
+        footerLayout.setVisibility(View.GONE);
         searchFragmentLayout.setVisibility(View.VISIBLE);
-        footer.setVisibility(View.GONE);
     }
 
-    private void onFooterButtonClick(){
-        if (selectedButton == Constants.BUTTON_MOVIES){
+    private void onFooterButtonClick() {
+        if (selectedButton == Constants.BUTTON_MOVIES) {
             ibMovies.setSelected(true);
             footerMoviesLabel.setSelected(true);
             ibTv.setSelected(false);
             footerTvLabel.setSelected(false);
             setTitle(getStringTitle(selectedButton));
+            // adapter loads frag based on selected button
             listFragmentPagerAdapter.setSelectedButton(selectedButton);
             listFragmentPagerAdapter.notifyDataSetChanged();
         } else {
@@ -160,22 +179,10 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             ibMovies.setSelected(false);
             footerMoviesLabel.setSelected(false);
             setTitle(getStringTitle(selectedButton));
+            // adapter loads frag based on selected button
             listFragmentPagerAdapter.setSelectedButton(selectedButton);
             listFragmentPagerAdapter.notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.search:
-                onSearchRequested();
-                // for orientation change
-                isSearchVisible = true;
-                switchToSearchFragment();
-                return super.onOptionsItemSelected(item);
-        }
-        return true;
     }
 
     @Override
@@ -193,18 +200,27 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
         MenuItem menuItem = menu.findItem(R.id.search);
 
-        if (savedSearchQuery != null ){
-            Log.i(ListActivity.class.getSimpleName(), "onCreateOptionsMenu: = " + savedSearchQuery);
+        // on orientation change
+        if (query != null) {
             searchView.clearFocus();
-        searchView.setIconified(false);
-        menuItem.expandActionView();
-        searchView.post(new Runnable() {
+            menuItem.expandActionView();
+            searchView.post(new Runnable() {
+                @Override
+                public void run() {
+                    searchView.setQuery(query, false);
+                }
+            });
+        }
+
+        // no need to override onOptionsItemSelected
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
-            public void run() {
-                searchView.setQuery(savedSearchQuery, false);
+            public boolean onMenuItemClick(MenuItem item) {
+                isSearchVisible = true;
+                switchToSearchFragment();
+                return false;
             }
         });
-        }
 
         // setOnCloseListener doesn't work so implemented this
         menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -216,9 +232,9 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchFragmentLayout.setVisibility(View.GONE);
-                tabLayout.setVisibility(View.VISIBLE);
-                footer.setVisibility(View.VISIBLE);
                 isSearchVisible = false;
+                tabLayout.setVisibility(View.VISIBLE);
+                footerLayout.setVisibility(View.VISIBLE);
                 return true;
             }
         });
@@ -231,10 +247,10 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                savedSearchQuery = newText;
-                if (!newText.contentEquals("")){
-                    ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(SEARCH_FRAG);
-                    if (selectedButton == Constants.BUTTON_MOVIES){
+                query = newText;
+                ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(SEARCH_FRAG);
+                if (!newText.contentEquals("")) {
+                    if (selectedButton == Constants.BUTTON_MOVIES) {
                         listFragment.searchMovies(newText);
                         return true;
                     } else {
@@ -249,25 +265,47 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         return super.onCreateOptionsMenu(menu);
     }
 
-    private String getStringTitle(int selectedButton){
-        if (selectedButton == 0){
-            return "Movies";
+    private String getStringTitle(int selectedButton) {
+        if (selectedButton == 0) {
+            return getResources().getString(R.string.movies_label);
         } else {
-            return "TV shows";
+            return getResources().getString(R.string.tv_label);
         }
     }
 
+    // for broadcast receiver to trigger(refresh) when connection is re-established
+    public void reload() {
+        listFragmentPagerAdapter.setSelectedButton(selectedButton);
+        listFragmentPagerAdapter.notifyDataSetChanged();
+    }
+
+    // called from NetworkLostReceiver only if there is no connection
+    public void registerNetworkRegainedReceiver() {
+        networkRegainedReceiver = new NetworkRegainedReceiver();
+        networkRegainedReceiver.setListActivityHandler(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkRegainedReceiver, intentFilter);
+        // so we can unregister
+        isRegainedReceiverRegistered = true;
+    }
+
     @Override
-    protected void onStop() {
+    protected void onPause() {
         isListActive = false;
-        super.onStop();
+        unregisterReceiver(networkLostReceiver);
+        if (isRegainedReceiverRegistered) {
+            unregisterReceiver(networkRegainedReceiver);
+            isRegainedReceiverRegistered = false;
+        }
+        super.onPause();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (isSearchVisible){
-            outState.putString("saved_query", savedSearchQuery);
+        if (isSearchVisible) {
+            outState.putString(QUERY, query);
         }
         outState.putInt(Constants.SELECTED_BUTTON, selectedButton);
         outState.putBoolean(SEARCH_VISIBLE, isSearchVisible);

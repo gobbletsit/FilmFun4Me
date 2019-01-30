@@ -13,16 +13,17 @@ import com.example.android.filmfun4me.activity.activity.list.presenter.ListPrese
 import com.example.android.filmfun4me.utils.BaseUtils;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ListItemRecyclerAdapter extends RecyclerView.Adapter<ListItemRecyclerAdapter.ViewHolder> {
 
     private ListPresenter listPresenter;
     private Context context;
 
-
-    public ListItemRecyclerAdapter(ListPresenter listPresenter){
+    public ListItemRecyclerAdapter(ListPresenter listPresenter) {
         this.listPresenter = listPresenter;
     }
-
 
     @Override
     public ListItemRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -43,17 +44,18 @@ public class ListItemRecyclerAdapter extends RecyclerView.Adapter<ListItemRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ListItemView {
 
-        private ViewGroup container;
-        private TextView tv_title;
-        private ImageView iv_movie_poster;
-        private TextView tv_genre;
+        @BindView(R.id.list_item_container)
+        ViewGroup container;
+        @BindView(R.id.tv_movie_title)
+        TextView tv_title;
+        @BindView(R.id.imv_poster)
+        ImageView iv_movie_poster;
+        @BindView(R.id.tv_list_genre)
+        TextView tv_genre;
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.container = itemView.findViewById(R.id.list_item_container);
-            this.tv_title = itemView.findViewById(R.id.tv_movie_title);
-            this.iv_movie_poster = itemView.findViewById(R.id.imv_poster);
-            this.tv_genre = itemView.findViewById(R.id.tv_list_genre);
+            ButterKnife.bind(this, itemView);
             this.container.setOnClickListener(this);
         }
 
@@ -77,6 +79,5 @@ public class ListItemRecyclerAdapter extends RecyclerView.Adapter<ListItemRecycl
             Picasso.with(context).load(BaseUtils.getPosterPath(posterPath)).into(iv_movie_poster);
         }
     }
-
 }
 

@@ -16,7 +16,7 @@ public class ListSeasonButtonRecyclerAdapter extends RecyclerView.Adapter<ListSe
     private DetailPresenter detailPresenter;
     private String tvShowId;
 
-    ListSeasonButtonRecyclerAdapter(DetailPresenter detailPresenter, String tvShowId){
+    ListSeasonButtonRecyclerAdapter(DetailPresenter detailPresenter, String tvShowId) {
         this.detailPresenter = detailPresenter;
         this.tvShowId = tvShowId;
     }

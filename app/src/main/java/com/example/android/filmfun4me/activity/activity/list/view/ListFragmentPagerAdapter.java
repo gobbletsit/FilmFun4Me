@@ -3,9 +3,9 @@ package com.example.android.filmfun4me.activity.activity.list.view;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.android.filmfun4me.R;
 import com.example.android.filmfun4me.utils.Constants;
 
 /**
@@ -14,19 +14,16 @@ import com.example.android.filmfun4me.utils.Constants;
 
 public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
-    // for resource string titles
-    private Context mContext;
+    private Context context;
 
     private int selectedButton;
 
     ListFragmentPagerAdapter(Context context, FragmentManager fm, int selectedButton) {
         super(fm);
-
-        // for strings
-        mContext = context;
+        // to get resource Strings
+        this.context = context;
         this.selectedButton = selectedButton;
     }
-
 
     @Override
     public Fragment getItem(int position) {
@@ -35,30 +32,29 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        if (selectedButton == Constants.BUTTON_MOVIES){
+        if (selectedButton == Constants.BUTTON_MOVIES) {
             return 3;
         } else {
             return 2;
         }
     }
 
-
     @Override
     public CharSequence getPageTitle(int position) {
-        // set which titles to retrieve based on SELECTED BUTTON
-        if (selectedButton == Constants.BUTTON_MOVIES){
-            if (position == 0){
-                return "Most Popular";
-            } else if (position == 1){
-                return "Highest rated";
+        // set which titles to retrieve based on selected button
+        if (selectedButton == Constants.BUTTON_MOVIES) {
+            if (position == 0) {
+                return context.getResources().getString(R.string.most_popular_label);
+            } else if (position == 1) {
+                return context.getResources().getString(R.string.highest_rated_label);
             } else {
-                return "Upcoming";
+                return context.getResources().getString(R.string.upcoming_label);
             }
-        } else if (selectedButton == Constants.BUTTON_TV_SHOWS){
-            if (position == 0){
-                return "Most Popular";
+        } else if (selectedButton == Constants.BUTTON_TV_SHOWS) {
+            if (position == 0) {
+                return context.getResources().getString(R.string.most_popular_label);
             } else {
-                return "Highest rated";
+                return context.getResources().getString(R.string.highest_rated_label);
             }
         } else {
             return null;
@@ -70,7 +66,8 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
         return POSITION_NONE;
     }
 
-    public void setSelectedButton(int selectedButton) {
+    // to refresh
+    void setSelectedButton(int selectedButton) {
         this.selectedButton = selectedButton;
     }
 }

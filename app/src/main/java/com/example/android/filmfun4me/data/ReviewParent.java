@@ -11,7 +11,7 @@ public class ReviewParent implements ParentObject {
 
     private List<Object> childrenList;
 
-    public ReviewParent (String reviewTitle, String reviewContent){
+    public ReviewParent(String reviewTitle, String reviewContent) {
         this.reviewTitle = reviewTitle;
         this.reviewContent = reviewContent;
     }

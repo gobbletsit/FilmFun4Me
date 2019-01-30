@@ -6,7 +6,7 @@ public class ReviewChild {
 
     private String reviewContent;
 
-    public ReviewChild (String reviewContent){
+    public ReviewChild(String reviewContent) {
         this.reviewContent = reviewContent;
     }
 

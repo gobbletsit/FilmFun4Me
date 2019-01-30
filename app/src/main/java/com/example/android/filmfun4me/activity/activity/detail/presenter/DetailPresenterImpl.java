@@ -68,14 +68,15 @@ public class DetailPresenterImpl implements DetailPresenter {
         showMovieReviews(movie);
     }
 
-    private void onGetMovieSuccess(Movie movie){
-        if (isViewAttached()){
+    private void onGetMovieSuccess(Movie movie) {
+        if (isViewAttached()) {
             detailView.onLoadingFinished();
             detailView.showMovieDetails(movie);
         }
     }
 
-    private void onGetMovieFailure(Throwable e){
+    private void onGetMovieFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetMovieFailure = ", e);
         detailView.loadingErrorMessage(e.toString());
     }
 
@@ -104,6 +105,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetReviewFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetReviewFailure = ", e);
         detailView.loadingErrorMessage(e.toString());
     }
 
@@ -138,6 +140,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetTvShowFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetTvShowFailure = ", e);
         detailView.loadingErrorMessage(e.toString());
     }
 
@@ -167,20 +170,8 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetEpisodesFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetEpisodesFailure = ", e);
         detailView.loadingErrorMessage(e.toString());
-    }
-
-    @Override
-    public void onBindEpisodeListItemOnPosition(int position, DetailEpisodeItemView detailEpisodeItemView) {
-        Episode episode = episodeList.get(position);
-        detailEpisodeItemView.setEpisodeTitle(episode.getName());
-        detailEpisodeItemView.setEpisodeOverview(episode.getOverview());
-        detailEpisodeItemView.setEpisodePoster(episode.getPosterPath());
-    }
-
-    @Override
-    public int getEpisodeListItemRowsCount() {
-        return episodeList.size();
     }
 
     @Override
@@ -208,12 +199,13 @@ public class DetailPresenterImpl implements DetailPresenter {
     private void onGetVideosSuccess(List<Video> videoList) {
         this.videoList.clear();
         this.videoList.addAll(videoList);
-        if (isViewAttached()){
+        if (isViewAttached()) {
             detailView.showVideos();
         }
     }
 
     private void onGetVideoFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetVideoFailure =", e);
         detailView.loadingErrorMessage(e.toString());
     }
 
@@ -228,15 +220,16 @@ public class DetailPresenterImpl implements DetailPresenter {
             detailVideoItemView.setImageViewVideoThumbnailUrl(Video.getThumbnailUrl(video));
         }
 
-        if (video.getTitle()!= null){
+        if (video.getTitle() != null) {
             detailVideoItemView.setVideoTitle(video.getTitle());
         }
     }
 
+    // for expandable adapter
     @Override
     public void generateEpisodes() {
         ArrayList<ParentObject> parentObjectArrayList = new ArrayList<>(100);
-        for (Episode episode: episodeList){
+        for (Episode episode : episodeList) {
             ArrayList<Object> childList = new ArrayList<>();
             childList.add(new EpisodeChild(episode.getOverview()));
             episode.setChildObjectList(childList);
@@ -248,7 +241,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     @Override
     public void whenTrailerClicked(View view) {
         String videoUrl = (String) view.getTag();
-        if (videoUrl != null){
+        if (videoUrl != null) {
             detailView.onTrailerClicked(videoUrl);
         }
     }
