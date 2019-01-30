@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.filmfun4me.BaseApplication;
@@ -41,10 +42,10 @@ import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 public class ListFragment extends Fragment implements ListView {
 
-    private static final String TAG = ListFragment.class.getSimpleName();
-
     @Inject
     ListPresenter listPresenter;
+
+    private TextView tvListNotAvailable;
 
     private int selectedButton;
     private int pagerPosition;
@@ -86,11 +87,11 @@ public class ListFragment extends Fragment implements ListView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null){
-            if (savedInstanceState.containsKey(Constants.PAGER_POSITION)){
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(Constants.PAGER_POSITION)) {
                 pagerPosition = (int) savedInstanceState.get(Constants.PAGER_POSITION);
             }
-            if (savedInstanceState.containsKey(Constants.SELECTED_BUTTON)){
+            if (savedInstanceState.containsKey(Constants.SELECTED_BUTTON)) {
                 selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
             }
         }
@@ -115,6 +116,7 @@ public class ListFragment extends Fragment implements ListView {
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
+        tvListNotAvailable = view.findViewById(R.id.tv_list_not_available);
         recyclerView = view.findViewById(R.id.rec_list_activity);
         progressBar = view.findViewById(R.id.progress_bar);
 
@@ -132,13 +134,13 @@ public class ListFragment extends Fragment implements ListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getArguments() != null){
-            if (getArguments().containsKey(Constants.SELECTED_BUTTON)){
+        if (getArguments() != null) {
+            if (getArguments().containsKey(Constants.SELECTED_BUTTON)) {
                 selectedButton = (int) getArguments().get(Constants.SELECTED_BUTTON);
-                if (getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_MOVIES){
+                if (getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_MOVIES) {
                     pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
                     listPresenter.setMovieView(this, pagerPosition);
-                } else if(getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_TV_SHOWS) {
+                } else if (getArguments().containsKey(Constants.PAGER_POSITION) && selectedButton == Constants.BUTTON_TV_SHOWS) {
                     pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
                     listPresenter.setTvShowView(this, pagerPosition);
                 } else {
@@ -155,7 +157,7 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void setUpMovieSearchView() {
-        if (scaleInAnimationAdapter == null){
+        if (scaleInAnimationAdapter == null) {
             setAnimationAdapter();
         }
         customAdapter.notifyDataSetChanged();
@@ -169,7 +171,7 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void setUpTvSearchView() {
-        if (scaleInAnimationAdapter == null){
+        if (scaleInAnimationAdapter == null) {
             setAnimationAdapter();
         }
         customAdapter.notifyDataSetChanged();
@@ -200,7 +202,12 @@ public class ListFragment extends Fragment implements ListView {
     @Override
     public void loadingErrorMessage(String error) {
         progressBar.setVisibility(View.GONE);
-        Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        tvListNotAvailable.setVisibility(View.VISIBLE);
+        if (error.contains("only-if-cached")) {
+            tvListNotAvailable.setText(getResources().getString(R.string.list_check_internet));
+        } else {
+            Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -215,7 +222,7 @@ public class ListFragment extends Fragment implements ListView {
         ((BaseApplication) getActivity().getApplication()).releaseListComponent();
     }
 
-    private void setAnimationAdapter(){
+    private void setAnimationAdapter() {
         scaleInAnimationAdapter = new ScaleInAnimationAdapter(customAdapter);
         scaleInAnimationAdapter.setDuration(400);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
@@ -225,20 +232,23 @@ public class ListFragment extends Fragment implements ListView {
         recyclerView.setAdapter(scaleInAnimationAdapter);
     }
 
-    void searchMovies(String query){
+    void searchMovies(String query) {
         listPresenter.showMovieSearchResults(query);
     }
 
-    void searchTvShows(String query){listPresenter.showTvSearchResults(query);}
+    void searchTvShows(String query) {
+        listPresenter.showTvSearchResults(query);
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(Constants.PAGER_POSITION,pagerPosition);
+        outState.putInt(Constants.PAGER_POSITION, pagerPosition);
     }
 
     public interface Callback {
         void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
+
         void onTvShowClicked(TvShow tvShow, String singleTvShowGenres, int selectedButton);
     }
 }

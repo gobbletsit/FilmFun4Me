@@ -76,6 +76,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetMovieFailure(Throwable e){
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetMovieFailure = ", e);
         detailView.loadingErrorMessage(e.toString());
     }
 
@@ -104,6 +105,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetReviewFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetReviewFailure = ", e);
         detailView.loadingErrorMessage(e.toString());
     }
 
@@ -138,6 +140,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetTvShowFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetTvShowFailure = ", e);
         detailView.loadingErrorMessage(e.toString());
     }
 
@@ -167,6 +170,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetEpisodesFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetEpisodesFailure = ", e);
         detailView.loadingErrorMessage(e.toString());
     }
 
@@ -214,6 +218,7 @@ public class DetailPresenterImpl implements DetailPresenter {
     }
 
     private void onGetVideoFailure(Throwable e) {
+        Log.e(DetailPresenterImpl.class.getSimpleName(), "onGetVideoFailure =", e);
         detailView.loadingErrorMessage(e.toString());
     }
 

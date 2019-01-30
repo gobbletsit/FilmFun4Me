@@ -39,7 +39,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailMovieFragment extends Fragment implements DetailView,View.OnClickListener {
+public class DetailMovieFragment extends Fragment implements DetailView, View.OnClickListener {
 
     private static final String TAG = DetailMovieFragment.class.getSimpleName();
 
@@ -47,23 +47,37 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     DetailPresenter detailPresenter;
 
     // view binding
-    @BindView(R.id.tv_detail_movie_title) TextView tvDetailMovieTitle;
-    @BindView(R.id.tv_detail_release_date) TextView tvDetailReleaseDate;
-    @BindView(R.id.tv_detail_overview) TextView tvDetailOverview;
-    @BindView(R.id.tv_detail_rating) TextView tvDetailRating;
-    @BindView(R.id.tv_detail_lang) TextView tvDetailLang;
-    @BindView(R.id.tv_review_label) TextView tvReviewLabel;
-    @BindView(R.id.tv_detail_genre) TextView tvGenre;
+    @BindView(R.id.tv_detail_movie_title)
+    TextView tvDetailMovieTitle;
+    @BindView(R.id.tv_detail_release_date)
+    TextView tvDetailReleaseDate;
+    @BindView(R.id.tv_detail_overview)
+    TextView tvDetailOverview;
+    @BindView(R.id.tv_detail_rating)
+    TextView tvDetailRating;
+    @BindView(R.id.tv_detail_lang)
+    TextView tvDetailLang;
+    @BindView(R.id.tv_review_label)
+    TextView tvReviewLabel;
+    @BindView(R.id.tv_detail_genre)
+    TextView tvGenre;
+    @BindView(R.id.tv_movie_details_not_available) TextView tvDetailsNotAvailable;
 
-    @BindView(R.id.button_drop_rev) Button btn_drop_review;
+    @BindView(R.id.button_drop_rev)
+    Button btn_drop_review;
 
-    @BindView(R.id.image_view_poster) ImageView ivPoster;
+    @BindView(R.id.image_view_poster)
+    ImageView ivPoster;
 
-    @BindView(R.id.recycler_movie_videos) RecyclerView recyclerViewVideos;
-    @BindView(R.id.recycler_detail_reviews) RecyclerView recyclerViewReviews;
+    @BindView(R.id.recycler_movie_videos)
+    RecyclerView recyclerViewVideos;
+    @BindView(R.id.recycler_detail_reviews)
+    RecyclerView recyclerViewReviews;
 
-    @BindView(R.id.progress_bar_movie_details) ProgressBar progressBar;
-    @BindView(R.id.movie_details_container_lyt) ConstraintLayout detailsContainerLyt;
+    @BindView(R.id.progress_bar_movie_details)
+    ProgressBar progressBar;
+    @BindView(R.id.movie_details_container_lyt)
+    ConstraintLayout detailsContainerLyt;
 
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
     private ListReviewRecyclerAdapter listReviewsRecyclerAdapter;
@@ -117,23 +131,19 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //if (isNetworkAvailable()){
-            if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
-                Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
-                if (movie != null) {
-                    detailPresenter.setDetailView(this);
-                    detailPresenter.showMovieDetails(movie);
-                }
+        if (getArguments() != null && getArguments().containsKey(Constants.KEY_MOVIE)) {
+            Movie movie = (Movie) getArguments().get(Constants.KEY_MOVIE);
+            if (movie != null) {
+                detailPresenter.setDetailView(this);
+                detailPresenter.showMovieDetails(movie);
             }
-       // } else {
-       //     Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_LONG).show();
-       // }
+        }
     }
 
     @Override
     public void showMovieDetails(Movie movie) {
 
-        if (movie.getBackdropPath() != null){
+        if (movie.getBackdropPath() != null) {
             Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(movie.getBackdropPath())).into(ivPoster);
         } else {
             Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(ivPoster);
@@ -145,7 +155,7 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
         tvDetailRating.setText(String.valueOf(movie.getVoteAverage()) + "/10");
         tvDetailLang.setText(movie.getLanguage());
 
-        if (getArguments() != null && getArguments().containsKey(Constants.KEY_SINGLE_MOVIE_GENRES)){
+        if (getArguments() != null && getArguments().containsKey(Constants.KEY_SINGLE_MOVIE_GENRES)) {
             tvGenre.setText(getArguments().getString(Constants.KEY_SINGLE_MOVIE_GENRES));
         }
     }
@@ -177,21 +187,21 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
 
     @Override
     public void showVideos() {
-        if (listVideosRecyclerAdapter != null){
+        if (listVideosRecyclerAdapter != null) {
             listVideosRecyclerAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void showReviews() {
-        if (listVideosRecyclerAdapter != null){
+        if (listVideosRecyclerAdapter != null) {
             listReviewsRecyclerAdapter.notifyDataSetChanged();
         }
         tvReviewLabel.setVisibility(View.VISIBLE);
         btn_drop_review.setVisibility(View.VISIBLE);
     }
 
-    private void setRecyclersLayouts(){
+    private void setRecyclersLayouts() {
         LinearLayoutManager videoListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewVideos.setLayoutManager(videoListLayoutManager);
 
@@ -206,7 +216,7 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
         recyclerViewReviews.addItemDecoration(itemDecoration);
     }
 
-    private void setAdapters(){
+    private void setAdapters() {
         listReviewsRecyclerAdapter = new ListReviewRecyclerAdapter(detailPresenter);
         recyclerViewReviews.setAdapter(listReviewsRecyclerAdapter);
 
@@ -230,7 +240,12 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     public void loadingErrorMessage(String error) {
         progressBar.setVisibility(View.GONE);
         detailsContainerLyt.setVisibility(View.GONE);
-        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+        tvDetailsNotAvailable.setVisibility(View.VISIBLE);
+        if (error.contains("only-if-cached")){
+            tvDetailsNotAvailable.setText(getResources().getString(R.string.details_check_internet));
+        } else {
+            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -238,7 +253,7 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
         if (recyclerViewReviews.getVisibility() == View.VISIBLE) {
             btn_drop_review.setText("+");
             recyclerViewReviews.setVisibility(View.GONE);
-        } else if (recyclerViewReviews.getVisibility() == View.GONE){
+        } else if (recyclerViewReviews.getVisibility() == View.GONE) {
             btn_drop_review.setText("-");
             recyclerViewReviews.setVisibility(View.VISIBLE);
             recyclerViewReviews.requestFocus();

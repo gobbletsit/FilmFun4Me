@@ -224,10 +224,8 @@ public class ListPresenterImpl implements ListPresenter {
                     public void onNext(List<TvShow> response) {
                         tvShowList.clear();
                         tvShowList = response;
-                        Log.i(ListPresenterImpl.class.getSimpleName(), "tvlistSize = " + tvShowList.size());
                         if (isViewAttached()){
                             view.setUpTvSearchView();
-                            Log.i(ListPresenterImpl.class.getSimpleName(), "IS VIEW ATTACHED " + isViewAttached());
                         }
                     }
                     @Override

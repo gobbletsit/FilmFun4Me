@@ -31,4 +31,10 @@
     // CONNECTION STRINGS
     <string name="connection_re_established">Connection re-established!</string>
     <string name="no_network_connection">No network connection!</string>
+
+    // ERROR STRINGS
+    <string name="details_not_available">Details not available</string>
+    <string name="list_not_available">List not available</string>
+    <string name="details_check_internet">Details not available!\ Please check your internet connection! </string>
+    <string name="list_check_internet">List not available!\ Please check your internet connection! </string>
 </resources>

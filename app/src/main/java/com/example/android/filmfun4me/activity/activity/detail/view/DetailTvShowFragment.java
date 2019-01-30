@@ -56,6 +56,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     TextView tvDetailTvShowLang;
     @BindView(R.id.tv_detail_tv_show_genre)
     TextView tvTvShowGenre;
+    @BindView(R.id.tv_tv_details_not_available) TextView tvDetailsNotAvailable;
 
     @BindView(R.id.image_view_poster_tv_show)
     ImageView ivTvShowPoster;
@@ -238,7 +239,12 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void loadingErrorMessage(String error) {
         progressBar.setVisibility(View.GONE);
         detailsContainerLyt.setVisibility(View.GONE);
-        Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        tvDetailsNotAvailable.setVisibility(View.VISIBLE);
+        if (error.contains("only-if-cached")){
+            tvDetailsNotAvailable.setText(getResources().getString(R.string.details_check_internet));
+        } else {
+            Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
