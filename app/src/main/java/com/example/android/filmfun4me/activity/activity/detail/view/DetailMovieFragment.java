@@ -2,8 +2,6 @@ package com.example.android.filmfun4me.activity.activity.detail.view;
 
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -66,7 +64,9 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
     @BindView(R.id.button_drop_rev)
     Button btn_drop_review;
 
-    @BindView(R.id.image_view_poster)
+    @BindView(R.id.image_view_movie_cover)
+    ImageView ivCover;
+    @BindView(R.id.image_view_movie_poster)
     ImageView ivPoster;
 
     @BindView(R.id.recycler_movie_videos)
@@ -144,9 +144,15 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
     public void showMovieDetails(Movie movie) {
 
         if (movie.getBackdropPath() != null) {
-            Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(movie.getBackdropPath())).into(ivPoster);
+            Picasso.with(getActivity()).load(BaseUtils.getBackdropPath(movie.getBackdropPath())).into(ivCover);
         } else {
-            Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(ivPoster);
+            Picasso.with(getActivity()).load(R.drawable.poster_not_available).into(ivCover);
+        }
+
+        if (movie.getPosterPath() != null) {
+            Picasso.with(getActivity()).load(BaseUtils.getPosterPath(movie.getPosterPath())).into(ivPoster);
+        } else {
+            Picasso.with(getActivity()).load(R.drawable.episode_poster_not_available).into(ivCover);
         }
 
         tvDetailMovieTitle.setText(movie.getTitle());
