@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@color/colorPrimaryDark"
-                app:layout_constraintBottom_toTopOf="@id/tv_detail_movie_title"
+                app:layout_constraintBottom_toTopOf="@id/image_view_movie_poster"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
