@@ -20,19 +20,22 @@ import java.util.List;
 
 public interface DetailView {
 
+    // movie
     void showMovieDetails(Movie movie);
 
-    void showTvDetails(TvShow tvShow);
-
-    void showVideos();
-
     void showReviews();
+
+    // tv
+    void showTvDetails(TvShow tvShow);
 
     void showSeasonList();
 
     void showEpisodeList();
 
     void showEpisodes(ArrayList<ParentObject> parentObjects);
+
+    // both
+    void showVideos();
 
     void onTrailerClicked(String videoUrl);
 

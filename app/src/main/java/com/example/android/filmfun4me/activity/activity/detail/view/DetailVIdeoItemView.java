@@ -4,7 +4,7 @@ public interface DetailVIdeoItemView {
 
     void setImageViewVideoTag(String videoUrl);
 
-    void setImageViewVideoThumbnailUrl (String videoThumbnailUrl);
+    void setImageViewVideoThumbnailUrl(String videoThumbnailUrl);
 
     void setVideoTitle(String videoTitle);
 }

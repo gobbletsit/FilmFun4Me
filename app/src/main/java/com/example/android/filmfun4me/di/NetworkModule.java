@@ -44,13 +44,13 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    Cache providesCache(File cacheFile){
+    Cache providesCache(File cacheFile) {
         return new Cache(cacheFile, 10 * 1000 * 1000);
     }
 
     @Provides
     @Singleton
-    File providesCacheFile(Context context){
+    File providesCacheFile(Context context) {
         return new File(context.getCacheDir(), "responses");
     }
 

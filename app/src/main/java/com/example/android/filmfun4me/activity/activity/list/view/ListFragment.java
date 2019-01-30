@@ -1,26 +1,15 @@
 package com.example.android.filmfun4me.activity.activity.list.view;
 
 
-import android.app.SearchManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -37,6 +26,8 @@ import com.example.android.filmfun4me.utils.Constants;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 
@@ -45,22 +36,22 @@ public class ListFragment extends Fragment implements ListView {
     @Inject
     ListPresenter listPresenter;
 
-    private TextView tvListNotAvailable;
+    @Inject
+    RecyclerView.Adapter customAdapter;
+
+    @BindView(R.id.tv_list_not_available)
+    TextView tvListNotAvailable;
+    @BindView(R.id.rec_list_activity)
+    RecyclerView recyclerView;
+    @BindView(R.id.list_progress_bar)
+    ProgressBar progressBar;
 
     private int selectedButton;
     private int pagerPosition;
 
-    private RecyclerView recyclerView;
-
-    @Inject
-    RecyclerView.Adapter customAdapter;
-
     private ScaleInAnimationAdapter scaleInAnimationAdapter;
 
     private Callback callback;
-
-    private ProgressBar progressBar;
-
 
     public ListFragment() {
         // Required empty public constructor
@@ -116,9 +107,7 @@ public class ListFragment extends Fragment implements ListView {
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        tvListNotAvailable = view.findViewById(R.id.tv_list_not_available);
-        recyclerView = view.findViewById(R.id.rec_list_activity);
-        progressBar = view.findViewById(R.id.progress_bar);
+        ButterKnife.bind(this, view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -188,7 +177,6 @@ public class ListFragment extends Fragment implements ListView {
         callback.onTvShowClicked(tvShow, singleTvShowGenres, selectedButton);
     }
 
-
     @Override
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
@@ -208,18 +196,6 @@ public class ListFragment extends Fragment implements ListView {
         } else {
             Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        listPresenter.destroy();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ((BaseApplication) getActivity().getApplication()).releaseListComponent();
     }
 
     private void setAnimationAdapter() {
@@ -244,6 +220,18 @@ public class ListFragment extends Fragment implements ListView {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(Constants.PAGER_POSITION, pagerPosition);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        listPresenter.destroy();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((BaseApplication) getActivity().getApplication()).releaseListComponent();
     }
 
     public interface Callback {

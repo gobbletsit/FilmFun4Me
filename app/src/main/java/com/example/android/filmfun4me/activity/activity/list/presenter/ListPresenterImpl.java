@@ -36,13 +36,14 @@ public class ListPresenterImpl implements ListPresenter {
     private Disposable disposableSubscription;
     private Disposable disposableGenres;
 
+    // TMDB only allows 20 results for movies and tv-shows
     private List<Movie> movieList = new ArrayList<>(40);
     private List<TvShow> tvShowList = new ArrayList<>(40);
     private List<Genre> genreList = new ArrayList<>(40);
 
     private PublishSubject publishSubject;
 
-    // for adapter to know which list to populate
+    // for recycler adapter to know which list to populate
     private int selectedButton;
 
     public ListPresenterImpl(ListInteractor listInteractor) {
@@ -97,7 +98,7 @@ public class ListPresenterImpl implements ListPresenter {
     @Override
     public void showMovieSearchResults(String query) {
         selectedButton = Constants.BUTTON_MOVIES;
-        if (!query.contentEquals("")){
+        if (!query.contentEquals("")) {
             //if (publishSubject == null) {
             publishSubject = PublishSubject.create();
             publishSubject
@@ -111,14 +112,16 @@ public class ListPresenterImpl implements ListPresenter {
                         public void onNext(List<Movie> response) {
                             movieList.clear();
                             movieList = response;
-                            if (isViewAttached()){
+                            if (isViewAttached()) {
                                 view.setUpMovieSearchView();
                             }
                         }
+
                         @Override
                         public void onError(Throwable e) {
                             onSearchFetchFailed(e);
                         }
+
                         @Override
                         public void onComplete() {
                             //On complete
@@ -131,7 +134,7 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     public void onBindListItemAtPosition(int position, ListItemView listItemView) {
-        if (selectedButton == Constants.BUTTON_MOVIES){
+        if (selectedButton == Constants.BUTTON_MOVIES) {
             Movie movie = movieList.get(position);
             listItemView.setItemTitle(movie.getTitle());
             listItemView.setItemPoster(movie.getPosterPath());
@@ -146,7 +149,7 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     public int getListItemRowsCount() {
-        if (selectedButton == Constants.BUTTON_MOVIES){
+        if (selectedButton == Constants.BUTTON_MOVIES) {
             return movieList.size();
         } else {
             return tvShowList.size();
@@ -156,7 +159,7 @@ public class ListPresenterImpl implements ListPresenter {
 
     @Override
     public void onListItemInteraction(int itemPosition) {
-        if (selectedButton == Constants.BUTTON_MOVIES){
+        if (selectedButton == Constants.BUTTON_MOVIES) {
             Movie movie = movieList.get(itemPosition);
             view.onMovieClicked(movie, getSingleItemAppendedGenres(movie.getGenreIds()));
         } else {
@@ -224,14 +227,16 @@ public class ListPresenterImpl implements ListPresenter {
                     public void onNext(List<TvShow> response) {
                         tvShowList.clear();
                         tvShowList = response;
-                        if (isViewAttached()){
+                        if (isViewAttached()) {
                             view.setUpTvSearchView();
                         }
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         onSearchFetchFailed(e);
                     }
+
                     @Override
                     public void onComplete() {
                         //On complete
@@ -282,7 +287,7 @@ public class ListPresenterImpl implements ListPresenter {
         view.loadingErrorMessage(e.getMessage());
     }
 
-    private void onSearchFetchFailed(Throwable e){
+    private void onSearchFetchFailed(Throwable e) {
         Log.e(TAG, "onSearchFetchFailed: " + e);
         view.loadingErrorMessage(e.toString());
     }
@@ -290,12 +295,12 @@ public class ListPresenterImpl implements ListPresenter {
     private String getSingleItemAppendedGenres(int[] currentGenreIds) {
         String appendedGenres = "";
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < currentGenreIds.length; i++){
+        for (int i = 0; i < currentGenreIds.length; i++) {
             int genreId = currentGenreIds[i];
-            for (int a = 0; a < genreList.size(); a++){
-                if (genreId == genreList.get(a).getGenreId()){
+            for (int a = 0; a < genreList.size(); a++) {
+                if (genreId == genreList.get(a).getGenreId()) {
                     // the last one doesn't need the comma
-                    if (i != currentGenreIds.length -1){
+                    if (i != currentGenreIds.length - 1) {
                         appendedGenres = stringBuilder.append(genreList.get(a).getGenreName()).append(", ").toString();
                     } else {
                         appendedGenres = stringBuilder.append(genreList.get(a).getGenreName()).toString();

@@ -14,17 +14,21 @@ import com.example.android.filmfun4me.activity.activity.detail.presenter.DetailP
 import com.example.android.filmfun4me.data.Video;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ListVideosRecyclerAdapter extends RecyclerView.Adapter<ListVideosRecyclerAdapter.ViewHolder> {
 
     private Context context;
     private DetailPresenter detailPresenter;
 
-    public ListVideosRecyclerAdapter (DetailPresenter detailPresenter){
+    ListVideosRecyclerAdapter(DetailPresenter detailPresenter) {
         this.detailPresenter = detailPresenter;
     }
 
     @Override
     public ListVideosRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // to use for picasso
         context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.video_list_item, parent, false);
         return new ViewHolder(view);
@@ -42,15 +46,16 @@ public class ListVideosRecyclerAdapter extends RecyclerView.Adapter<ListVideosRe
 
     class ViewHolder extends RecyclerView.ViewHolder implements DetailVIdeoItemView, View.OnClickListener {
 
+        @BindView(R.id.image_view_video_poster)
         ImageView videoImageView;
+        @BindView(R.id.text_view_video_title)
         TextView videoTitleTextView;
+        @BindView(R.id.video_list_item_container)
         ViewGroup listVideoItemContainer;
 
         ViewHolder(View itemView) {
             super(itemView);
-            videoImageView = itemView.findViewById(R.id.image_view_video_poster);
-            videoTitleTextView = itemView.findViewById(R.id.text_view_video_title);
-            listVideoItemContainer = itemView.findViewById(R.id.video_list_item_container);
+            ButterKnife.bind(this, itemView);
             listVideoItemContainer.setOnClickListener(this);
         }
 

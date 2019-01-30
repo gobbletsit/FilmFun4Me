@@ -26,7 +26,7 @@ public class NetworkRegainedReceiver extends BroadcastReceiver {
         // if isListActive/isDetailActive
 
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())){
-            if (networkInfo!= null && networkInfo.isConnected()){
+            if (networkInfo != null && networkInfo.isConnected()){
                 Toast.makeText(context, context.getResources().getString(R.string.connection_re_established), Toast.LENGTH_SHORT).show();
                 if (ListActivity.isListActive && listActivity != null){
                     listActivity.reload();

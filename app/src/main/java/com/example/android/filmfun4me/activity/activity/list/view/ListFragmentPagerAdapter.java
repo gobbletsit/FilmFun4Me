@@ -20,12 +20,10 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     ListFragmentPagerAdapter(Context context, FragmentManager fm, int selectedButton) {
         super(fm);
-
         // to get resource Strings
         this.context = context;
         this.selectedButton = selectedButton;
     }
-
 
     @Override
     public Fragment getItem(int position) {
@@ -34,27 +32,26 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        if (selectedButton == Constants.BUTTON_MOVIES){
+        if (selectedButton == Constants.BUTTON_MOVIES) {
             return 3;
         } else {
             return 2;
         }
     }
 
-
     @Override
     public CharSequence getPageTitle(int position) {
-        // set which titles to retrieve based on SELECTED BUTTON
-        if (selectedButton == Constants.BUTTON_MOVIES){
-            if (position == 0){
+        // set which titles to retrieve based on selected button
+        if (selectedButton == Constants.BUTTON_MOVIES) {
+            if (position == 0) {
                 return context.getResources().getString(R.string.most_popular_label);
-            } else if (position == 1){
+            } else if (position == 1) {
                 return context.getResources().getString(R.string.highest_rated_label);
             } else {
                 return context.getResources().getString(R.string.upcoming_label);
             }
-        } else if (selectedButton == Constants.BUTTON_TV_SHOWS){
-            if (position == 0){
+        } else if (selectedButton == Constants.BUTTON_TV_SHOWS) {
+            if (position == 0) {
                 return context.getResources().getString(R.string.most_popular_label);
             } else {
                 return context.getResources().getString(R.string.highest_rated_label);
@@ -69,7 +66,7 @@ public class ListFragmentPagerAdapter extends FragmentStatePagerAdapter {
         return POSITION_NONE;
     }
 
-    // to refresh without recreating
+    // to refresh
     void setSelectedButton(int selectedButton) {
         this.selectedButton = selectedButton;
     }

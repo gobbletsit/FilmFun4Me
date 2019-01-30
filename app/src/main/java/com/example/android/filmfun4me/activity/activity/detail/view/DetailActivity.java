@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.android.filmfun4me.BaseApplication;
 import com.example.android.filmfun4me.NetworkLostReceiver;
 import com.example.android.filmfun4me.NetworkRegainedReceiver;
 import com.example.android.filmfun4me.R;
@@ -18,9 +18,7 @@ import com.example.android.filmfun4me.data.Movie;
 import com.example.android.filmfun4me.data.TvShow;
 import com.example.android.filmfun4me.utils.Constants;
 
-import java.util.ArrayList;
-
-public class DetailActivity extends AppCompatActivity implements Callback {
+public class DetailActivity extends AppCompatActivity implements OnTrailerClickCallback {
 
     public static boolean isDetailActive;
 
@@ -44,7 +42,7 @@ public class DetailActivity extends AppCompatActivity implements Callback {
 
         if (extras != null) {
             selectedButton = extras.getInt(Constants.SELECTED_BUTTON);
-        } else if (savedInstanceState != null){
+        } else if (savedInstanceState != null) {
             selectedButton = savedInstanceState.getInt(Constants.SELECTED_BUTTON);
         } else {
             selectedButton = Constants.BUTTON_MOVIES;
@@ -58,7 +56,7 @@ public class DetailActivity extends AppCompatActivity implements Callback {
                 switchToMovieDetailFragment(movie, singleItemGenres);
                 setTitle(getResources().getString(R.string.movie_details_label));
             }
-        } else if (selectedButton == Constants.BUTTON_TV_SHOWS && extras != null ){
+        } else if (selectedButton == Constants.BUTTON_TV_SHOWS && extras != null) {
             tvShow = extras.getParcelable(Constants.KEY_TV_SHOW);
             //String singleTvShowGenres = extras.getString(Constants.KEY_SINGLE_TV_SHOW_GENRES);
             singleItemGenres = extras.getString(Constants.KEY_SINGLE_TV_SHOW_GENRES);
@@ -71,6 +69,7 @@ public class DetailActivity extends AppCompatActivity implements Callback {
 
     @Override
     protected void onResume() {
+        // for receiver to know if activity running
         isDetailActive = true;
         networkLostReceiver = new NetworkLostReceiver();
         networkLostReceiver.setDetailActivityHandler(this);
@@ -80,7 +79,7 @@ public class DetailActivity extends AppCompatActivity implements Callback {
         super.onResume();
     }
 
-    private void switchToMovieDetailFragment(Movie movie, String singleMovieGenres){
+    private void switchToMovieDetailFragment(Movie movie, String singleMovieGenres) {
         FragmentManager manager = getSupportFragmentManager();
         DetailMovieFragment fragment = DetailMovieFragment.newInstance(movie, singleMovieGenres);
         FragmentTransaction transaction = manager.beginTransaction();
@@ -88,7 +87,7 @@ public class DetailActivity extends AppCompatActivity implements Callback {
         transaction.commit();
     }
 
-    private void switchToTvShowDetailFragment(TvShow tvShow, String singleTvShowGenres){
+    private void switchToTvShowDetailFragment(TvShow tvShow, String singleTvShowGenres) {
         FragmentManager manager = getSupportFragmentManager();
         DetailTvShowFragment fragment = DetailTvShowFragment.newInstance(tvShow, singleTvShowGenres);
         FragmentTransaction transaction = manager.beginTransaction();
@@ -118,16 +117,17 @@ public class DetailActivity extends AppCompatActivity implements Callback {
         return super.onOptionsItemSelected(item);
     }
 
-    public void reload(){
-        if (selectedButton == Constants.BUTTON_MOVIES){
+    // for receiver to trigger when connection re-established
+    public void reload() {
+        if (selectedButton == Constants.BUTTON_MOVIES) {
             switchToMovieDetailFragment(movie, singleItemGenres);
-        } else if (selectedButton == Constants.BUTTON_TV_SHOWS){
+        } else if (selectedButton == Constants.BUTTON_TV_SHOWS) {
             switchToTvShowDetailFragment(tvShow, singleItemGenres);
         }
     }
 
     // called from NetworkLostReceiver only if there is no connection
-    public void registerNetworkRegainedReceiver(){
+    public void registerNetworkRegainedReceiver() {
         networkRegainedReceiver = new NetworkRegainedReceiver();
         networkRegainedReceiver.setDetailActivityHandler(this);
         IntentFilter intentFilter = new IntentFilter();
@@ -141,7 +141,7 @@ public class DetailActivity extends AppCompatActivity implements Callback {
     protected void onPause() {
         isDetailActive = false;
         unregisterReceiver(networkLostReceiver);
-        if (isReceiverRegistered){
+        if (isReceiverRegistered) {
             unregisterReceiver(networkRegainedReceiver);
             isReceiverRegistered = false;
         }

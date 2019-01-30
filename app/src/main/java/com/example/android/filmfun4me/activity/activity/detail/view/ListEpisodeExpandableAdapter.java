@@ -21,9 +21,10 @@ public class ListEpisodeExpandableAdapter extends ExpandableRecyclerAdapter<Epis
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public ListEpisodeExpandableAdapter(Context context, List<ParentObject> parentItemList) {
+    ListEpisodeExpandableAdapter(Context context, List<ParentObject> parentItemList) {
         super(context, parentItemList);
         this.layoutInflater = LayoutInflater.from(context);
+        // to use for picasso
         this.context = context;
     }
 
@@ -41,12 +42,12 @@ public class ListEpisodeExpandableAdapter extends ExpandableRecyclerAdapter<Epis
 
     @Override
     public void onBindParentViewHolder(EpisodeParentViewHolder episodeParentViewHolder, int i, Object o) {
-        Episode episode = (Episode)o;
+        Episode episode = (Episode) o;
         String posterPath = episode.getPosterPath();
-        if (posterPath != null){
+        if (posterPath != null) {
             Picasso.with(context).load(BaseUtils.getPosterPath(posterPath)).into(episodeParentViewHolder.imv_episode_poster);
         } else {
-            Picasso.with(context).load(R.drawable.poster_not_available).into(episodeParentViewHolder.imv_episode_poster);
+            Picasso.with(context).load(R.drawable.episode_poster_not_available).into(episodeParentViewHolder.imv_episode_poster);
         }
         episodeParentViewHolder.tv_season_and_episode_number.setText(formatSeasonAndEpisodeString(String.valueOf(episode.getSeasonNumber()), String.valueOf(episode.getEpisodeNumber())));
         episodeParentViewHolder.tv_episode_title.setText(episode.getName());
@@ -60,7 +61,7 @@ public class ListEpisodeExpandableAdapter extends ExpandableRecyclerAdapter<Epis
         episodeChildViewHolder.episodeOverview.setText(episodeChild.getEpisodeOverview());
     }
 
-    private String formatSeasonAndEpisodeString(String seasonNumber, String episodeNumber){
+    private String formatSeasonAndEpisodeString(String seasonNumber, String episodeNumber) {
         return "SO" + seasonNumber + " EP" + episodeNumber;
     }
 }

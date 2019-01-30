@@ -49,9 +49,11 @@ public interface ListPresenter {
     void setSearchView(ListView listView);
 
     void onBindListItemAtPosition(int position, ListItemView listItemView);
+
     int getListItemRowsCount();
+
     void onListItemInteraction(int itemPosition);
-    
+
     void destroy();
 
 }

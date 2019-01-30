@@ -25,7 +25,7 @@ public class ListModule {
         return new ListInteractorImpl(moviesWebService, tvShowsWebService);
     }
 
-    // to stay on activity level instead of application level with @Singleton
+    // to stay on activity level with scope
     @ListScope
     @Provides
     ListPresenter provideListPresenter(ListInteractor listInteractor) {
@@ -33,7 +33,7 @@ public class ListModule {
     }
 
     @Provides
-    RecyclerView.Adapter provideListMovieRecyclerAdapter (ListPresenter listPresenter){
+    RecyclerView.Adapter provideListMovieRecyclerAdapter(ListPresenter listPresenter) {
         return new ListItemRecyclerAdapter(listPresenter);
     }
 

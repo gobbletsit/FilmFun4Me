@@ -56,7 +56,8 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     TextView tvDetailTvShowLang;
     @BindView(R.id.tv_detail_tv_show_genre)
     TextView tvTvShowGenre;
-    @BindView(R.id.tv_tv_details_not_available) TextView tvDetailsNotAvailable;
+    @BindView(R.id.tv_tv_details_not_available)
+    TextView tvDetailsNotAvailable;
 
     @BindView(R.id.image_view_poster_tv_show)
     ImageView ivTvShowPoster;
@@ -76,7 +77,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
     private ListSeasonButtonRecyclerAdapter listSeasonButtonRecyclerAdapter;
 
-    private Callback callback;
+    private OnTrailerClickCallback onTrailerClickCallback;
 
     public DetailTvShowFragment() {
         // required empty public constructor
@@ -94,7 +95,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callback = (Callback) context;
+        onTrailerClickCallback = (OnTrailerClickCallback) context;
     }
 
     @Override
@@ -220,7 +221,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void onTrailerClicked(String videoUrl) {
-        callback.onTrailerClick(videoUrl);
+        onTrailerClickCallback.onTrailerClick(videoUrl);
     }
 
     @Override
@@ -240,7 +241,7 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         progressBar.setVisibility(View.GONE);
         detailsContainerLyt.setVisibility(View.GONE);
         tvDetailsNotAvailable.setVisibility(View.VISIBLE);
-        if (error.contains("only-if-cached")){
+        if (error.contains("only-if-cached")) {
             tvDetailsNotAvailable.setText(getResources().getString(R.string.details_check_internet));
         } else {
             Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
@@ -257,11 +258,5 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
     public void onDestroy() {
         super.onDestroy();
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

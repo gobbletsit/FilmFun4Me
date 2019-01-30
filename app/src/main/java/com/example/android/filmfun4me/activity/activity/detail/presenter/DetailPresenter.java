@@ -30,6 +30,7 @@ public interface DetailPresenter {
     void showMovieReviews(Movie movie);
 
     void onBindReviewListItemOnPosition(int position, DetailReviewItemView detailReviewItemView);
+
     int getReviewListItemRowsCount();
 
     // Tv-show
@@ -39,15 +40,15 @@ public interface DetailPresenter {
 
     void showTvEpisodes(String tvShowId, int seasonNumber);
 
-    void onBindEpisodeListItemOnPosition(int position, DetailEpisodeItemView detailEpisodeItemView);
-    int getEpisodeListItemRowsCount();
-
     void onBindSeasonListItemOnPosition(int position, DetailSeasonItemView detailSeasonItemView);
+
     int getSeasonListItemRowsCount();
+
     void onSeasonListItemInteraction(String tvShowId, int seasonNumber);
 
     // Both
     void onBindVideoListItemOnPosition(int position, DetailVIdeoItemView detailVideoItemView);
+
     int getVideoListItemRowsCount();
 
     void whenTrailerClicked(View view);

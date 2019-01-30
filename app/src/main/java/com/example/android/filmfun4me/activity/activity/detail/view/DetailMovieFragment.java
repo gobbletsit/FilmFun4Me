@@ -46,7 +46,6 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
     @Inject
     DetailPresenter detailPresenter;
 
-    // view binding
     @BindView(R.id.tv_detail_movie_title)
     TextView tvDetailMovieTitle;
     @BindView(R.id.tv_detail_release_date)
@@ -61,7 +60,8 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
     TextView tvReviewLabel;
     @BindView(R.id.tv_detail_genre)
     TextView tvGenre;
-    @BindView(R.id.tv_movie_details_not_available) TextView tvDetailsNotAvailable;
+    @BindView(R.id.tv_movie_details_not_available)
+    TextView tvDetailsNotAvailable;
 
     @BindView(R.id.button_drop_rev)
     Button btn_drop_review;
@@ -82,12 +82,11 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
     private ListVideosRecyclerAdapter listVideosRecyclerAdapter;
     private ListReviewRecyclerAdapter listReviewsRecyclerAdapter;
 
-    private Callback callback;
+    private OnTrailerClickCallback onTrailerClickCallback;
 
     public DetailMovieFragment() {
         // Required empty public constructor
     }
-
 
     public static DetailMovieFragment newInstance(Movie movie, String singleMovieGenres) {
         DetailMovieFragment fragment = new DetailMovieFragment();
@@ -101,7 +100,7 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callback = (Callback) context;
+        onTrailerClickCallback = (OnTrailerClickCallback) context;
     }
 
     @Override
@@ -121,6 +120,7 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
         setRecyclersLayouts();
         setAdapters();
 
+        // handle review adapter visibility
         btn_drop_review.setOnClickListener(this);
         tvReviewLabel.setOnClickListener(this);
 
@@ -177,7 +177,7 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
 
     @Override
     public void onTrailerClicked(String videoUrl) {
-        callback.onTrailerClick(videoUrl);
+        onTrailerClickCallback.onTrailerClick(videoUrl);
     }
 
     @Override
@@ -241,7 +241,7 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
         progressBar.setVisibility(View.GONE);
         detailsContainerLyt.setVisibility(View.GONE);
         tvDetailsNotAvailable.setVisibility(View.VISIBLE);
-        if (error.contains("only-if-cached")){
+        if (error.contains("only-if-cached")) {
             tvDetailsNotAvailable.setText(getResources().getString(R.string.details_check_internet));
         } else {
             Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
@@ -271,11 +271,5 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
     public void onDestroy() {
         super.onDestroy();
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
