@@ -248,6 +248,7 @@ public class DetailMovieFragment extends Fragment implements DetailView,View.OnC
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        getArguments().clear();
         detailPresenter.destroy();
     }
 

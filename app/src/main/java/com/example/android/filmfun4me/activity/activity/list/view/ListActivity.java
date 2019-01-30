@@ -284,6 +284,7 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         unregisterReceiver(networkLostReceiver);
         if (isReceiverRegistered){
             unregisterReceiver(networkRegainedReceiver);
+            isReceiverRegistered = false;
         }
         super.onStop();
     }
