@@ -79,12 +79,12 @@ public class ListReviewRecyclerAdapter extends RecyclerView.Adapter<ListReviewRe
         @Override
         public void onClick(View v) {
             if (tvReviewContent.getMaxLines() == 3) {
-                tvReviewContent.setMaxLines(100);
                 Picasso.with(context).load(android.R.drawable.arrow_up_float).into(ibExpandReview);
+                tvReviewContent.setMaxLines(100);
                 ibContractReview.setVisibility(View.VISIBLE);
             } else {
-                tvReviewContent.setMaxLines(3);
                 Picasso.with(context).load(android.R.drawable.arrow_down_float).into(ibExpandReview);
+                tvReviewContent.setMaxLines(3);
                 ibContractReview.setVisibility(View.GONE);
             }
         }
