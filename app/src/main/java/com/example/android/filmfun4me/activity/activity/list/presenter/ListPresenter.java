@@ -46,7 +46,7 @@ public interface ListPresenter {
     void getTvGenres();
 
     // both
-    void setSearchView(ListView listView);
+    void setSearchView(ListView listView, int selectedButton);
 
     void onBindListItemAtPosition(int position, ListItemView listItemView);
 

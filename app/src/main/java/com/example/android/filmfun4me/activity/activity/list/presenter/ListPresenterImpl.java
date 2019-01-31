@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
@@ -51,8 +52,13 @@ public class ListPresenterImpl implements ListPresenter {
     }
 
     @Override
-    public void setSearchView(ListView listView) {
+    public void setSearchView(ListView listView, int selectedButton) {
         this.view = listView;
+        if (selectedButton == Constants.BUTTON_MOVIES){
+            getMovieGenres();
+        } else {
+            getTvGenres();
+        }
     }
 
     @Override

@@ -132,7 +132,7 @@ public class ListFragment extends Fragment implements ListView {
                     pagerPosition = (int) getArguments().get(Constants.PAGER_POSITION);
                     listPresenter.setTvShowView(this, pagerPosition);
                 } else {
-                    listPresenter.setSearchView(this);
+                    listPresenter.setSearchView(this, selectedButton);
                 }
             }
         }
