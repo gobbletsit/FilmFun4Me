@@ -116,8 +116,7 @@ public class ListPresenterImpl implements ListPresenter {
                     .subscribeWith(new DisposableObserver<List<Movie>>() {
                         @Override
                         public void onNext(List<Movie> response) {
-                            movieList.clear();
-                            movieList = response;
+                            onMovieFetchSuccess(response);
                             if (isViewAttached()) {
                                 view.setUpMovieSearchView();
                             }
@@ -231,8 +230,7 @@ public class ListPresenterImpl implements ListPresenter {
                 .subscribeWith(new DisposableObserver<List<TvShow>>() {
                     @Override
                     public void onNext(List<TvShow> response) {
-                        tvShowList.clear();
-                        tvShowList = response;
+                        onTvShowFetchSuccess(response);
                         if (isViewAttached()) {
                             view.setUpTvSearchView();
                         }
