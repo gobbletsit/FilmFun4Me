@@ -233,6 +233,13 @@ public class ListFragment extends Fragment implements ListView {
         ((BaseApplication) getActivity().getApplication()).releaseListComponent();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        // to avoid leaking
+        callback = null;
+    }
+
     public interface Callback {
         void onMovieClicked(Movie movie, String singleMovieGenres, int selectedButton);
 

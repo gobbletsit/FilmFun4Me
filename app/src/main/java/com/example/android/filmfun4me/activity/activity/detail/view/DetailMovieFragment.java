@@ -278,4 +278,11 @@ public class DetailMovieFragment extends Fragment implements DetailView, View.On
         super.onDestroy();
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        // to avoid leaking
+        onTrailerClickCallback = null;
+    }
 }

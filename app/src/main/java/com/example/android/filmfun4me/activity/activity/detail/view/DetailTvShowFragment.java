@@ -257,4 +257,11 @@ public class DetailTvShowFragment extends android.support.v4.app.Fragment implem
         super.onDestroy();
         ((BaseApplication) getActivity().getApplication()).releaseDetailComponent();
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        // to avoid leaking
+        onTrailerClickCallback = null;
+    }
 }
